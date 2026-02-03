@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trilha de Aprendizagem T&D - Grupo Ello</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 20px; min-height: 100vh; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        .login-screen { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+        .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-width: 450px; width: 100%; }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header h1 { color: #1e3c72; font-size: 28px; margin-bottom: 10px; }
+        .login-header p { color: #666; font-size: 14px; }
+        .login-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
+        .login-tab { flex: 1; padding: 12px; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; transition: all 0.3s; }
+        .login-tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #667eea; }
+        .login-form { display: none; }
+        .login-form.active { display: block; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #333; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #667eea; }
+        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+        .btn-login:hover { transform: translateY(-2px); }
+        .login-info { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #667eea; }
+        .login-info h4 { color: #1e3c72; margin-bottom: 8px; font-size: 14px; }
+        .login-info p { color: #666; font-size: 13px; line-height: 1.5; }
+        .error-message { background: #ff4757; color: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
+        .error-message.show { display: block; }
+        .header { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .header-info h1 { color: #1e3c72; font-size: 24px; margin-bottom: 5px; }
+        .header-info p { color: #666; font-size: 13px; }
+        .user-badge { background: #f8f9fa; padding: 10px 20px; border-radius: 25px; display: inline-flex; align-items: center; gap: 10px; border: 2px solid #e0e0e0; }
+        .user-badge .role { background: #667eea; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .user-badge .role.admin { background: #ff4757; }
+        .user-badge .name { font-weight: bold; color: #333; }
+        .mode-toggle { display: flex; gap: 10px; }
+        .mode-btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.3s; }
+        .mode-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .mode-btn:not(.active) { background: #e0e0e0; color: #666; }
+        .mode-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); text-align: center; }
+        .stat-icon { font-size: 32px; margin-bottom: 8px; }
+        .stat-value { font-size: 28px; font-weight: bold; color: #1e3c72; margin-bottom: 5px; }
+        .stat-label { color: #666; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .badges-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); margin-bottom: 25px; }
+        .category-section { margin-bottom: 40px; }
+        .category-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #1e3c72; }
+        .category-icon { font-size: 36px; }
+        .category-info h3 { color: #1e3c72; font-size: 22px; margin-bottom: 5px; }
+        .category-info p { color: #666; font-size: 13px; }
+        .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .badge { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; border-radius: 15px; text-align: center; transition: all 0.3s; cursor: pointer; border: 3px solid transparent; position: relative; }
+        .badge.unlocked { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); border-color: #ffd700; box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4); }
+        .badge.unlocked::before { content: '✓'; position: absolute; top: 5px; right: 5px; background: #28a745; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+        .badge.locked { opacity: 0.5; filter: grayscale(100%); }
+        .badge:hover:not(.locked) { transform: translateY(-5px); }
+        .badge.read-only { cursor: default; }
+        .badge-icon { font-size: 48px; margin-bottom: 10px; }
+        .badge-name { font-weight: bold; color: #1e3c72; margin-bottom: 8px; font-size: 14px; }
+        .badge.unlocked .badge-name { color: white; }
+        .badge-desc { font-size: 12px; color: #666; line-height: 1.4; }
+        .badge.unlocked .badge-desc { color: rgba(255,255,255,0.95); }
+        .badge-points { background: #1e3c72; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-top: 10px; display: inline-block; }
+        .badge.unlocked .badge-points { background: white; color: #1e3c72; }
+        .badge-tag { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; }
+        .admin-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .admin-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .section-title { color: #1e3c72; font-size: 22px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #1e3c72; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; width: 100%; }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .list-item { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .list-item-info { flex: 1; }
+        .list-item-name { font-weight: bold; color: #333; margin-bottom: 5px; }
+        .list-item-details { font-size: 12px; color: #666; }
+        .btn-delete { background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .btn-secondary { background: #6c757d; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px; width: 100%; }
+        .leaderboard { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .leaderboard-item { display: flex; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px; }
+        .leaderboard-position { font-size: 28px; font-weight: bold; color: #1e3c72; margin-right: 20px; min-width: 50px; }
+        .leaderboard-position.first { color: #ffd700; }
+        .leaderboard-position.second { color: #c0c0c0; }
+        .leaderboard-position.third { color: #cd7f32; }
+        .leaderboard-info { flex: 1; }
+        .leaderboard-name { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .leaderboard-badges { font-size: 14px; }
+        .leaderboard-points { font-size: 24px; font-weight: bold; color: #1e3c72; }
+        .eval-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); margin-bottom: 25px; }
+        .info-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 25px; }
+        .info-box strong { color: #856404; }
+        .question { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .question-number { background: #667eea; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .question-type { background: #e0e0e0; color: #333; padding: 5px 12px; border-radius: 20px; font-size: 11px; }
+        .question-text { font-weight: bold; color: #333; margin-bottom: 15px; font-size: 15px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: #667eea; background: #f8f9fa; }
+        .option input { margin-right: 10px; cursor: pointer; width: 18px; height: 18px; }
+        .option label { cursor: pointer; flex: 1; font-size: 14px; }
+        .textarea-answer { width: 100%; min-height: 100px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 14px; resize: vertical; }
+        .textarea-answer:focus { outline: none; border-color: #667eea; }
+        .result-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 20px; text-align: center; margin-top: 30px; }
+        .result-card h2 { font-size: 32px; margin-bottom: 20px; }
+        .result-card p { font-size: 18px; margin-bottom: 10px; }
+        .score-big { font-size: 72px; font-weight: bold; margin: 20px 0; }
+        .btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        @media (max-width: 768px) { .admin-container { grid-template-columns: 1fr; } .badges-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .header { flex-direction: column; text-align: center; } }
+        .login-logo { text-align: center; margin-bottom: 25px; }
+        .login-logo img { max-width: 180px; height: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="login-screen" class="login-screen">
+            <div class="login-card">
+<div class="login-logo">
+                    <img src="data:image/jpeg;base64,
+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" alt="Grupo Ello">
+                </div>
+                <div class="login-header">
+                    <h1>🏆 Trilha de Aprendizagem T&D</h1>
+                    <p>Grupo Ello - T&D - Sistema Completo</p>
+                </div>
+                <div class="login-tabs">
+                    <div class="login-tab active" onclick="switchLoginTab('employee')">👤 Colaborador</div>
+                    <div class="login-tab" onclick="switchLoginTab('admin')">🔐 Admin</div>
+                </div>
+                <div class="error-message" id="error-message"></div>
+                <form id="employee-form" class="login-form active" onsubmit="loginEmployee(event)">
+                    <div class="form-group">
+                        <label>Código de Acesso:</label>
+                        <input type="text" id="employee-code" placeholder="Ex: MARIA202501" style="text-transform: uppercase;" required>
+                    </div>
+                    <button type="submit" class="btn-login">👁️ Ver Meu Progresso</button>
+                    <div class="login-info">
+                        <h4>💡 Como obter seu código?</h4>
+                        <p>Seu código de acesso é fornecido pelo setor de T&D. Se você não possui, entre em contato com o RH.</p>
+                    </div>
+                </form>
+                <form id="admin-form" class="login-form" onsubmit="loginAdmin(event)">
+                    <div class="form-group">
+                        <label>Usuário:</label>
+                        <input type="text" id="admin-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha:</label>
+                        <input type="password" id="admin-password" required>
+                    </div>
+                    <button type="submit" class="btn-login">🔓 Entrar</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="main-system" style="display: none;">
+            <div class="header">
+                <div class="header-info">
+                    <h1>🏆 Trilha de Aprendizagem T&D</h1>
+                    <p>Sistema Completo: Badges + Avaliações</p>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div class="user-badge">
+                        <span class="role" id="user-role">-</span>
+                        <span class="name" id="user-name">-</span>
+                    </div>
+                    <div class="mode-toggle">
+                        <button class="mode-btn active" onclick="switchMode('view')">👁️ Badges</button>
+                        <button class="mode-btn" onclick="switchMode('eval')">📝 Avaliações</button>
+                        <button class="mode-btn disabled" id="admin-btn" onclick="switchMode('admin')">⚙️ Admin</button>
+                    </div>
+                    <button class="btn-logout" onclick="logout()">🚪 Sair</button>
+                </div>
+            </div>
+            
+            <div id="view-mode" class="view-section active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="total-points">0</div><div class="stat-label">Pontos</div></div>
+                    <div class="stat-card"><div class="stat-icon">🏅</div><div class="stat-value" id="badges-count">0/0</div><div class="stat-label">Badges</div></div>
+                    <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-value" id="completion">0%</div><div class="stat-label">Progresso</div></div>
+                </div>
+                <div class="badges-container" id="badges-container"></div>
+            </div>
+            
+            <div id="eval-mode" class="view-section">
+                <div class="eval-card">
+                    <h2 class="section-title">📝 Sistema de Avaliações</h2>
+                    <div class="info-box">
+                        <strong>⚠️ ATENÇÃO:</strong> Os resultados serão mostrados após o envio das respostas!
+                    </div>
+                    <div id="eval-buttons"></div>
+                </div>
+                <div id="eval-content"></div>
+            </div>
+            
+            <div id="admin-mode" class="view-section">
+                <!-- Seletor de Colaborador para Gerenciar -->
+                <div class="eval-card" style="margin-bottom: 25px;">
+                    <h2 class="section-title">🎯 Selecionar Colaborador para Gerenciar</h2>
+                    <div class="form-group">
+                        <label>Colaborador:</label>
+                        <select id="admin-trainee-select" onchange="selectTraineeToManage()">
+                            <option value="">-- Selecione um colaborador --</option>
+                        </select>
+                    </div>
+                    <div id="selected-trainee-info" style="display:none;">
+                        <div class="info-box" style="background:#d4edda;border-color:#28a745;">
+                            <strong style="color:#155724;">👤 Gerenciando:</strong> <span id="managing-name"></span> | <span id="managing-function"></span> | <span id="managing-brand"></span> | <span id="managing-points"></span> pts
+                        </div>
+                        <button class="btn-primary" style="margin-top:15px;background:linear-gradient(135deg, #28a745 0%, #20c997 100%);" onclick="exportTraineeReport()">📄 Exportar Relatório do Colaborador</button>
+                    </div>
+                </div>
+
+                <!-- Badges do Colaborador Selecionado -->
+                <div class="eval-card" id="admin-badges-section" style="display:none; margin-bottom: 25px;">
+                    <h2 class="section-title">🏅 Gerenciar Badges</h2>
+                    <p style="color:#666; margin-bottom:20px;">Clique nos badges para ativar/desativar conquistas do colaborador selecionado.</p>
+                    <div id="admin-badges-container"></div>
+                </div>
+
+                <!-- Histórico de Avaliações -->
+                <div class="eval-card" id="admin-eval-section" style="display:none; margin-bottom: 25px;">
+                    <h2 class="section-title">📝 Histórico de Avaliações</h2>
+                    <div id="admin-eval-history"></div>
+                </div>
+
+                <div class="admin-container">
+                    <div class="admin-card">
+                        <h2 class="section-title">➕ Adicionar Colaborador</h2>
+                        <div class="form-group"><label>Nome</label><input type="text" id="trainee-name" placeholder="Nome completo"></div>
+                        <div class="form-group"><label>Função</label><select id="trainee-function"><option value="B2B">B2B</option><option value="B2C">B2C</option><option value="Backoffice">Backoffice</option></select></div>
+                        <div class="form-group"><label>Marca</label><select id="trainee-brand"><option value="ECA USP">ECA USP</option><option value="ESALQ/PECEGE">ESALQ/PECEGE</option><option value="MACKENZIE">MACKENZIE</option><option value="POLI">POLI</option></select></div>
+                        <button class="btn-primary" onclick="addTrainee()">➕ Adicionar</button>
+                        <div style="margin-top: 20px;"><div id="trainees-list"></div></div>
+                        <button class="btn-secondary" onclick="changePassword()">🔑 Alterar Senha</button>
+                    </div>
+                    <div class="admin-card">
+                        <h2 class="section-title">📊 Stats Gerais</h2>
+                        <div id="admin-stats"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+// ========== FIREBASE CONFIG ==========
+let db = null;
+let useFirebase = false;
+let unsubscribeTrainees = null;
+
+const FIREBASE_CONFIG = {"apiKey":"AIzaSyAnNHt38voyE5BrTdb3aoa9TWa1qO200RQ","authDomain":"td-grupo-ello-2026.firebaseapp.com","projectId":"td-grupo-ello-2026","storageBucket":"td-grupo-ello-2026.firebasestorage.app","messagingSenderId":"730370049526","appId":"1:730370049526:web:cd60a1385700587082f3d7","measurementId":"G-M558R3EL5H"};
+
+function initFirebase() {
+    return new Promise((resolve) => {
+        if (typeof firebase === 'undefined') {
+            console.log('Firebase não disponível, usando localStorage');
+            resolve(false);
+            return;
+        }
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(FIREBASE_CONFIG);
+            }
+            db = firebase.firestore();
+            db.collection('_test').doc('_ping').set({t: new Date().toISOString()})
+                .then(() => {
+                    console.log('Firebase conectado!');
+                    resolve(true);
+                })
+                .catch(e => {
+                    console.log('Erro Firebase:', e.message);
+                    resolve(false);
+                });
+        } catch(e) {
+            console.log('Erro init Firebase:', e);
+            resolve(false);
+        }
+    });
+}
+
+// ========== DADOS ==========
+const badgeCategories = {
+'ECA USP':{icon:'🎓',name:'ECA USP',description:'Escola de Comunicações e Artes',badges:[
+{id:'eca_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'eca1',icon:'🎨',name:'Expert ECA',desc:'História e estrutura da ECA',points:50},
+{id:'eca2',icon:'📊',name:'Mestre BI',desc:'Business Intelligence e Analytics',points:40},
+{id:'eca3',icon:'💻',name:'Marketing Digital',desc:'Comunicação e Marketing Digital',points:40},
+{id:'eca4',icon:'🤖',name:'IA Negócios',desc:'Inteligência Artificial',points:40}]},
+'ESALQ/PECEGE':{icon:'🌱',name:'ESALQ/PECEGE',description:'USP Piracicaba',badges:[
+{id:'esalq_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'esalq1',icon:'🏛️',name:'História Esalq',desc:'1901 até integração USP',points:50},
+{id:'esalq2',icon:'🌾',name:'Agronegócio',desc:'MBA em Agronegócios',points:40},
+{id:'esalq3',icon:'🌍',name:'ESG',desc:'Compliance e Sustentabilidade',points:40},
+{id:'esalq4',icon:'💹',name:'Finanças',desc:'Banking e Investimentos',points:40}]},
+'MACKENZIE':{icon:'🏛️',name:'MACKENZIE',description:'150 anos de tradição',badges:[
+{id:'mack_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'mack1',icon:'⛪',name:'História',desc:'150 anos Mackenzie',points:50},
+{id:'mack2',icon:'🎓',name:'MBA Expert',desc:'Estrutura MBA',points:40},
+{id:'mack3',icon:'🏢',name:'Multi-Campus',desc:'Todas as unidades',points:30}]},
+'POLI':{icon:'🔧',name:'POLI',description:'Escola Politécnica USP',badges:[
+{id:'poli_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'poli1',icon:'⚙️',name:'Expert Poli',desc:'Conhece Poli USP Pro',points:50},
+{id:'poli2',icon:'🏭',name:'Eng. Produção',desc:'MBA Engenharia',points:40},
+{id:'poli3',icon:'🏗️',name:'Vanzolini',desc:'Fundação Vanzolini',points:40},
+{id:'poli4',icon:'📊',name:'Data Science',desc:'Analytics para Operações',points:40}]},
+'B2B':{icon:'🤝',name:'Vendedor B2B',description:'Venda corporativa',badges:[
+{id:'b2b_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'b2b1',icon:'🎯',name:'Prospecção',desc:'Técnica de prospecção',points:60},
+{id:'b2b2',icon:'🔍',name:'Qualificador',desc:'Curvas A/B/C',points:50},
+{id:'b2b3',icon:'🗣️',name:'SPIN Selling',desc:'Aplicou SPIN',points:80},
+{id:'b2b4',icon:'👂',name:'Escuta Ativa',desc:'Escuta eficaz',points:50},
+{id:'b2b5',icon:'🤝',name:'Rapport',desc:'Conexão genuína',points:70}]},
+'B2C':{icon:'📞',name:'Vendedor B2C',description:'Atendimento cliente',badges:[
+{id:'b2c_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'b2c1',icon:'☎️',name:'Multicanal',desc:'Telefone/Email/WhatsApp',points:50},
+{id:'b2c2',icon:'📧',name:'Follow-up',desc:'Menos de 24h',points:40},
+{id:'b2c3',icon:'📋',name:'Documentos',desc:'Docs sem erros',points:50},
+{id:'b2c4',icon:'💬',name:'Objeções',desc:'Contornou 3+ objeções',points:60}]},
+'Backoffice':{icon:'⚙️',name:'Backoffice',description:'Processamento',badges:[
+{id:'back_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'back1',icon:'📝',name:'Aprovador',desc:'Formulários sem erros',points:40},
+{id:'back2',icon:'💻',name:'iEllo Master',desc:'Matrícula no iEllo',points:50},
+{id:'back3',icon:'🎓',name:'Inserção',desc:'Inseriu aluno na marca',points:40},
+{id:'back4',icon:'💰',name:'Financeiro',desc:'Boleto e pagamento',points:40}]},
+'Geral':{icon:'⭐',name:'Geral',description:'Habilidades transversais',badges:[
+{id:'geral_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
+{id:'geral1',icon:'🎯',name:'1º Dia Perfeito',desc:'Integração 100%',points:50},
+{id:'geral2',icon:'🤝',name:'Colaborativo',desc:'Ajudou 3+ colegas',points:40},
+{id:'geral3',icon:'⚡',name:'Pontual',desc:'Pontual todos dias',points:30},
+{id:'geral4',icon:'💡',name:'Inovador',desc:'Sugeriu melhoria',points:50},
+{id:'geral5',icon:'🎓',name:'Avaliação 100%',desc:'Nota máxima',points:100}]}
+};
+
+const Q={
+"b2b_comum":[
+{"n":1,"t":"Sinais de Reunião Bem Recebida","tipo":"multi","q":"Quais são os sinais de que uma reunião de apresentação está sendo bem recebida pelo RH?","opts":["Perguntas sobre o Grupo Ello","Interesse nos cursos oferecidos pela escola","Perguntas sobre os materiais de trabalho que utilizamos (notebook, celular, etc)","Perguntas detalhadas e interesse em saber mais sobre o projeto","Demonstração de interesse pela posição e fala do RH"],"correct":[3,4]},
+{"n":2,"t":"Informações Essenciais Pré-Reunião","tipo":"multi","q":"Quais informações são essenciais de serem coletadas antes da apresentação de parceria para garantir sua eficácia?","opts":["Pesquisar sobre a empresa no Google, LinkedIn, redes sociais, etc","Pesquisar histórico de atendimento","Pesquisar o número de colaboradores da empresa","Pesquisar sobre a pessoa (RH), que falaremos na reunião","Pesquisar se a empresa disponibiliza subsídio aos colaboradores","Pesquisar sobre o CEO da empresa","Pesquisar se a empresa usa o Teams","Pesquisar se os funcionários recebem material adequado para trabalhar"],"correct":[0,1,2,3,4]},
+{"n":3,"t":"Segmentação de Mercado","tipo":"single","q":"Qual é a importância da segmentação de mercado na prospecção das empresas?","opts":["Permite um foco mais eficiente nos recursos","Ajuda a personalizar a abordagem de vendas","Facilita o acompanhamento e medição de resultados","Todas as opções acima"],"correct":3},
+{"n":4,"t":"Projeto Multicompany","tipo":"single","q":"O que é o projeto Multicompany?","opts":["Turmas de cursos de pós-graduação de colaboradores da mesma empresa","Turmas de cursos de pós-graduação de colaboradores de empresas diversas","Turmas de cursos de pós e graduação para colaboradores da mesma empresa","Turmas de cursos de graduação de colaboradores de empresas diversas"],"correct":0},
+{"n":5,"t":"Benefícios do Multicompany","tipo":"single","q":"Quais benefícios as empresas obtêm ao participar do Projeto Multicompany?","opts":["Facilitar o acesso à educação aos colaboradores","Acesso à uma opção gratuita de retenção de talentos","Aumento de opções no pacote de benefícios da empresa","Todas as opções"],"correct":3},
+{"n":6,"t":"Ferramentas para Reunião Eficiente","tipo":"single","q":"Quais ferramentas ou recursos você utilizaria para garantir uma reunião bem estruturada e eficiente?","opts":["Pesquisa prévia sobre a empresa, preparação do material e tópicos que serão abordados na reunião. Identificação do perfil do RH e direcionamento da conversa.","Pesquisar se os funcionários da empresa recebem um bom salário","Pesquisa sobre a empresa, pesquisa sobre a vida pessoal do RH (onde mora, se tem filhos), e pesquisa sobre o número de colaboradores da empresa","Pesquisa sobre o vendedor anterior da empresa, e pesquisa no LinkedIn sobre o nicho da empresa"],"correct":0},
+{"n":7,"t":"Perguntas para Identificar Perfil do RH","tipo":"multi","q":"Quais perguntas iniciais você faria para identificar rapidamente o perfil do RH?","opts":["Como estão estruturadas as parcerias da empresa, atualmente?","Como funciona o pacote de benefícios da empresa?","Quais ações de incentivo educacional você realiza na empresa?","Que tipo de benefícios educacionais a empresa mais valoriza?","A empresa trabalha com subsídio aos colaboradores?","Qual a carga horária de trabalho semanal do colaborador da empresa?","Os funcionários da empresa recebem benefícios como VR, VA, VT ou cartão de multibenefícios?","Qual a periodicidade para aplicação dos indicadores de desempenho dos colaboradores?"],"correct":[0,1,2,3,4]},
+{"n":8,"t":"Perfis de RH Receptivos","tipo":"single","q":"Quais perfis de RH são mais receptivos a parcerias educacionais e por quê?","opts":["RH Generalista, porque precisa de soluções abrangentes","RH de Treinamento, porque foca no desenvolvimento de habilidades","RH de Benefícios, porque busca valor agregado para os colaboradores","Todos os perfis mencionados"],"correct":3},
+{"n":9,"t":"Importância do Follow-up","tipo":"text","q":"Qual a importância do follow-up após uma reunião com a empresa?"},
+{"n":10,"t":"Identificação do Perfil do RH","tipo":"text","q":"Como a identificação correta do perfil do RH pode impactar o sucesso da parceria e o aproveitamento da reunião?"},
+{"n":11,"t":"Identificação de Empresas Propensas","tipo":"text","q":"Como você identifica as empresas mais propensas a se beneficiar da parceria?"},
+{"n":12,"t":"Etapas do Multicompany","tipo":"text","q":"Quais são as etapas envolvidas no desenvolvimento de um projeto dentro do Multicompany?"},
+{"n":13,"t":"Avaliação do Treinamento","tipo":"text","q":"De um modo geral como você avalia o processo de treinamento até agora? Dicas, críticas ou elogios são bem-vindos para melhorarmos o processo."}
+],
+"b2b_poli":[
+{"n":14,"t":"Explicar POLI USP Pro","tipo":"text","q":"Explique de forma breve o que é a POLI USP Pro"},
+{"n":15,"t":"Diferença POLI vs USP Tradicional","tipo":"text","q":"Qual a diferença entre a POLI USP Pro e os cursos tradicionais da USP?"},
+{"n":16,"t":"Setores Beneficiados - POLI","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas da POLI USP Pro?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
+{"n":17,"t":"Vantagens Competitivas - POLI","tipo":"multi","q":"Quais vantagens competitivas a POLI USP Pro oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Corpo docente composto por professores renomados da USP","Flexibilidade nos formatos dos cursos","Opções de pagamento facilitadas"],"correct":[1,2]}
+],
+"b2b_esalq":[
+{"n":18,"t":"Explicar MBA USP ESALQ","tipo":"text","q":"Explique de forma breve o que é o MBA USP ESALQ"},
+{"n":19,"t":"Diferença ESALQ vs USP Tradicional","tipo":"text","q":"Qual a diferença entre o MBA USP ESALQ e os cursos tradicionais da USP?"},
+{"n":20,"t":"Setores Beneficiados - ESALQ","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas do MBA USP ESALQ?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
+{"n":21,"t":"Vantagens Competitivas - ESALQ","tipo":"multi","q":"Quais vantagens competitivas o MBA USP ESALQ oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Corpo docente composto por professores renomados da USP","Flexibilidade nos formatos dos cursos","Opções de pagamento facilitadas"],"correct":[1,2]}
+],
+"b2b_mackenzie":[
+{"n":22,"t":"Falar da Universidade Mackenzie","tipo":"text","q":"Fale um pouco da Universidade Presbiteriana Mackenzie"},
+{"n":23,"t":"MBA vs Pós-Graduação (Lato vs Stricto)","tipo":"text","q":"Qual a diferença entre MBA e Pós-Graduação?"},
+{"n":24,"t":"Setores Beneficiados - MACKENZIE","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas do Multicompany MACKENZIE?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
+{"n":25,"t":"Vantagens Competitivas - MACKENZIE","tipo":"multi","q":"Quais vantagens competitivas o Multicompany MACKENZIE oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Networking","Opções de pagamento facilitadas","Flexibilidade nos formatos dos cursos","Opções de cursos gratuitos para os funcionários das empresas parceiras","Corpo docente composto por professores renomados"],"correct":[1,3,4]}
+],
+"b2b_eca":[
+{"n":26,"t":"Explicar ECA USP","tipo":"text","q":"Explique de forma breve o que é a ECA USP (Escola de Comunicações e Artes)"},
+{"n":27,"t":"Diferença ECA vs USP Tradicional","tipo":"text","q":"Qual a diferença entre a ECA USP e os cursos tradicionais da USP?"},
+{"n":28,"t":"Setores Beneficiados - ECA USP","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas da ECA USP (Comunicação, Marketing, BI)?","opts":["Comunicação e Marketing","Business Intelligence & Analytics","Artes e Design","Todos os setores mencionados"],"correct":3},
+{"n":29,"t":"Vantagens Competitivas - ECA USP","tipo":"multi","q":"Quais vantagens competitivas a ECA USP oferece em comparação com outras instituições?","opts":["Corpo docente renomado da USP","Flexibilidade nos formatos (EAD)","Especialização em Comunicação e Artes","Localização privilegiada em São Paulo"],"correct":[0,1,2]}
+],
+"b2c":[
+{"n":30,"t":"Canais de Atendimento B2C","tipo":"multi","q":"Quais canais você utiliza para atendimento ao lead?","opts":["Telefone","E-mail","WhatsApp","Presencial"],"correct":[0,1,2]},
+{"n":31,"t":"Primeira Abordagem ao Lead","tipo":"single","q":"Como deve ser feita a abordagem inicial ao lead?","opts":["Contato telefônico + envio de material + agendamento de follow-up","Apenas envio de material por e-mail","Esperar o lead retornar contato","Enviar proposta comercial imediatamente"],"correct":0},
+{"n":32,"t":"Lead Negativo - Procedimento","tipo":"single","q":"O que fazer quando o lead não quer seguir com inscrição?","opts":["Perguntar se deseja receber informações na próxima turma + colocar histórico + dar PERDIDO no sistema","Insistir na venda","Apenas dar PERDIDO no sistema","Transferir para outro vendedor"],"correct":0},
+{"n":33,"t":"Documentação Obrigatória","tipo":"multi","q":"Quais documentos são obrigatórios para inscrição?","opts":["RG (não pode ser substituído)","CPF (ou CNH)","Diploma de Graduação","Formulário online preenchido","Certidão de nascimento"],"correct":[0,1,2,3]},
+{"n":34,"t":"Prazo Follow-up","tipo":"single","q":"Qual o prazo ideal para retornar contato com lead após envio de material?","opts":["1 semana","3 dias","24 a 48 horas","Aguardar lead retornar"],"correct":2},
+{"n":35,"t":"Qualificação de Lead","tipo":"single","q":"Como identificar se um lead está qualificado?","opts":["Possui graduação completa + demonstra interesse real + está dentro do público-alvo da parceria","Apenas se possui condições financeiras para pagar","Se respondeu rápido ao primeiro contato","Se tem cargo de gerência ou superior"],"correct":0},
+{"n":36,"t":"Contorno de Objeções","tipo":"multi","q":"Quais as objeções mais comuns e como contorná-las?","opts":["\"Está caro\" - Mostrar desconto exclusivo da parceria e opções de pagamento","\"Não tenho tempo\" - Destacar flexibilidade do EAD e aulas ao vivo gravadas","\"Preciso pensar\" - Criar senso de urgência (vagas limitadas, turma fechando)","\"Já fiz pós-graduação\" - Mostrar diferencial da certificação USP/Mackenzie"],"correct":[0,1,2,3]},
+{"n":37,"t":"Processo de Inscrição","tipo":"text","q":"Descreva brevemente as etapas do processo de inscrição desde o contato inicial até a matrícula"},
+{"n":38,"t":"Tratamento de Pendências Documentais","tipo":"text","q":"Como proceder quando o lead envia documentação incompleta ou com problemas?"},
+{"n":39,"t":"Avaliação do Treinamento B2C","tipo":"text","q":"Como você avalia o processo de treinamento B2C? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"backoffice":[
+{"n":40,"t":"Fluxo de Trabalho - Ordem Correta","tipo":"multi","q":"Ordene corretamente as etapas do processo de matrícula:","opts":["1. Trabalhar lead","2. Aprovação interna de formulário","3. Matrícula eletrônica","4. Validar matrícula com a marca","5. Inserir aluno na marca","6. Processo seletivo (quando aplicável)","7. Status do processo seletivo","8. Gerar boleto 1ª parcela","9. Pagamento 1ª parcela"],"correct":[0,1,2,3,4,5,6,7,8]},
+{"n":41,"t":"Aprovação de Formulários","tipo":"multi","q":"O que verificar na aprovação de formulários?","opts":["Dados pessoais completos e corretos","Documentos anexados corretamente (formato e legibilidade)","Curso selecionado está correto","Empresa/parceria identificada","Score de crédito do aluno"],"correct":[0,1,2,3]},
+{"n":42,"t":"Validação de Documentação","tipo":"multi","q":"Quais documentos precisam de validação especial (autenticação)?","opts":["Diploma de graduação (autenticação em cartório, digital ou física da universidade)","Histórico de graduação (autenticação em cartório, digital ou física)","Comprovante de vínculo empregatício (quando aplicável)","RG (cópia simples aceita)"],"correct":[0,1,2]},
+{"n":43,"t":"Sistemas Utilizados","tipo":"multi","q":"Quais sistemas você utiliza no dia a dia do Backoffice?","opts":["iELLO (sistema interno Grupo Ello)","Sistemas das marcas (APOLO para ESALQ, MOVE para POLI, etc)","E-mail corporativo","CRM externo"],"correct":[0,1,2]},
+{"n":44,"t":"Matrícula Eletrônica no iELLO","tipo":"text","q":"Descreva o processo de matrícula eletrônica no sistema iELLO"},
+{"n":45,"t":"Validação com a Marca","tipo":"text","q":"Como proceder para validar a matrícula com a escola parceira?"},
+{"n":46,"t":"Cobrança de Documentos Faltantes","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes após identificar a pendência?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar espontaneamente"],"correct":1},
+{"n":47,"t":"Processo Seletivo POLI","tipo":"single","q":"Como funciona o processo seletivo específico da POLI?","opts":["Análise curricular eliminatória","Prova escrita presencial","Entrevista online","Não há processo seletivo na POLI"],"correct":0},
+{"n":48,"t":"Gestão Financeira - Responsabilidades","tipo":"multi","q":"Quais são suas responsabilidades na parte financeira?","opts":["Gerar boleto da 1ª parcela após aprovação","Confirmar pagamento da 1ª parcela","Informar inadimplência ao setor responsável","Negociar desconto diretamente com aluno"],"correct":[0,1,2]},
+{"n":49,"t":"Boas Práticas Backoffice","tipo":"text","q":"Quais boas práticas você aplicaria para garantir zero erros no processo de matrícula?"},
+{"n":50,"t":"Avaliação do Treinamento Backoffice","tipo":"text","q":"Como você avalia o treinamento de Backoffice? Sugestões de melhoria são bem-vindas."}
+]
+};
+
+let trainees=[];let currentTrainee=0;let currentUser=null;let isAdmin=false;
+let adminCreds={username:'admin',password:'ello2025'};
+let currentEval={type:'',brand:'',answers:{},started:false};
+let adminSelectedTrainee=-1;
+let evalHistory=[];
+
+// ========== FIREBASE DATA FUNCTIONS ==========
+async function loadData() {
+    if (useFirebase && db) {
+        // Carregar do Firebase com listener em tempo real
+        return new Promise((resolve) => {
+            if (unsubscribeTrainees) unsubscribeTrainees();
+            unsubscribeTrainees = db.collection('trainees').onSnapshot(snap => {
+                trainees = [];
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    data.firebaseId = doc.id;
+                    // Gerar código se não existir
+                    if (!data.code) {
+                        data.code = generateCode(data.name);
+                        db.collection('trainees').doc(doc.id).update({code: data.code});
+                    }
+                    trainees.push(data);
+                });
+                if (!trainees.length) {
+                    // Adicionar colaboradores padrão
+                    addDefaultTrainees();
+                }
+                populateEmployeeSelect();
+                populateAdminTraineeSelect();
+                if (currentUser && !isAdmin) {
+                    const updated = trainees.find(t => t.firebaseId === currentUser.firebaseId);
+                    if (updated) currentUser = updated;
+                    updateView();
+                }
+                resolve();
+            }, err => {
+                console.log('Erro ao carregar:', err);
+                loadFromLocalStorage();
+                resolve();
+            });
+        });
+    } else {
+        loadFromLocalStorage();
+    }
+}
+
+function loadFromLocalStorage() {
+    const s = localStorage.getItem('badgesSystemData');
+    if (s) {
+        const d = JSON.parse(s);
+        trainees = d.trainees || [];
+        if (d.adminCreds) adminCreds = d.adminCreds;
+        if (d.evalHistory) evalHistory = d.evalHistory;
+    }
+    if (!trainees.length) {
+        trainees = [
+            {name:'João Silva', function:'B2B', brand:'ECA USP', points:0, badges:[], code:'JOAO2025'},
+            {name:'Maria Santos', function:'B2C', brand:'MACKENZIE', points:0, badges:[], code:'MARIA2025'}
+        ];
+    }
+    // Garantir que todos tenham código
+    trainees.forEach((t, i) => {
+        if (!t.code) t.code = generateCode(t.name);
+    });
+}
+
+async function addDefaultTrainees() {
+    const defaults = [
+        {name:'João Silva', function:'B2B', brand:'ECA USP', points:0, badges:[], code:'JOAO2025'},
+        {name:'Maria Santos', function:'B2C', brand:'MACKENZIE', points:0, badges:[], code:'MARIA2025'}
+    ];
+    for (const t of defaults) {
+        await db.collection('trainees').add(t);
+    }
+}
+
+function generateCode(name) {
+    const fn = name.split(' ')[0].toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return `${fn}${new Date().getFullYear()}${String(Math.floor(Math.random()*100)).padStart(2,'0')}`;
+}
+
+async function saveData() {
+    if (useFirebase && db && currentUser && currentUser.firebaseId) {
+        try {
+            await db.collection('trainees').doc(currentUser.firebaseId).update({
+                points: currentUser.points || 0,
+                badges: currentUser.badges || [],
+                evalHistory: currentUser.evalHistory || []
+            });
+        } catch(e) {
+            console.log('Erro ao salvar no Firebase:', e);
+            saveToLocalStorage();
+        }
+    } else {
+        saveToLocalStorage();
+    }
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem('badgesSystemData', JSON.stringify({trainees, adminCreds, evalHistory}));
+}
+function populateEmployeeSelect(){const s=document.getElementById('employee-select');s.innerHTML='<option value="">-- Selecione --</option>'+trainees.map((t,i)=>'<option value="'+i+'">'+t.name+'</option>').join('');}
+function populateAdminTraineeSelect(){const s=document.getElementById('admin-trainee-select');if(s){s.innerHTML='<option value="">-- Selecione um colaborador --</option>'+trainees.map((t,i)=>'<option value="'+i+'">'+t.name+' ('+t.function+' - '+t.brand+')</option>').join('');}}
+function switchLoginTab(t){document.querySelectorAll('.login-tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.login-form').forEach(f=>f.classList.remove('active'));if(t==='employee'){document.querySelector('.login-tab:first-child').classList.add('active');document.getElementById('employee-form').classList.add('active');}else{document.querySelector('.login-tab:last-child').classList.add('active');document.getElementById('admin-form').classList.add('active');}hideError();}
+function showError(m){const e=document.getElementById('error-message');e.textContent=m;e.classList.add('show');}
+function hideError(){document.getElementById('error-message').classList.remove('show');}
+function loginEmployee(e){
+    e.preventDefault();
+    const code = document.getElementById('employee-code').value.trim().toUpperCase();
+    if(!code){
+        showError('❌ Digite seu código de acesso');
+        return;
+    }
+    
+    // Procurar colaborador pelo código
+    const index = trainees.findIndex(t => t.code && t.code.toUpperCase() === code);
+    
+    if(index === -1){
+        showError('❌ Código não encontrado. Verifique com o T&D.');
+        return;
+    }
+    
+    currentTrainee = index;
+    currentUser = trainees[currentTrainee];
+    isAdmin = false;
+    showMainSystem();
+}
+function loginAdmin(e){e.preventDefault();const u=document.getElementById('admin-username').value;const p=document.getElementById('admin-password').value;if(u===adminCreds.username&&p===adminCreds.password){isAdmin=true;currentUser={name:'Administrador'};showMainSystem();}else{showError('❌ Usuário ou senha incorretos');}}
+function showMainSystem(){document.getElementById('login-screen').style.display='none';document.getElementById('main-system').style.display='block';document.getElementById('user-name').textContent=currentUser.name;document.getElementById('user-role').textContent=isAdmin?'Administrador':'Colaborador';document.getElementById('user-role').classList.toggle('admin',isAdmin);const a=document.getElementById('admin-btn');if(isAdmin)a.classList.remove('disabled');else a.classList.add('disabled');updateView();renderEvalButtons();}
+function logout(){if(confirm('Sair?')){document.getElementById('login-screen').style.display='flex';document.getElementById('main-system').style.display='none';document.getElementById('employee-code').value='';document.getElementById('admin-username').value='';document.getElementById('admin-password').value='';currentUser=null;isAdmin=false;switchLoginTab('employee');}}
+function changePassword(){const c=prompt('Senha atual:');if(c!==adminCreds.password){alert('❌ Incorreta');return;}const n=prompt('Nova senha (min 6):');if(!n||n.length<6){alert('❌ Min 6 chars');return;}const f=prompt('Confirme:');if(n!==f){alert('❌ Não coincidem');return;}adminCreds.password=n;saveData();alert('✅ Alterada!');}
+function switchMode(m){if(m==='admin'&&!isAdmin){alert('⚠️ Só admin!');return;}document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));if(m==='view'){document.querySelector('.mode-btn:first-child').classList.add('active');document.getElementById('view-mode').classList.add('active');updateView();}else if(m==='eval'){document.querySelector('.mode-btn:nth-child(2)').classList.add('active');document.getElementById('eval-mode').classList.add('active');renderEvalButtons();}else{document.querySelector('.mode-btn:nth-child(3)').classList.add('active');document.getElementById('admin-mode').classList.add('active');renderAdmin();}}
+function addTrainee(){
+    const n=document.getElementById('trainee-name').value;
+    const f=document.getElementById('trainee-function').value;
+    const b=document.getElementById('trainee-brand').value;
+    if(!n){alert('⚠️ Nome!');return;}
+    
+    const code = generateCode(n);
+    const newTrainee = {name:n, function:f, brand:b, points:0, badges:[], code:code, evalHistory:[]};
+    
+    if(useFirebase && db) {
+        db.collection('trainees').add(newTrainee).then(() => {
+            document.getElementById('trainee-name').value='';
+            renderAdmin();
+            populateEmployeeSelect();
+            alert('✅ Adicionado!\n\nCódigo de acesso: ' + code);
+        }).catch(e => {
+            console.log('Erro ao adicionar:', e);
+            alert('❌ Erro ao adicionar');
+        });
+    } else {
+        trainees.push(newTrainee);
+        saveToLocalStorage();
+        document.getElementById('trainee-name').value='';
+        renderAdmin();
+        populateEmployeeSelect();
+        alert('✅ Adicionado!\n\nCódigo de acesso: ' + code);
+    }
+}
+function deleteTrainee(i){
+    if(confirm('Excluir?')){
+        if(useFirebase && db && trainees[i].firebaseId) {
+            db.collection('trainees').doc(trainees[i].firebaseId).delete().then(() => {
+                if(currentTrainee>=trainees.length)currentTrainee=Math.max(0,trainees.length-1);
+                renderAdmin();
+                populateEmployeeSelect();
+            });
+        } else {
+            trainees.splice(i,1);
+            if(currentTrainee>=trainees.length)currentTrainee=Math.max(0,trainees.length-1);
+            saveToLocalStorage();
+            renderAdmin();
+            populateEmployeeSelect();
+        }
+    }
+}
+function renderAdmin(){populateAdminTraineeSelect();const l=document.getElementById('trainees-list');l.innerHTML=trainees.map((t,i)=>'<div class="list-item"><div class="list-item-info"><div class="list-item-name">'+t.name+'</div><div class="list-item-details">'+t.function+' • '+t.brand+' • '+t.points+'pts • '+t.badges.length+' badges</div><div class="list-item-details" style="margin-top:5px;"><strong>Código:</strong> <span style="background:#667eea;color:white;padding:2px 8px;border-radius:4px;font-family:monospace;">'+(t.code||'N/A')+'</span></div></div><button class="btn-delete" onclick="deleteTrainee('+i+')">🗑️</button></div>').join('');const tb=Object.values(badgeCategories).reduce((s,c)=>s+c.badges.length,0);const tp=trainees.reduce((s,t)=>s+t.points,0);const ap=trainees.length?Math.round(tp/trainees.length):0;document.getElementById('admin-stats').innerHTML='<div class="list-item"><div class="list-item-info"><div class="list-item-name">Colaboradores</div><div class="list-item-details">'+trainees.length+' cadastrados</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Total Badges</div><div class="list-item-details">'+tb+' disponíveis</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Pontos</div><div class="list-item-details">'+tp+' distribuídos</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Média</div><div class="list-item-details">'+ap+' pts/pessoa</div></div></div><div class="list-item" style="background:#e8f5e9;"><div class="list-item-info"><div class="list-item-name">🌐 Firebase</div><div class="list-item-details">'+(useFirebase?'✅ Conectado - Sincronização em tempo real':'❌ Offline - Usando localStorage')+'</div></div></div>';}
+function updateView(){renderBadges();updateStats();}
+function renderBadges(){const c=document.getElementById('badges-container');const t=trainees[currentTrainee];let h='';for(const[k,cat]of Object.entries(badgeCategories)){if(!isAdmin){if(!['Geral'].includes(k)&&k!==t.brand&&k!==t.function)continue;}h+='<div class="category-section"><div class="category-header"><div class="category-icon">'+cat.icon+'</div><div class="category-info"><h3>'+cat.name+'</h3><p>'+cat.description+'</p></div></div><div class="badges-grid">';cat.badges.forEach(b=>{const u=t.badges.includes(b.id);const tag=['B2B','B2C','Backoffice','Geral'].includes(k)?'Função':'Marca';const cl=isAdmin?'onclick="toggleBadge(\''+b.id+'\')"':'';const ro=isAdmin?'':'read-only';h+='<div class="badge '+(u?'unlocked':'locked')+' '+ro+'" '+cl+'><span class="badge-tag">'+tag+'</span><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+'</div><div class="badge-points">+'+b.points+'pts</div></div>';});h+='</div></div>';}c.innerHTML=h;}
+function toggleBadge(id){
+    if(!isAdmin){alert('⚠️ Só admin!');return;}
+    const t=trainees[currentTrainee];
+    const i=t.badges.indexOf(id);
+    if(i===-1)t.badges.push(id);
+    else t.badges.splice(i,1);
+    recalculatePoints(t);
+    
+    if(useFirebase && db && t.firebaseId) {
+        db.collection('trainees').doc(t.firebaseId).update({
+            badges: t.badges,
+            points: t.points
+        }).catch(e => console.log('Erro ao salvar badge:', e));
+    } else {
+        saveToLocalStorage();
+    }
+    updateView();
+}
+function recalculatePoints(t){t.points=0;t.badges.forEach(id=>{for(const c of Object.values(badgeCategories)){const b=c.badges.find(x=>x.id===id);if(b){t.points+=b.points;break;}}});}
+function updateStats(){const t=trainees[currentTrainee];const tb=Object.values(badgeCategories).reduce((s,c)=>s+c.badges.length,0);const cp=Math.round((t.badges.length/tb)*100);document.getElementById('total-points').textContent=t.points;document.getElementById('badges-count').textContent=t.badges.length+'/'+tb;document.getElementById('completion').textContent=cp+'%';}
+
+
+function renderEvalButtons(){const btn=document.getElementById('eval-buttons');const t=trainees[currentTrainee];let html='<div class="btn-group">';if(isAdmin){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'POLI\')">B2B - POLI</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ESALQ/PECEGE\')">B2B - ESALQ</button><button class="btn-primary" onclick="startEval(\'b2b\',\'MACKENZIE\')">B2B - MACK</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ECA USP\')">B2B - ECA</button><button class="btn-primary" onclick="startEval(\'b2c\',\'\')">B2C</button><button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Backoffice</button>';}else{if(t.function==='B2B'){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\''+t.brand+'\')">Avaliação B2B - '+t.brand+'</button>';}else if(t.function==='B2C'){html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'\')">Avaliação B2C</button>';}else if(t.function==='Backoffice'){html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Avaliação Backoffice</button>';}}html+='</div>';btn.innerHTML=html;document.getElementById('eval-content').innerHTML='';}
+
+function startEval(type,brand){currentEval={type,brand,answers:{},started:true};renderEval();}
+
+function renderEval(){const c=document.getElementById('eval-content');let qs=[];if(currentEval.type==='b2b'){qs=[...Q.b2b_comum];if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);}else if(currentEval.type==='b2c'){qs=Q.b2c;}else if(currentEval.type==='backoffice'){qs=Q.backoffice;}let html='<div class="eval-card"><h2 class="section-title">'+(currentEval.type==='b2b'?'Avaliação B2B - '+currentEval.brand:currentEval.type==='b2c'?'Avaliação B2C':'Avaliação Backoffice')+'</h2>';qs.forEach(q=>{html+='<div class="question"><div class="question-header"><span class="question-number">Q'+q.n+'</span><span class="question-type">'+(q.tipo==='multi'?'Múltipla escolha':q.tipo==='single'?'Única escolha':'Dissertativa')+'</span></div><div class="question-text">'+q.q+'</div>';if(q.opts){html+='<div class="options">';q.opts.forEach((o,i)=>{const inputType=q.tipo==='multi'?'checkbox':'radio';const name='q'+q.n;html+='<div class="option"><input type="'+inputType+'" name="'+name+'" value="'+i+'" id="'+name+'_'+i+'"><label for="'+name+'_'+i+'">'+o+'</label></div>';});html+='</div>';}else{html+='<textarea class="textarea-answer" id="q'+q.n+'_text" placeholder="Digite sua resposta aqui..."></textarea>';}html+='</div>';});html+='<button class="btn-primary" onclick="submitEval()">✅ Enviar Avaliação</button></div>';c.innerHTML=html;}
+
+function submitEval(){let qs=[];if(currentEval.type==='b2b'){qs=[...Q.b2b_comum];if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);}else if(currentEval.type==='b2c'){qs=Q.b2c;}else{qs=Q.backoffice;}let correct=0,total=0;qs.forEach(q=>{if(q.tipo==='text')return;total++;const answers=[];document.querySelectorAll('input[name="q'+q.n+'"]:checked').forEach(el=>{answers.push(parseInt(el.value));});let isCorrect=false;if(q.tipo==='single'){isCorrect=answers.length===1&&answers[0]===q.correct;}else{isCorrect=answers.length===q.correct.length&&answers.every(a=>q.correct.includes(a));}if(isCorrect)correct++;});const score=total>0?Math.round((correct/total)*100):0;const passed=score>=70;
+// Salvar histórico da avaliação
+const evalRecord={
+    traineeIndex:currentTrainee,
+    traineeName:trainees[currentTrainee].name,
+    type:currentEval.type,
+    brand:currentEval.brand,
+    score:score,
+    correct:correct,
+    total:total,
+    passed:passed,
+    date:new Date().toLocaleString('pt-BR'),
+    answers:{}
+};
+// Salvar todas as respostas
+qs.forEach(q=>{
+    if(q.tipo==='text'){
+        const textarea=document.getElementById('q'+q.n+'_text');
+        evalRecord.answers['q'+q.n]={
+            tipo:'text',
+            pergunta:q.q,
+            tema:q.t,
+            resposta:textarea?textarea.value:''
+        };
+    }else{
+        const selected=[];
+        document.querySelectorAll('input[name="q'+q.n+'"]:checked').forEach(el=>{
+            selected.push(parseInt(el.value));
+        });
+        const isCorrect=q.tipo==='single'?(selected.length===1&&selected[0]===q.correct):(selected.length===q.correct.length&&selected.every(a=>q.correct.includes(a)));
+        evalRecord.answers['q'+q.n]={
+            tipo:q.tipo,
+            pergunta:q.q,
+            tema:q.t,
+            opcoes:q.opts,
+            selecionadas:selected,
+            corretas:Array.isArray(q.correct)?q.correct:[q.correct],
+            acertou:isCorrect
+        };
+    }
+});
+evalHistory.push(evalRecord);
+
+// Salvar no Firebase se disponível
+if(useFirebase && db && trainees[currentTrainee].firebaseId) {
+    const t = trainees[currentTrainee];
+    if(!t.evalHistory) t.evalHistory = [];
+    t.evalHistory.push(evalRecord);
+    db.collection('trainees').doc(t.firebaseId).update({
+        evalHistory: t.evalHistory
+    }).catch(e => console.log('Erro ao salvar avaliação:', e));
+} else {
+    saveToLocalStorage();
+}
+
+document.getElementById('eval-content').innerHTML='<div class="result-card"><h2>'+(passed?'🎉 Parabéns! Aprovado!':'📚 Necessário Revisar Conteúdo')+'</h2><div class="score-big">'+score+'%</div><p><strong>Acertos:</strong> '+correct+' de '+total+' questões objetivas</p><p><strong>Nota mínima:</strong> 70%</p><p style="margin-top:20px;font-size:14px;opacity:0.9">As questões dissertativas serão avaliadas pelo coordenador</p><button class="btn-secondary" onclick="renderEvalButtons();document.getElementById(\'eval-content\').innerHTML=\'\';">🔄 Fazer Outra Avaliação</button></div>';}
+
+// ========== INICIALIZAÇÃO ==========
+async function init() {
+    useFirebase = await initFirebase();
+    console.log('Firebase:', useFirebase ? 'Ativo' : 'Inativo (usando localStorage)');
+    await loadData();
+    populateEmployeeSelect();
+}
+
+init();
+
+// Funções do Admin para gerenciar colaboradores
+function selectTraineeToManage(){
+    const sel=document.getElementById('admin-trainee-select');
+    adminSelectedTrainee=sel.value?parseInt(sel.value):-1;
+    if(adminSelectedTrainee>=0){
+        const t=trainees[adminSelectedTrainee];
+        document.getElementById('selected-trainee-info').style.display='block';
+        document.getElementById('managing-name').textContent=t.name;
+        document.getElementById('managing-function').textContent=t.function;
+        document.getElementById('managing-brand').textContent=t.brand;
+        document.getElementById('managing-points').textContent=t.points;
+        document.getElementById('admin-badges-section').style.display='block';
+        document.getElementById('admin-eval-section').style.display='block';
+        renderAdminBadges();
+        renderAdminEvalHistory();
+    }else{
+        document.getElementById('selected-trainee-info').style.display='none';
+        document.getElementById('admin-badges-section').style.display='none';
+        document.getElementById('admin-eval-section').style.display='none';
+    }
+}
+
+function renderAdminBadges(){
+    if(adminSelectedTrainee<0)return;
+    const c=document.getElementById('admin-badges-container');
+    const t=trainees[adminSelectedTrainee];
+    let h='';
+    for(const[k,cat]of Object.entries(badgeCategories)){
+        h+='<div class="category-section"><div class="category-header"><div class="category-icon">'+cat.icon+'</div><div class="category-info"><h3>'+cat.name+'</h3><p>'+cat.description+'</p></div></div><div class="badges-grid">';
+        cat.badges.forEach(b=>{
+            const u=t.badges.includes(b.id);
+            const tag=['B2B','B2C','Backoffice','Geral'].includes(k)?'Função':'Marca';
+            h+='<div class="badge '+(u?'unlocked':'locked')+'" onclick="toggleAdminBadge(\''+b.id+'\')"><span class="badge-tag">'+tag+'</span><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+'</div><div class="badge-points">+'+b.points+'pts</div></div>';
+        });
+        h+='</div></div>';
+    }
+    c.innerHTML=h;
+}
+
+function toggleAdminBadge(id){
+    if(adminSelectedTrainee<0)return;
+    const t=trainees[adminSelectedTrainee];
+    const i=t.badges.indexOf(id);
+    if(i===-1)t.badges.push(id);
+    else t.badges.splice(i,1);
+    recalculatePoints(t);
+    
+    if(useFirebase && db && t.firebaseId) {
+        db.collection('trainees').doc(t.firebaseId).update({
+            badges: t.badges,
+            points: t.points
+        }).catch(e => console.log('Erro ao salvar badge:', e));
+    } else {
+        saveToLocalStorage();
+    }
+    
+    renderAdminBadges();
+    document.getElementById('managing-points').textContent=t.points;
+    renderAdmin();
+}
+
+function renderAdminEvalHistory(){
+    if(adminSelectedTrainee<0)return;
+    const c=document.getElementById('admin-eval-history');
+    const history=evalHistory.filter(e=>e.traineeIndex===adminSelectedTrainee);
+    if(history.length===0){
+        c.innerHTML='<div class="info-box"><strong>📋 Nenhuma avaliação registrada</strong><br>Este colaborador ainda não realizou avaliações.</div>';
+        return;
+    }
+    // Encontrar índices originais no evalHistory
+    const historyWithIndex=history.map(e=>{
+        const origIndex=evalHistory.findIndex(x=>x===e);
+        return {...e,origIndex};
+    });
+    let h='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#1e3c72;color:white;"><th style="padding:12px;text-align:left;border-radius:8px 0 0 0;">Data</th><th style="padding:12px;text-align:left;">Tipo</th><th style="padding:12px;text-align:left;">Marca</th><th style="padding:12px;text-align:center;">Acertos</th><th style="padding:12px;text-align:center;">Nota</th><th style="padding:12px;text-align:center;">Status</th><th style="padding:12px;text-align:center;border-radius:0 8px 0 0;">Ações</th></tr></thead><tbody>';
+    historyWithIndex.reverse().forEach((e,i)=>{
+        const bg=i%2===0?'#f8f9fa':'white';
+        const statusColor=e.passed?'#28a745':'#dc3545';
+        const statusText=e.passed?'✅ Aprovado':'❌ Reprovado';
+        h+='<tr style="background:'+bg+';"><td style="padding:12px;">'+e.date+'</td><td style="padding:12px;">'+e.type.toUpperCase()+'</td><td style="padding:12px;">'+(e.brand||'-')+'</td><td style="padding:12px;text-align:center;">'+e.correct+'/'+e.total+'</td><td style="padding:12px;text-align:center;font-weight:bold;">'+e.score+'%</td><td style="padding:12px;text-align:center;color:'+statusColor+';font-weight:bold;">'+statusText+'</td><td style="padding:12px;text-align:center;"><button class="btn-primary" style="padding:8px 16px;width:auto;" onclick="viewEvalDetails('+e.origIndex+')">👁️ Ver Respostas</button></td></tr>';
+    });
+    h+='</tbody></table></div>';
+    h+='<div id="eval-details-container"></div>';
+    c.innerHTML=h;
+}
+
+function viewEvalDetails(evalIndex){
+    const e=evalHistory[evalIndex];
+    if(!e||!e.answers){
+        alert('Esta avaliação não possui respostas salvas (formato antigo).');
+        return;
+    }
+    const c=document.getElementById('eval-details-container');
+    let h='<div class="eval-card" style="margin-top:25px;"><h2 class="section-title">📋 Detalhes da Avaliação - '+e.traineeName+'</h2>';
+    h+='<div class="info-box" style="background:#e7f3ff;border-color:#0066cc;margin-bottom:20px;"><strong style="color:#004085;">📅 '+e.date+'</strong> | '+e.type.toUpperCase()+(e.brand?' - '+e.brand:'')+' | Nota: <strong>'+e.score+'%</strong> ('+(e.passed?'Aprovado':'Reprovado')+')</div>';
+    
+    // Separar questões objetivas e dissertativas
+    const objetivas=[];
+    const dissertativas=[];
+    for(const[key,ans] of Object.entries(e.answers)){
+        if(ans.tipo==='text'){
+            dissertativas.push({key,ans});
+        }else{
+            objetivas.push({key,ans});
+        }
+    }
+    
+    // Questões Objetivas
+    if(objetivas.length>0){
+        h+='<h3 style="color:#1e3c72;margin:20px 0 15px;border-bottom:2px solid #1e3c72;padding-bottom:10px;">📊 Questões Objetivas ('+e.correct+'/'+e.total+')</h3>';
+        objetivas.forEach(({key,ans})=>{
+            const statusIcon=ans.acertou?'✅':'❌';
+            const statusBg=ans.acertou?'#d4edda':'#f8d7da';
+            const statusBorder=ans.acertou?'#28a745':'#dc3545';
+            h+='<div class="question" style="border-left-color:'+statusBorder+';background:'+statusBg+';">';
+            h+='<div class="question-header"><span class="question-number">'+key.toUpperCase()+'</span><span class="question-type">'+ans.tema+' '+statusIcon+'</span></div>';
+            h+='<div class="question-text">'+ans.pergunta+'</div>';
+            h+='<div style="margin-top:10px;">';
+            ans.opcoes.forEach((opt,idx)=>{
+                const wasSelected=ans.selecionadas.includes(idx);
+                const isCorrect=ans.corretas.includes(idx);
+                let style='padding:8px 12px;margin:4px 0;border-radius:6px;';
+                if(wasSelected&&isCorrect)style+='background:#28a745;color:white;';
+                else if(wasSelected&&!isCorrect)style+='background:#dc3545;color:white;';
+                else if(!wasSelected&&isCorrect)style+='background:#ffc107;color:#333;';
+                else style+='background:#e9ecef;color:#666;';
+                const icon=wasSelected?(isCorrect?'✓':'✗'):(isCorrect?'●':'○');
+                h+='<div style="'+style+'">'+icon+' '+opt+'</div>';
+            });
+            h+='</div></div>';
+        });
+    }
+    
+    // Questões Dissertativas
+    if(dissertativas.length>0){
+        h+='<h3 style="color:#1e3c72;margin:30px 0 15px;border-bottom:2px solid #1e3c72;padding-bottom:10px;">📝 Questões Dissertativas ('+dissertativas.length+')</h3>';
+        dissertativas.forEach(({key,ans})=>{
+            h+='<div class="question">';
+            h+='<div class="question-header"><span class="question-number">'+key.toUpperCase()+'</span><span class="question-type">'+ans.tema+'</span></div>';
+            h+='<div class="question-text">'+ans.pergunta+'</div>';
+            h+='<div style="background:white;padding:15px;border-radius:8px;margin-top:10px;border:2px solid #e0e0e0;min-height:60px;">';
+            h+=ans.resposta?'<p style="color:#333;white-space:pre-wrap;">'+ans.resposta+'</p>':'<p style="color:#999;font-style:italic;">Não respondida</p>';
+            h+='</div></div>';
+        });
+    }
+    
+    h+='<button class="btn-secondary" style="margin-top:20px;" onclick="document.getElementById(\'eval-details-container\').innerHTML=\'\';">✖️ Fechar Detalhes</button>';
+    h+='</div>';
+    c.innerHTML=h;
+    c.scrollIntoView({behavior:'smooth'});
+}
+
+function exportTraineeReport(){
+    if(adminSelectedTrainee<0){
+        alert('Selecione um colaborador primeiro!');
+        return;
+    }
+    const t=trainees[adminSelectedTrainee];
+    const history=evalHistory.filter(e=>e.traineeIndex===adminSelectedTrainee);
+    
+    // Obter badges conquistados com detalhes
+    const badgesConquistados=[];
+    t.badges.forEach(id=>{
+        for(const[catKey,cat] of Object.entries(badgeCategories)){
+            const b=cat.badges.find(x=>x.id===id);
+            if(b){
+                badgesConquistados.push({
+                    categoria:cat.name,
+                    nome:b.name,
+                    descricao:b.desc,
+                    pontos:b.points,
+                    icon:b.icon
+                });
+                break;
+            }
+        }
+    });
+    
+    // Criar HTML do relatório
+    let html=`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <title>Relatório - ${t.name}</title>
+        <style>
+            *{margin:0;padding:0;box-sizing:border-box;}
+            body{font-family:'Segoe UI',sans-serif;padding:40px;background:#f5f5f5;}
+            .report{max-width:800px;margin:0 auto;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+            .header{text-align:center;border-bottom:3px solid #1e3c72;padding-bottom:20px;margin-bottom:30px;}
+            .header h1{color:#1e3c72;font-size:24px;margin-bottom:5px;}
+            .header p{color:#666;font-size:14px;}
+            .section{margin-bottom:30px;}
+            .section-title{color:#1e3c72;font-size:18px;border-bottom:2px solid #e0e0e0;padding-bottom:10px;margin-bottom:15px;}
+            .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px;}
+            .info-item{background:#f8f9fa;padding:15px;border-radius:8px;}
+            .info-label{font-size:12px;color:#666;text-transform:uppercase;margin-bottom:5px;}
+            .info-value{font-size:18px;font-weight:bold;color:#333;}
+            .badge-item{display:flex;align-items:center;padding:10px;background:#f8f9fa;border-radius:8px;margin-bottom:8px;}
+            .badge-icon{font-size:24px;margin-right:15px;}
+            .badge-info{flex:1;}
+            .badge-name{font-weight:bold;color:#333;}
+            .badge-desc{font-size:12px;color:#666;}
+            .badge-points{background:#1e3c72;color:white;padding:4px 10px;border-radius:12px;font-size:12px;}
+            .eval-item{background:#f8f9fa;padding:15px;border-radius:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+            .eval-info{flex:1;}
+            .eval-date{font-weight:bold;color:#333;}
+            .eval-type{font-size:12px;color:#666;}
+            .eval-score{font-size:24px;font-weight:bold;}
+            .eval-score.passed{color:#28a745;}
+            .eval-score.failed{color:#dc3545;}
+            .summary{background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:white;padding:20px;border-radius:10px;text-align:center;margin-top:30px;}
+            .summary h3{margin-bottom:15px;}
+            .summary-grid{display:flex;justify-content:space-around;}
+            .summary-item{text-align:center;}
+            .summary-value{font-size:32px;font-weight:bold;}
+            .summary-label{font-size:12px;opacity:0.8;}
+            .no-data{color:#999;font-style:italic;padding:20px;text-align:center;}
+            .print-btn{background:#1e3c72;color:white;border:none;padding:12px 30px;border-radius:8px;font-size:14px;cursor:pointer;margin-top:20px;}
+            @media print{.print-btn{display:none;}}
+        </style>
+    </head>
+    <body>
+        <div class="report">
+            <div class="header">
+                <h1>📋 Relatório do Colaborador</h1>
+                <p>Grupo Ello - T&D - Trilha de Aprendizagem T&D</p>
+                <p style="margin-top:10px;font-size:12px;color:#999;">Gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">👤 Dados do Colaborador</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Nome</div>
+                        <div class="info-value">${t.name}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Função</div>
+                        <div class="info-value">${t.function}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Marca</div>
+                        <div class="info-value">${t.brand}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Total de Pontos</div>
+                        <div class="info-value">${t.points} pts</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🏅 Conquistas de Badges (${badgesConquistados.length})</h2>
+                ${badgesConquistados.length>0?badgesConquistados.map(b=>`
+                    <div class="badge-item">
+                        <div class="badge-icon">${b.icon}</div>
+                        <div class="badge-info">
+                            <div class="badge-name">${b.nome}</div>
+                            <div class="badge-desc">${b.categoria} - ${b.descricao}</div>
+                        </div>
+                        <div class="badge-points">+${b.pontos} pts</div>
+                    </div>
+                `).join(''):'<div class="no-data">Nenhum badge conquistado ainda.</div>'}
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">📝 Histórico de Avaliações (${history.length})</h2>
+                ${history.length>0?history.map(e=>`
+                    <div class="eval-item">
+                        <div class="eval-info">
+                            <div class="eval-date">${e.date}</div>
+                            <div class="eval-type">${e.type.toUpperCase()}${e.brand?' - '+e.brand:''} | Acertos: ${e.correct}/${e.total}</div>
+                        </div>
+                        <div class="eval-score ${e.passed?'passed':'failed'}">${e.score}%</div>
+                    </div>
+                `).join(''):'<div class="no-data">Nenhuma avaliação realizada ainda.</div>'}
+            </div>
+            
+            <div class="summary">
+                <h3>📊 Resumo Geral</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-value">${t.points}</div>
+                        <div class="summary-label">Pontos Totais</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${badgesConquistados.length}</div>
+                        <div class="summary-label">Badges Conquistados</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${history.length}</div>
+                        <div class="summary-label">Avaliações Realizadas</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">${history.length>0?Math.round(history.reduce((s,e)=>s+e.score,0)/history.length):0}%</div>
+                        <div class="summary-label">Média das Avaliações</div>
+                    </div>
+                </div>
+            </div>
+            
+            <center><button class="print-btn" onclick="window.print()">🖨️ Imprimir Relatório</button></center>
+        </div>
+    </body>
+    </html>`;
+    
+    // Abrir em nova janela
+    const win=window.open('','_blank');
+    win.document.write(html);
+    win.document.close();
+}
+    </script>
+</body>
+</html>
