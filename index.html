@@ -129,7 +129,7 @@
                 </div>
                 <div class="login-header">
                     <h1>🏆 Trilha de Aprendizagem T&D</h1>
-                    <p>Grupo Ello - T&D - Sistema Completo</p>
+                    <p>Grupo Ello - T&D</p>
                 </div>
                 <div class="login-tabs">
                     <div class="login-tab active" onclick="switchLoginTab('employee')">👤 Colaborador</div>
@@ -311,32 +311,117 @@ const badgeCategories = {
 {id:'poli2',icon:'🏭',name:'Eng. Produção',desc:'MBA Engenharia',points:40},
 {id:'poli3',icon:'🏗️',name:'Vanzolini',desc:'Fundação Vanzolini',points:40},
 {id:'poli4',icon:'📊',name:'Data Science',desc:'Analytics para Operações',points:40}]},
-'B2B':{icon:'🤝',name:'Vendedor B2B',description:'Venda corporativa',badges:[
-{id:'b2b_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
-{id:'b2b1',icon:'🎯',name:'Prospecção',desc:'Técnica de prospecção',points:60},
-{id:'b2b2',icon:'🔍',name:'Qualificador',desc:'Curvas A/B/C',points:50},
-{id:'b2b3',icon:'🗣️',name:'SPIN Selling',desc:'Aplicou SPIN',points:80},
-{id:'b2b4',icon:'👂',name:'Escuta Ativa',desc:'Escuta eficaz',points:50},
-{id:'b2b5',icon:'🤝',name:'Rapport',desc:'Conexão genuína',points:70}]},
-'B2C':{icon:'📞',name:'Vendedor B2C',description:'Atendimento cliente',badges:[
-{id:'b2c_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
-{id:'b2c1',icon:'☎️',name:'Multicanal',desc:'Telefone/Email/WhatsApp',points:50},
-{id:'b2c2',icon:'📧',name:'Follow-up',desc:'Menos de 24h',points:40},
-{id:'b2c3',icon:'📋',name:'Documentos',desc:'Docs sem erros',points:50},
-{id:'b2c4',icon:'💬',name:'Objeções',desc:'Contornou 3+ objeções',points:60}]},
-'Backoffice':{icon:'⚙️',name:'Backoffice',description:'Processamento',badges:[
-{id:'back_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
-{id:'back1',icon:'📝',name:'Aprovador',desc:'Formulários sem erros',points:40},
-{id:'back2',icon:'💻',name:'iEllo Master',desc:'Matrícula no iEllo',points:50},
-{id:'back3',icon:'🎓',name:'Inserção',desc:'Inseriu aluno na marca',points:40},
-{id:'back4',icon:'💰',name:'Financeiro',desc:'Boleto e pagamento',points:40}]},
-'Geral':{icon:'⭐',name:'Geral',description:'Habilidades transversais',badges:[
-{id:'geral_lato',icon:'📚',name:'Lato vs Stricto',desc:'Diferencia tipos de pós-graduação',points:30},
-{id:'geral1',icon:'🎯',name:'1º Dia Perfeito',desc:'Integração 100%',points:50},
-{id:'geral2',icon:'🤝',name:'Colaborativo',desc:'Ajudou 3+ colegas',points:40},
-{id:'geral3',icon:'⚡',name:'Pontual',desc:'Pontual todos dias',points:30},
-{id:'geral4',icon:'💡',name:'Inovador',desc:'Sugeriu melhoria',points:50},
-{id:'geral5',icon:'🎓',name:'Avaliação 100%',desc:'Nota máxima',points:100}]}
+'B2B - Técnicas de Vendas':{icon:'🎯',name:'B2B - Técnicas de Vendas',description:'Habilidades comerciais',isB2B:true,badges:[
+{id:'b2b_funcoes',icon:'📋',name:'Funções Vendedor B2B',desc:'Funções e atribuições do vendedor',points:35},
+{id:'b2b_rotina',icon:'🕐',name:'Rotina de Vendas',desc:'Apresentação da rotina de vendas',points:35},
+{id:'b2b_etapas',icon:'📊',name:'Etapas Prospecção',desc:'Etapas de prospecção',points:40},
+{id:'b2b_spin',icon:'🗣️',name:'SPIN Selling',desc:'Técnicas de Vendas - SPIN',points:50},
+{id:'b2b_escuta',icon:'👂',name:'Escuta Ativa',desc:'Técnicas de Vendas - Escuta ativa',points:45},
+{id:'b2b_rapport',icon:'🤝',name:'Rapport',desc:'Técnicas de Vendas - Rapport',points:45}]},
+'B2B - Sistema iEllo':{icon:'💻',name:'B2B - Sistema iEllo',description:'Operação no sistema',isB2B:true,badges:[
+{id:'b2b_sist_prosp',icon:'💻',name:'Sistema Prospecção',desc:'Treinamento no sistema (prospecção)',points:40},
+{id:'b2b_fluxo_prosp',icon:'🔄',name:'Fluxo Prospecção iEllo',desc:'Fluxo de prospecção no iEllo',points:40},
+{id:'b2b_filtros',icon:'🔍',name:'Filtros Central',desc:'Filtros da central de atendimento',points:35},
+{id:'b2b_historico',icon:'📝',name:'Inserção Histórico',desc:'Treinamento de inserção de histórico',points:30},
+{id:'b2b_follow',icon:'📆',name:'Agendamento Follow',desc:'Treinamento de agendamento de follow',points:35},
+{id:'b2b_agenda',icon:'📅',name:'Consulta Agenda',desc:'Consulta de agenda no iEllo',points:30},
+{id:'b2b_emp_perdida',icon:'❌',name:'Empresa Perdida',desc:'Treinamento de empresa perdida',points:30}]},
+'B2B - E-mails':{icon:'📧',name:'B2B - E-mails',description:'Comunicação por e-mail',isB2B:true,badges:[
+{id:'b2b_email_modelo',icon:'📧',name:'E-mail Modelos',desc:'Envio de e-mail - modelos prontos',points:30},
+{id:'b2b_email_anexo',icon:'📎',name:'E-mail com Anexo',desc:'Envio de e-mail com anexo',points:30},
+{id:'b2b_dir_email',icon:'📬',name:'Direcionamento E-mails',desc:'Direcionamento de e-mails',points:30},
+{id:'b2b_email_lead',icon:'📧',name:'E-mail Lead',desc:'Envio de e-mail - lead',points:30}]},
+'B2B - Reuniões':{icon:'👥',name:'B2B - Reuniões',description:'Gestão de reuniões',isB2B:true,badges:[
+{id:'b2b_ag_reuniao',icon:'🗓️',name:'Agendamento Reunião',desc:'Treinamento de agendamento de reunião',points:35},
+{id:'b2b_reg_reuniao',icon:'✍️',name:'Registro Reunião',desc:'Treinamento de registro de reunião',points:35},
+{id:'b2b_reunioes',icon:'👥',name:'Treinamento Reuniões',desc:'Treinamento de reuniões',points:40},
+{id:'b2b_prep_reuniao',icon:'📋',name:'Preparação Reunião',desc:'Preparação para reunião',points:35},
+{id:'b2b_perfis_rh',icon:'👤',name:'Perfis de RH',desc:'Treinamento de perfis de RH',points:35},
+{id:'b2b_plan_reuniao',icon:'📝',name:'Planejamento Reunião',desc:'Planejamento de reunião',points:35},
+{id:'b2b_pos_reuniao',icon:'✅',name:'Pós Reunião',desc:'Registro, envio de materiais, etc',points:40},
+{id:'b2b_simul_reuniao',icon:'🎭',name:'Simulação Reuniões',desc:'Simulação de reuniões',points:45}]},
+'B2B - Ligações':{icon:'📞',name:'B2B - Ligações',description:'Atendimento telefônico',isB2B:true,badges:[
+{id:'b2b_ligacoes',icon:'📞',name:'Treinamento Ligações',desc:'Treinamento de ligações',points:35},
+{id:'b2b_reg_ligacoes',icon:'📱',name:'Registro Ligações',desc:'Treinamento de registro de ligações',points:30},
+{id:'b2b_reg_whats',icon:'💬',name:'Registro WhatsApp',desc:'Registro de WhatsApp, ligação e histórico',points:35}]},
+'B2B - Divulgação':{icon:'📢',name:'B2B - Divulgação',description:'Marketing e divulgação',isB2B:true,badges:[
+{id:'b2b_divulgacao',icon:'📢',name:'Treinamento Divulgação',desc:'Treinamento de divulgação',points:35},
+{id:'b2b_peca_divulg',icon:'🎨',name:'Montagem Peça',desc:'Montagem de peça de divulgação',points:35},
+{id:'b2b_reg_divulg',icon:'📋',name:'Registro Divulgação',desc:'Registro de divulgação no sistema',points:30},
+{id:'b2b_cont_divulg',icon:'🔁',name:'Continuação Divulgação',desc:'Continuação da divulgação',points:30},
+{id:'b2b_concl_divulg',icon:'✅',name:'Conclusão Divulgação',desc:'Conclusão da divulgação',points:30}]},
+'B2B - Plantão':{icon:'🏥',name:'B2B - Plantão',description:'Gestão de plantões',isB2B:true,badges:[
+{id:'b2b_ag_plantao',icon:'🏥',name:'Agendamento Plantão',desc:'Treinamento de agendamento de plantão',points:35},
+{id:'b2b_reg_plantao',icon:'📝',name:'Registro Plantão',desc:'Treinamento de registro de plantão',points:30},
+{id:'b2b_leads_plantao',icon:'👥',name:'Leads do Plantão',desc:'Inserção de leads do plantão',points:35},
+{id:'b2b_reembolso',icon:'💰',name:'Solicitação Reembolso',desc:'Treinamento de solicitação de reembolso',points:30}]},
+'B2B - Leads':{icon:'🎯',name:'B2B - Leads',description:'Gestão de leads',isB2B:true,badges:[
+{id:'b2b_ins_leads',icon:'➕',name:'Inserção de Leads',desc:'Treinamento de inserção de leads',points:35},
+{id:'b2b_fluxo_leads',icon:'🔄',name:'Fluxo de Leads',desc:'Treinamento de fluxo de leads',points:40},
+{id:'b2b_lead_site',icon:'🌐',name:'Lead Site Escola',desc:'Fluxo de lead no site da escola',points:35},
+{id:'b2b_lead_iello',icon:'💻',name:'Lead Sistema iEllo',desc:'Fluxo de lead no sistema iEllo',points:40},
+{id:'b2b_doc_lead',icon:'📄',name:'Documento Lead',desc:'Inserção de documento - lead',points:30},
+{id:'b2b_filtros_lead',icon:'🔍',name:'Filtros de Leads',desc:'Treinamento de filtros de leads',points:30},
+{id:'b2b_atend_leads',icon:'🎯',name:'Atendimento Leads',desc:'Atendimento e conversão de leads',points:45}]},
+'B2B - Termos':{icon:'📑',name:'B2B - Termos',description:'Gestão de termos e contratos',isB2B:true,badges:[
+{id:'b2b_fluxo_termos',icon:'📑',name:'Fluxo de Termos',desc:'Treinamento de fluxo de termos',points:35},
+{id:'b2b_termo_word',icon:'📝',name:'Termo Padrão Word',desc:'Envio de termo padrão - modelo word',points:30},
+{id:'b2b_termo_email',icon:'📧',name:'Termo Corpo E-mail',desc:'Envio de termo - corpo do e-mail',points:30},
+{id:'b2b_reg_termo',icon:'📋',name:'Registro Info Termo',desc:'Registro de informações de termo',points:30},
+{id:'b2b_filtros_termo',icon:'🔍',name:'Filtros de Termo',desc:'Treinamento de filtros de termo',points:30}]},
+
+'B2C - E-mails':{icon:'📧',name:'B2C - E-mails',description:'Comunicação por e-mail',isB2C:true,badges:[
+{id:'b2c_filtros',icon:'🔍',name:'Filtros Central',desc:'Filtros da central de atendimento',points:35},
+{id:'b2c_email_modelo',icon:'📧',name:'E-mail Modelos',desc:'Envio de e-mail - modelos prontos',points:30},
+{id:'b2c_email_anexo',icon:'📎',name:'E-mail com Anexo',desc:'Envio de e-mail com anexo',points:30},
+{id:'b2c_dir_email',icon:'📬',name:'Direcionamento E-mails',desc:'Direcionamento de e-mails',points:30}]},
+'B2C - Leads':{icon:'🎯',name:'B2C - Leads',description:'Gestão de leads',isB2C:true,badges:[
+{id:'b2c_ins_leads',icon:'➕',name:'Inserção de Leads',desc:'Treinamento de inserção de leads',points:35},
+{id:'b2c_fluxo_leads',icon:'🔄',name:'Fluxo de Leads',desc:'Treinamento de fluxo de leads',points:40},
+{id:'b2c_doc_lead',icon:'📄',name:'Documento Lead',desc:'Inserção de documento - lead',points:30},
+{id:'b2c_reg_whats',icon:'💬',name:'Registro WhatsApp',desc:'Registro de WhatsApp, ligação e histórico',points:35},
+{id:'b2c_filtros_lead',icon:'🔍',name:'Filtros de Leads',desc:'Treinamento de filtros de leads',points:30},
+{id:'b2c_atend_leads',icon:'🎯',name:'Atendimento Leads',desc:'Atendimento e conversão de leads',points:45}]},
+
+'Backoffice - E-mails':{icon:'📧',name:'Backoffice - E-mails',description:'Comunicação por e-mail',isBackoffice:true,badges:[
+{id:'back_filtros',icon:'🔍',name:'Filtros Central',desc:'Filtros da central de atendimento',points:35},
+{id:'back_email_modelo',icon:'📧',name:'E-mail Modelos',desc:'Envio de e-mail - modelos prontos',points:30},
+{id:'back_email_anexo',icon:'📎',name:'E-mail com Anexo',desc:'Envio de e-mail com anexo',points:30},
+{id:'back_dir_email',icon:'📬',name:'Direcionamento E-mails',desc:'Direcionamento de e-mails',points:30}]},
+'Backoffice - Leads':{icon:'🎯',name:'Backoffice - Leads',description:'Gestão de leads',isBackoffice:true,badges:[
+{id:'back_ins_leads',icon:'➕',name:'Inserção de Leads',desc:'Treinamento de inserção de leads',points:35},
+{id:'back_fluxo_leads',icon:'🔄',name:'Fluxo de Leads',desc:'Treinamento de fluxo de leads',points:40},
+{id:'back_doc_lead',icon:'📄',name:'Documento Lead',desc:'Inserção de documento - lead',points:30},
+{id:'back_reg_whats',icon:'💬',name:'Registro WhatsApp',desc:'Registro de WhatsApp, ligação e histórico',points:35},
+{id:'back_filtros_lead',icon:'🔍',name:'Filtros de Leads',desc:'Treinamento de filtros de leads',points:30}]},
+'Backoffice - Cobrança':{icon:'💰',name:'Backoffice - Cobrança',description:'Cobrança e retenção',isBackoffice:true,badges:[
+{id:'back_cob_doc',icon:'📋',name:'Cobrança Documentação',desc:'Treinamento de cobrança de documentação',points:35},
+{id:'back_cob_pag',icon:'💳',name:'Cobrança Pagamento',desc:'Treinamento de cobrança de pagamento',points:35},
+{id:'back_retencao',icon:'🎯',name:'Atendimento e Retenção',desc:'Atendimento e retenção de leads',points:45}]},
+
+'Geral - Institucional':{icon:'🏢',name:'Geral - Institucional',description:'Conhecimento da empresa',badges:[
+{id:'geral_grupo',icon:'🏢',name:'Apresentação Grupo Ello',desc:'Conhece o Grupo Ello',points:30},
+{id:'geral_historia',icon:'📜',name:'História da Empresa',desc:'Conhece a história da empresa',points:30},
+{id:'geral_diretoria',icon:'👔',name:'Diretoria',desc:'Conhece a diretoria',points:20},
+{id:'geral_diversidade',icon:'🌈',name:'Diversidade',desc:'Treinamento de diversidade',points:30},
+{id:'geral_imagem',icon:'👤',name:'Imagem Pessoal',desc:'Treinamento de imagem pessoal',points:25},
+{id:'geral_mba',icon:'🎓',name:'MBA e Pós-Graduação',desc:'Conhece MBA e Pós',points:40},
+{id:'geral_marcas',icon:'🏷️',name:'Marcas',desc:'Conhece as marcas parceiras',points:35},
+{id:'geral_clientes',icon:'🤝',name:'Nossos Clientes',desc:'Conhece os clientes',points:30}]},
+'Geral - Treinamento Inicial':{icon:'📋',name:'Geral - Treinamento Inicial',description:'Integração e onboarding',badges:[
+{id:'geral_area_td',icon:'📋',name:'Área de Treinamento',desc:'Apresentação da área de T&D',points:25},
+{id:'geral_topicos',icon:'📝',name:'Tópicos Presencial',desc:'Tópicos do treinamento presencial',points:30},
+{id:'geral_experiencia',icon:'📅',name:'Período Experiência',desc:'Acompanhamento no período de experiência',points:35},
+{id:'geral_info',icon:'🔎',name:'Buscar Informações',desc:'Onde buscar informações corretas',points:25},
+{id:'geral_comunicacao',icon:'💬',name:'Comunicação Interna',desc:'Meios de comunicação internos',points:25},
+{id:'geral_equipe',icon:'👥',name:'Apresentação Equipe',desc:'Conhece a equipe',points:25}]},
+'Geral - Produto e Cursos':{icon:'🎓',name:'Geral - Produto e Cursos',description:'Conhecimento de produtos',badges:[
+{id:'geral_produto',icon:'📦',name:'Produto e Negócio',desc:'Apresentação produto e modelo de negócio',points:40},
+{id:'geral_marca',icon:'🎯',name:'Apresentação Marca',desc:'Apresentação da marca',points:35},
+{id:'geral_site',icon:'🌐',name:'Site da Escola',desc:'Conhecendo o site da escola',points:30},
+{id:'geral_cursos',icon:'📚',name:'Apresentação Cursos',desc:'Modalidades, valores, etc',points:40}]},
+'Geral - Overview':{icon:'🔭',name:'Geral - Overview',description:'Visão geral completa',badges:[
+{id:'geral_overview',icon:'🔭',name:'Overview Geral',desc:'Visão geral completa do treinamento',points:50}]}
 };
 
 const Q={
@@ -586,7 +671,43 @@ function deleteTrainee(i){
 }
 function renderAdmin(){populateAdminTraineeSelect();const l=document.getElementById('trainees-list');l.innerHTML=trainees.map((t,i)=>'<div class="list-item"><div class="list-item-info"><div class="list-item-name">'+t.name+'</div><div class="list-item-details">'+t.function+' • '+t.brand+' • '+t.points+'pts • '+t.badges.length+' badges</div><div class="list-item-details" style="margin-top:5px;"><strong>Código:</strong> <span style="background:#667eea;color:white;padding:2px 8px;border-radius:4px;font-family:monospace;">'+(t.code||'N/A')+'</span></div></div><button class="btn-delete" onclick="deleteTrainee('+i+')">🗑️</button></div>').join('');const tb=Object.values(badgeCategories).reduce((s,c)=>s+c.badges.length,0);const tp=trainees.reduce((s,t)=>s+t.points,0);const ap=trainees.length?Math.round(tp/trainees.length):0;document.getElementById('admin-stats').innerHTML='<div class="list-item"><div class="list-item-info"><div class="list-item-name">Colaboradores</div><div class="list-item-details">'+trainees.length+' cadastrados</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Total Badges</div><div class="list-item-details">'+tb+' disponíveis</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Pontos</div><div class="list-item-details">'+tp+' distribuídos</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Média</div><div class="list-item-details">'+ap+' pts/pessoa</div></div></div><div class="list-item" style="background:#e8f5e9;"><div class="list-item-info"><div class="list-item-name">🌐 Firebase</div><div class="list-item-details">'+(useFirebase?'✅ Conectado - Sincronização em tempo real':'❌ Offline - Usando localStorage')+'</div></div></div>';}
 function updateView(){renderBadges();updateStats();}
-function renderBadges(){const c=document.getElementById('badges-container');const t=trainees[currentTrainee];let h='';for(const[k,cat]of Object.entries(badgeCategories)){if(!isAdmin){if(!['Geral'].includes(k)&&k!==t.brand&&k!==t.function)continue;}h+='<div class="category-section"><div class="category-header"><div class="category-icon">'+cat.icon+'</div><div class="category-info"><h3>'+cat.name+'</h3><p>'+cat.description+'</p></div></div><div class="badges-grid">';cat.badges.forEach(b=>{const u=t.badges.includes(b.id);const tag=['B2B','B2C','Backoffice','Geral'].includes(k)?'Função':'Marca';const cl=isAdmin?'onclick="toggleBadge(\''+b.id+'\')"':'';const ro=isAdmin?'':'read-only';h+='<div class="badge '+(u?'unlocked':'locked')+' '+ro+'" '+cl+'><span class="badge-tag">'+tag+'</span><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+'</div><div class="badge-points">+'+b.points+'pts</div></div>';});h+='</div></div>';}c.innerHTML=h;}
+function renderBadges(){
+    const c=document.getElementById('badges-container');
+    const t=trainees[currentTrainee];
+    let h='';
+    for(const[k,cat]of Object.entries(badgeCategories)){
+        // Verificar se deve mostrar esta categoria
+        const isB2BCategory = cat.isB2B === true;
+        const isB2CCategory = cat.isB2C === true;
+        const isBackofficeCategory = cat.isBackoffice === true;
+        const isGeralCategory = k.startsWith('Geral');
+        
+        // Filtrar badges: mostrar apenas Geral + função + marca do colaborador selecionado
+        // Isso vale tanto para admin quanto para colaborador
+        const isSuaMarca = k === t.brand;
+        const isSuaFuncao = k === t.function;
+        const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
+                                     (t.function === 'B2C' && isB2CCategory) || 
+                                     (t.function === 'Backoffice' && isBackofficeCategory);
+        
+        if(!isGeralCategory && !isSuaMarca && !isSuaFuncao && !isSubcategoriaFuncao) continue;
+        
+        // Determinar tag (Função, Marca ou Geral)
+        let tag = 'Marca';
+        if(isGeralCategory) tag = 'Geral';
+        else if(isB2BCategory || isB2CCategory || isBackofficeCategory || k.startsWith('B2B') || k.startsWith('B2C') || k.startsWith('Backoffice')) tag = 'Função';
+        
+        h+='<div class="category-section"><div class="category-header"><div class="category-icon">'+cat.icon+'</div><div class="category-info"><h3>'+cat.name+'</h3><p>'+cat.description+'</p></div></div><div class="badges-grid">';
+        cat.badges.forEach(b=>{
+            const u=t.badges.includes(b.id);
+            const cl=isAdmin?'onclick="toggleBadge(\''+b.id+'\')"':'';
+            const ro=isAdmin?'':'read-only';
+            h+='<div class="badge '+(u?'unlocked':'locked')+' '+ro+'" '+cl+'><span class="badge-tag">'+tag+'</span><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+'</div><div class="badge-points">+'+b.points+'pts</div></div>';
+        });
+        h+='</div></div>';
+    }
+    c.innerHTML=h;
+}
 function toggleBadge(id){
     if(!isAdmin){alert('⚠️ Só admin!');return;}
     const t=trainees[currentTrainee];
@@ -606,7 +727,31 @@ function toggleBadge(id){
     updateView();
 }
 function recalculatePoints(t){t.points=0;t.badges.forEach(id=>{for(const c of Object.values(badgeCategories)){const b=c.badges.find(x=>x.id===id);if(b){t.points+=b.points;break;}}});}
-function updateStats(){const t=trainees[currentTrainee];const tb=Object.values(badgeCategories).reduce((s,c)=>s+c.badges.length,0);const cp=Math.round((t.badges.length/tb)*100);document.getElementById('total-points').textContent=t.points;document.getElementById('badges-count').textContent=t.badges.length+'/'+tb;document.getElementById('completion').textContent=cp+'%';}
+function updateStats(){
+    const t=trainees[currentTrainee];
+    // Contar apenas badges disponíveis para este colaborador
+    let availableBadges = 0;
+    for(const[k,cat] of Object.entries(badgeCategories)){
+        const isB2BCategory = cat.isB2B === true;
+        const isB2CCategory = cat.isB2C === true;
+        const isBackofficeCategory = cat.isBackoffice === true;
+        const isGeralCategory = k.startsWith('Geral');
+        
+        const isSuaMarca = k === t.brand;
+        const isSuaFuncao = k === t.function;
+        const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
+                                     (t.function === 'B2C' && isB2CCategory) || 
+                                     (t.function === 'Backoffice' && isBackofficeCategory);
+        
+        if(isGeralCategory || isSuaMarca || isSuaFuncao || isSubcategoriaFuncao){
+            availableBadges += cat.badges.length;
+        }
+    }
+    const cp = Math.round((t.badges.length/availableBadges)*100);
+    document.getElementById('total-points').textContent = t.points;
+    document.getElementById('badges-count').textContent = t.badges.length + '/' + availableBadges;
+    document.getElementById('completion').textContent = cp + '%';
+}
 
 
 function renderEvalButtons(){const btn=document.getElementById('eval-buttons');const t=trainees[currentTrainee];let html='<div class="btn-group">';if(isAdmin){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'POLI\')">B2B - POLI</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ESALQ/PECEGE\')">B2B - ESALQ</button><button class="btn-primary" onclick="startEval(\'b2b\',\'MACKENZIE\')">B2B - MACK</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ECA USP\')">B2B - ECA</button><button class="btn-primary" onclick="startEval(\'b2c\',\'\')">B2C</button><button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Backoffice</button>';}else{if(t.function==='B2B'){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\''+t.brand+'\')">Avaliação B2B - '+t.brand+'</button>';}else if(t.function==='B2C'){html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'\')">Avaliação B2C</button>';}else if(t.function==='Backoffice'){html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Avaliação Backoffice</button>';}}html+='</div>';btn.innerHTML=html;document.getElementById('eval-content').innerHTML='';}
