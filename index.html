@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trilha de Aprendizagem T&D - Grupo Ello</title>
+    <title>Trilha de Aprendizagem T&D - Grupo Ello - v2</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -675,27 +675,41 @@ function renderBadges(){
     const c=document.getElementById('badges-container');
     const t=trainees[currentTrainee];
     let h='';
+    
+    // Lista de marcas válidas
+    const marcasValidas = ['ECA USP', 'ESALQ/PECEGE', 'MACKENZIE', 'POLI'];
+    
+    // DEBUG
+    console.log('Colaborador:', t.name, 'Função:', t.function, 'Marca:', t.brand);
+    
     for(const[k,cat]of Object.entries(badgeCategories)){
-        // Verificar se deve mostrar esta categoria
+        // Verificar tipo de categoria
         const isB2BCategory = cat.isB2B === true;
         const isB2CCategory = cat.isB2C === true;
         const isBackofficeCategory = cat.isBackoffice === true;
         const isGeralCategory = k.startsWith('Geral');
+        const isMarcaCategory = marcasValidas.includes(k);
         
-        // Filtrar badges: mostrar apenas Geral + função + marca do colaborador selecionado
-        // Isso vale tanto para admin quanto para colaborador
-        const isSuaMarca = k === t.brand;
-        const isSuaFuncao = k === t.function;
+        // Filtrar: mostrar apenas Geral + função + marca do colaborador selecionado
+        const isSuaMarca = (k === t.brand);
         const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
                                      (t.function === 'B2C' && isB2CCategory) || 
                                      (t.function === 'Backoffice' && isBackofficeCategory);
         
-        if(!isGeralCategory && !isSuaMarca && !isSuaFuncao && !isSubcategoriaFuncao) continue;
+        // Mostrar se: é Geral OU é a marca do colaborador OU é subcategoria da função dele
+        const deveMostrar = isGeralCategory || isSuaMarca || isSubcategoriaFuncao;
+        
+        // DEBUG
+        if(isMarcaCategory) {
+            console.log('Categoria:', k, '| isSuaMarca:', isSuaMarca, '| t.brand:', t.brand, '| deveMostrar:', deveMostrar);
+        }
+        
+        if(!deveMostrar) continue;
         
         // Determinar tag (Função, Marca ou Geral)
-        let tag = 'Marca';
+        let tag = 'Função';
         if(isGeralCategory) tag = 'Geral';
-        else if(isB2BCategory || isB2CCategory || isBackofficeCategory || k.startsWith('B2B') || k.startsWith('B2C') || k.startsWith('Backoffice')) tag = 'Função';
+        else if(isMarcaCategory) tag = 'Marca';
         
         h+='<div class="category-section"><div class="category-header"><div class="category-icon">'+cat.icon+'</div><div class="category-info"><h3>'+cat.name+'</h3><p>'+cat.description+'</p></div></div><div class="badges-grid">';
         cat.badges.forEach(b=>{
@@ -729,6 +743,9 @@ function toggleBadge(id){
 function recalculatePoints(t){t.points=0;t.badges.forEach(id=>{for(const c of Object.values(badgeCategories)){const b=c.badges.find(x=>x.id===id);if(b){t.points+=b.points;break;}}});}
 function updateStats(){
     const t=trainees[currentTrainee];
+    // Lista de marcas válidas
+    const marcasValidas = ['ECA USP', 'ESALQ/PECEGE', 'MACKENZIE', 'POLI'];
+    
     // Contar apenas badges disponíveis para este colaborador
     let availableBadges = 0;
     for(const[k,cat] of Object.entries(badgeCategories)){
@@ -738,12 +755,13 @@ function updateStats(){
         const isGeralCategory = k.startsWith('Geral');
         
         const isSuaMarca = k === t.brand;
-        const isSuaFuncao = k === t.function;
         const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
                                      (t.function === 'B2C' && isB2CCategory) || 
                                      (t.function === 'Backoffice' && isBackofficeCategory);
         
-        if(isGeralCategory || isSuaMarca || isSuaFuncao || isSubcategoriaFuncao){
+        const deveMostrar = isGeralCategory || isSuaMarca || isSubcategoriaFuncao;
+        
+        if(deveMostrar){
             availableBadges += cat.badges.length;
         }
     }
@@ -854,11 +872,37 @@ function renderAdminBadges(){
     const c=document.getElementById('admin-badges-container');
     const t=trainees[adminSelectedTrainee];
     let h='';
+    
+    // Lista de marcas válidas
+    const marcasValidas = ['ECA USP', 'ESALQ/PECEGE', 'MACKENZIE', 'POLI'];
+    
     for(const[k,cat]of Object.entries(badgeCategories)){
+        // Verificar tipo de categoria
+        const isB2BCategory = cat.isB2B === true;
+        const isB2CCategory = cat.isB2C === true;
+        const isBackofficeCategory = cat.isBackoffice === true;
+        const isGeralCategory = k.startsWith('Geral');
+        const isMarcaCategory = marcasValidas.includes(k);
+        
+        // Filtrar: mostrar apenas Geral + função + marca do colaborador selecionado
+        const isSuaMarca = (k === t.brand);
+        const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
+                                     (t.function === 'B2C' && isB2CCategory) || 
+                                     (t.function === 'Backoffice' && isBackofficeCategory);
+        
+        // Mostrar se: é Geral OU é a marca do colaborador OU é subcategoria da função dele
+        const deveMostrar = isGeralCategory || isSuaMarca || isSubcategoriaFuncao;
+        
+        if(!deveMostrar) continue;
+        
+        // Determinar tag (Função, Marca ou Geral)
+        let tag = 'Função';
+        if(isGeralCategory) tag = 'Geral';
+        else if(isMarcaCategory) tag = 'Marca';
+        
         h+='<div class="category-section"><div class="category-header"><div class="category-icon">'+cat.icon+'</div><div class="category-info"><h3>'+cat.name+'</h3><p>'+cat.description+'</p></div></div><div class="badges-grid">';
         cat.badges.forEach(b=>{
             const u=t.badges.includes(b.id);
-            const tag=['B2B','B2C','Backoffice','Geral'].includes(k)?'Função':'Marca';
             h+='<div class="badge '+(u?'unlocked':'locked')+'" onclick="toggleAdminBadge(\''+b.id+'\')"><span class="badge-tag">'+tag+'</span><div class="badge-icon">'+b.icon+'</div><div class="badge-name">'+b.name+'</div><div class="badge-desc">'+b.desc+'</div><div class="badge-points">+'+b.points+'pts</div></div>';
         });
         h+='</div></div>';
