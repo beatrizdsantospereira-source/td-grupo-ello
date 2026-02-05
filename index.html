@@ -117,6 +117,40 @@
         @media (max-width: 768px) { .admin-container { grid-template-columns: 1fr; } .badges-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .header { flex-direction: column; text-align: center; } }
         .login-logo { text-align: center; margin-bottom: 25px; }
         .login-logo img { max-width: 180px; height: auto; }
+        
+        /* Barra de Progresso */
+        .progress-container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); margin-bottom: 25px; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .progress-title { font-size: 18px; font-weight: bold; color: #1e3c72; }
+        .progress-percentage { font-size: 24px; font-weight: bold; color: #667eea; }
+        .progress-bar-outer { background: #e0e0e0; border-radius: 15px; height: 30px; overflow: hidden; position: relative; }
+        .progress-bar-inner { background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #28a745 100%); height: 100%; border-radius: 15px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; }
+        .progress-bar-inner span { color: white; font-weight: bold; font-size: 12px; }
+        .progress-details { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; color: #666; }
+        
+        /* Quiz Diário */
+        .quiz-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .quiz-modal { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .quiz-header { text-align: center; margin-bottom: 30px; }
+        .quiz-header h2 { color: #1e3c72; font-size: 28px; margin-bottom: 10px; }
+        .quiz-header p { color: #666; font-size: 14px; }
+        .quiz-streak { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 10px 20px; border-radius: 25px; display: inline-block; margin-bottom: 20px; font-weight: bold; }
+        .quiz-question { background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        .quiz-question-text { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .quiz-option { padding: 15px 20px; background: white; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-size: 15px; }
+        .quiz-option:hover { border-color: #667eea; background: #f8f9fa; }
+        .quiz-option.selected { border-color: #667eea; background: #667eea; color: white; }
+        .quiz-option.correct { border-color: #28a745; background: #28a745; color: white; }
+        .quiz-option.incorrect { border-color: #dc3545; background: #dc3545; color: white; }
+        .quiz-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: transform 0.2s; }
+        .quiz-btn:hover { transform: translateY(-2px); }
+        .quiz-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .quiz-result { text-align: center; padding: 30px; }
+        .quiz-result-icon { font-size: 80px; margin-bottom: 20px; }
+        .quiz-result h3 { font-size: 24px; margin-bottom: 10px; }
+        .quiz-result p { color: #666; font-size: 16px; margin-bottom: 20px; }
+        .quiz-points { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 15px 30px; border-radius: 25px; font-size: 20px; font-weight: bold; display: inline-block; }
     </style>
 </head>
 <body>
@@ -182,6 +216,32 @@
             </div>
             
             <div id="view-mode" class="view-section active">
+                <!-- Barra de Progresso -->
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-title">🎯 Seu Progresso na Trilha</span>
+                        <span class="progress-percentage" id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-outer">
+                        <div class="progress-bar-inner" id="progress-bar" style="width: 0%;">
+                            <span id="progress-bar-text"></span>
+                        </div>
+                    </div>
+                    <div class="progress-details">
+                        <span id="progress-badges">0 de 0 badges</span>
+                        <span id="progress-points">0 de 0 pontos</span>
+                    </div>
+                </div>
+                
+                <!-- Quiz Diário Progress -->
+                <div class="quiz-progress-card" id="quiz-progress-card" style="background:white;padding:20px;border-radius:15px;margin-bottom:25px;box-shadow:0 5px 20px rgba(0,0,0,0.1);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                        <h3 style="color:#1e3c72;margin:0;">🎯 Quiz Diário</h3>
+                        <button class="btn-primary" id="quiz-play-btn" onclick="showDailyQuiz()" style="padding:8px 16px;width:auto;">▶️ Responder Quiz</button>
+                    </div>
+                    <div id="quiz-user-progress"></div>
+                </div>
+                
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="total-points">0</div><div class="stat-label">Pontos</div></div>
                     <div class="stat-card"><div class="stat-icon">🏅</div><div class="stat-value" id="badges-count">0/0</div><div class="stat-label">Badges</div></div>
@@ -232,6 +292,12 @@
                     <div id="admin-eval-history"></div>
                 </div>
 
+                <!-- Progresso Quiz Diário -->
+                <div class="eval-card" id="admin-quiz-section" style="display:none; margin-bottom: 25px;">
+                    <h2 class="section-title">🎯 Progresso no Quiz Diário</h2>
+                    <div id="admin-quiz-progress"></div>
+                </div>
+
                 <div class="admin-container">
                     <div class="admin-card">
                         <h2 class="section-title">➕ Adicionar Colaborador</h2>
@@ -247,6 +313,13 @@
                         <div id="admin-stats"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Modal Quiz Diário -->
+        <div id="quiz-overlay" class="quiz-overlay" style="display: none;">
+            <div class="quiz-modal">
+                <div id="quiz-content"></div>
             </div>
         </div>
     </div>
@@ -497,6 +570,340 @@ let currentEval={type:'',brand:'',answers:{},started:false};
 let adminSelectedTrainee=-1;
 let evalHistory=[];
 
+// ========== QUIZ DIÁRIO ==========
+const quizDiario = {
+    dia1: [
+        {q: "Qual é a marca do Grupo Ello focada em Agronegócio?", opts: ["POLI", "ECA USP", "ESALQ/PECEGE", "MACKENZIE"], correct: 2},
+        {q: "Qual a escola do Grupo Ello especializada em Comunicação e Artes?", opts: ["POLI", "ESALQ", "MACKENZIE", "ECA USP"], correct: 3},
+        {q: "Quantos anos de tradição o Mackenzie possui?", opts: ["100 anos", "125 anos", "150 anos", "175 anos"], correct: 2}
+    ],
+    dia2: [
+        {q: "Qual a diferença entre Lato Sensu e Stricto Sensu?", opts: ["Lato é mais caro", "Stricto é especialização, Lato é mestrado", "Lato é especialização/MBA, Stricto é mestrado/doutorado", "Não há diferença"], correct: 2},
+        {q: "A POLI USP Pro é focada em qual área?", opts: ["Agronegócio", "Comunicação", "Engenharia e Tecnologia", "Direito"], correct: 2},
+        {q: "Qual o público-alvo dos cursos oferecidos pelas marcas do Grupo Ello?", opts: ["Estudantes do ensino médio", "Profissionais que buscam pós-graduação e MBA", "Aposentados", "Crianças e adolescentes"], correct: 1}
+    ],
+    dia3: [
+        {q: "Quais são os meios de comunicação interna do Grupo Ello?", opts: ["Apenas e-mail", "E-mail e Teams", "Somente telefone", "Carta e fax"], correct: 1},
+        {q: "O que significa a sigla T&D?", opts: ["Tecnologia e Desenvolvimento", "Treinamento e Desenvolvimento", "Tempo e Dedicação", "Trabalho e Desempenho"], correct: 1},
+        {q: "Qual o principal diferencial das marcas do Grupo Ello?", opts: ["Preço mais baixo do mercado", "Parceria com universidades renomadas (USP, Mackenzie)", "Cursos 100% presenciais", "Sem necessidade de diploma"], correct: 1}
+    ],
+    dia4: [
+        {q: "O que é um lead?", opts: ["Cliente que já comprou", "Potencial cliente interessado", "Fornecedor da empresa", "Funcionário novo"], correct: 1},
+        {q: "Qual sistema interno o Grupo Ello utiliza?", opts: ["Salesforce", "HubSpot", "iELLO", "Pipedrive"], correct: 2},
+        {q: "Qual a importância do histórico no sistema?", opts: ["Apenas burocracia", "Rastrear interações e dar continuidade ao atendimento", "Ocupar espaço no servidor", "Não tem importância"], correct: 1}
+    ],
+    dia5: [
+        {q: "Qual é o requisito mínimo de formação para ingressar em um curso de pós-graduação?", opts: ["Ensino médio completo", "Graduação completa", "Mestrado", "Não há requisito"], correct: 1},
+        {q: "O que o aluno precisa apresentar para comprovar sua formação acadêmica?", opts: ["Apenas RG", "Diploma de graduação", "Carteira de trabalho", "Comprovante de residência"], correct: 1},
+        {q: "O que é o Projeto Multicompany?", opts: ["Venda de cursos online", "Turmas de pós-graduação para colaboradores de empresas parceiras", "Sistema de gestão interna", "Programa de estágio"], correct: 1}
+    ]
+};
+
+let currentQuizQuestions = [];
+let currentQuizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+let selectedQuizOption = -1;
+let pendingQuizDays = [];
+let currentQuizDayIndex = 0;
+
+function getTodayKey() {
+    const today = new Date();
+    return `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+}
+
+function hasCompletedQuizToday(trainee) {
+    if (!trainee.quizData) return false;
+    return trainee.quizData.lastQuizDate === getTodayKey();
+}
+
+function getCompletedDays(trainee) {
+    if (!trainee.quizData || !trainee.quizData.completedDays) return [];
+    return trainee.quizData.completedDays;
+}
+
+function getPendingDays(trainee) {
+    const completed = getCompletedDays(trainee);
+    const allDays = [1, 2, 3, 4, 5];
+    return allDays.filter(d => !completed.includes(d)).sort((a, b) => a - b);
+}
+
+function getQuizStreak(trainee) {
+    if (!trainee.quizData) return 0;
+    return trainee.quizData.streak || 0;
+}
+
+function getTotalQuizPoints(trainee) {
+    if (!trainee.quizData) return 0;
+    return trainee.quizData.totalPoints || 0;
+}
+
+function getQuizHistory(trainee) {
+    if (!trainee.quizData) return [];
+    return trainee.quizData.history || [];
+}
+
+async function saveQuizData(trainee, dayCompleted, pointsEarned, questionsCorrect) {
+    // Inicializar quizData se não existir
+    if (!trainee.quizData) {
+        trainee.quizData = {
+            completedDays: [],
+            totalPoints: 0,
+            streak: 0,
+            history: [],
+            lastQuizDate: null
+        };
+    }
+    
+    // Adicionar dia completado
+    if (!trainee.quizData.completedDays.includes(dayCompleted)) {
+        trainee.quizData.completedDays.push(dayCompleted);
+    }
+    
+    // Adicionar pontos
+    trainee.quizData.totalPoints += pointsEarned;
+    
+    // Atualizar streak se acertou todas
+    if (questionsCorrect === 3) {
+        trainee.quizData.streak++;
+    }
+    
+    // Adicionar ao histórico
+    trainee.quizData.history.push({
+        day: dayCompleted,
+        date: new Date().toLocaleString('pt-BR'),
+        correct: questionsCorrect,
+        points: pointsEarned
+    });
+    
+    // Marcar data de hoje
+    trainee.quizData.lastQuizDate = getTodayKey();
+    
+    // Salvar no Firebase ou localStorage
+    if (useFirebase && db && trainee.firebaseId) {
+        await db.collection('trainees').doc(trainee.firebaseId).update({
+            quizData: trainee.quizData,
+            points: trainee.points
+        });
+    } else {
+        saveToLocalStorage();
+    }
+}
+
+function checkPendingQuizzes() {
+    if (!currentUser || !currentUser.code) return false;
+    
+    // Se já completou hoje, não mostrar
+    if (hasCompletedQuizToday(currentUser)) return false;
+    
+    // Verificar dias pendentes
+    pendingQuizDays = getPendingDays(currentUser);
+    
+    return pendingQuizDays.length > 0;
+}
+
+function showDailyQuiz() {
+    const overlay = document.getElementById('quiz-overlay');
+    const content = document.getElementById('quiz-content');
+    
+    pendingQuizDays = getPendingDays(currentUser);
+    
+    if (pendingQuizDays.length === 0) {
+        // Todos os dias completos
+        content.innerHTML = `
+            <div class="quiz-result">
+                <div class="quiz-result-icon">🎓</div>
+                <h3>Parabéns!</h3>
+                <p>Você já completou todos os 5 dias de quiz!</p>
+                <p style="margin-top:10px;">Total de pontos do quiz: <strong>${getTotalQuizPoints(currentUser)} pts</strong></p>
+                <button class="quiz-btn" onclick="closeQuiz()">Continuar</button>
+            </div>
+        `;
+        overlay.style.display = 'flex';
+        return;
+    }
+    
+    currentQuizDayIndex = 0;
+    showQuizDayIntro();
+}
+
+function showQuizDayIntro() {
+    const overlay = document.getElementById('quiz-overlay');
+    const content = document.getElementById('quiz-content');
+    
+    const day = pendingQuizDays[currentQuizDayIndex];
+    const totalPending = pendingQuizDays.length;
+    const completedDays = getCompletedDays(currentUser);
+    const streak = getQuizStreak(currentUser);
+    
+    let html = `
+        <div class="quiz-header">
+            <h2>🎯 Quiz Diário</h2>
+            ${totalPending > 1 ? `<p style="background:#fff3cd;padding:10px;border-radius:8px;margin-bottom:10px;">📚 Você tem <strong>${totalPending} dias</strong> de quiz pendentes!</p>` : ''}
+            <p>Dia <strong>${day}</strong> de 5 - Responda as 3 perguntas</p>
+            <p style="margin-top:5px;"><strong>+5 pontos</strong> por acerto!</p>
+            ${streak > 0 ? `<div class="quiz-streak">🔥 Dias perfeitos: ${streak}</div>` : ''}
+        </div>
+        <div style="display:flex;justify-content:center;gap:10px;margin:20px 0;">
+            ${[1,2,3,4,5].map(d => `
+                <div style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;
+                    ${completedDays.includes(d) ? 'background:#28a745;color:white;' : d === day ? 'background:#667eea;color:white;' : 'background:#e0e0e0;color:#666;'}">
+                    ${completedDays.includes(d) ? '✓' : d}
+                </div>
+            `).join('')}
+        </div>
+        <button class="quiz-btn" onclick="startQuizDay(${day})">Começar Dia ${day}</button>
+    `;
+    
+    content.innerHTML = html;
+    overlay.style.display = 'flex';
+}
+
+function startQuizDay(day) {
+    currentQuizQuestions = quizDiario['dia' + day] || quizDiario.dia1;
+    currentQuizIndex = 0;
+    quizScore = 0;
+    showQuizQuestion(day);
+}
+
+function showQuizQuestion(day) {
+    const content = document.getElementById('quiz-content');
+    const q = currentQuizQuestions[currentQuizIndex];
+    quizAnswered = false;
+    selectedQuizOption = -1;
+    
+    content.innerHTML = `
+        <div class="quiz-header" style="margin-bottom:15px;">
+            <h2 style="font-size:20px;">🎯 Dia ${day}/5</h2>
+        </div>
+        <div class="quiz-question">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <span style="background:#667eea;color:white;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold;">Pergunta ${currentQuizIndex + 1}/3</span>
+                <span style="color:#666;font-size:14px;">Acertos: ${quizScore}/3</span>
+            </div>
+            <div class="quiz-question-text">${q.q}</div>
+            <div class="quiz-options">
+                ${q.opts.map((opt, i) => `
+                    <div class="quiz-option" onclick="selectQuizOption(${i})" id="quiz-opt-${i}">${opt}</div>
+                `).join('')}
+            </div>
+        </div>
+        <button class="quiz-btn" id="quiz-submit-btn" onclick="submitQuizAnswer(${day})" disabled>Confirmar Resposta</button>
+    `;
+}
+
+function selectQuizOption(index) {
+    if (quizAnswered) return;
+    
+    document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+    document.getElementById('quiz-opt-' + index).classList.add('selected');
+    selectedQuizOption = index;
+    document.getElementById('quiz-submit-btn').disabled = false;
+}
+
+function submitQuizAnswer(day) {
+    if (selectedQuizOption === -1 || quizAnswered) return;
+    
+    quizAnswered = true;
+    const q = currentQuizQuestions[currentQuizIndex];
+    const correct = selectedQuizOption === q.correct;
+    
+    document.querySelectorAll('.quiz-option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if (i === q.correct) {
+            opt.classList.add('correct');
+        } else if (i === selectedQuizOption && !correct) {
+            opt.classList.add('incorrect');
+        }
+    });
+    
+    if (correct) {
+        quizScore++;
+    }
+    
+    const btn = document.getElementById('quiz-submit-btn');
+    if (currentQuizIndex < 2) {
+        btn.textContent = 'Próxima Pergunta →';
+        btn.onclick = function() { nextQuizQuestion(day); };
+    } else {
+        btn.textContent = 'Ver Resultado';
+        btn.onclick = function() { finishQuizDay(day); };
+    }
+    btn.disabled = false;
+}
+
+function nextQuizQuestion(day) {
+    currentQuizIndex++;
+    showQuizQuestion(day);
+}
+
+async function finishQuizDay(day) {
+    const content = document.getElementById('quiz-content');
+    const allCorrect = quizScore === 3;
+    const pointsEarned = quizScore * 5;
+    
+    // Adicionar pontos ao colaborador
+    currentUser.points += pointsEarned;
+    trainees[currentTrainee].points = currentUser.points;
+    
+    // Salvar dados do quiz no Firebase
+    await saveQuizData(currentUser, day, pointsEarned, quizScore);
+    
+    // Atualizar referência local
+    trainees[currentTrainee] = currentUser;
+    
+    // Atualizar lista de pendentes
+    pendingQuizDays = getPendingDays(currentUser);
+    const hasMoreDays = pendingQuizDays.length > 0;
+    const newStreak = getQuizStreak(currentUser);
+    
+    let message = '';
+    let icon = '';
+    if (quizScore === 3) {
+        icon = '🏆';
+        message = 'Perfeito! Você acertou todas!';
+    } else if (quizScore === 2) {
+        icon = '🎉';
+        message = 'Muito bem! Quase perfeito!';
+    } else if (quizScore === 1) {
+        icon = '👍';
+        message = 'Bom! Continue estudando!';
+    } else {
+        icon = '📚';
+        message = 'Não desanime! Revise o conteúdo!';
+    }
+    
+    content.innerHTML = `
+        <div class="quiz-result">
+            <div class="quiz-result-icon">${icon}</div>
+            <h3>${message}</h3>
+            <p>Dia ${day} - Você acertou <strong>${quizScore} de 3</strong> perguntas</p>
+            <div class="quiz-points">+${pointsEarned} pontos</div>
+            ${allCorrect && newStreak > 0 ? `<p style="margin-top:10px;">🔥 Dias perfeitos: <strong>${newStreak}</strong></p>` : ''}
+            ${hasMoreDays ? `
+                <p style="margin-top:15px;background:#fff3cd;padding:10px;border-radius:8px;">
+                    📚 Ainda ${pendingQuizDays.length === 1 ? 'resta 1 dia' : `restam ${pendingQuizDays.length} dias`} pendente${pendingQuizDays.length > 1 ? 's' : ''}!
+                </p>
+                <button class="quiz-btn" onclick="continueToNextDay()">Continuar para o Dia ${pendingQuizDays[0]}</button>
+            ` : `
+                <p style="margin-top:15px;color:#28a745;font-weight:bold;">🎓 Parabéns! Você completou todos os 5 dias!</p>
+                <p>Total de pontos do quiz: <strong>${getTotalQuizPoints(currentUser)} pts</strong></p>
+                <button class="quiz-btn" onclick="closeQuiz()">Finalizar</button>
+            `}
+        </div>
+    `;
+}
+
+function continueToNextDay() {
+    currentQuizDayIndex++;
+    showQuizDayIntro();
+}
+
+function closeQuiz() {
+    document.getElementById('quiz-overlay').style.display = 'none';
+    updateView();
+}
+
 // ========== FIREBASE DATA FUNCTIONS ==========
 async function loadData() {
     if (useFirebase && db) {
@@ -523,8 +930,22 @@ async function loadData() {
                 populateAdminTraineeSelect();
                 if (currentUser && !isAdmin) {
                     const updated = trainees.find(t => t.firebaseId === currentUser.firebaseId);
-                    if (updated) currentUser = updated;
-                    updateView();
+                    if (updated) {
+                        currentUser = updated;
+                        currentTrainee = trainees.indexOf(updated);
+                    }
+                    try {
+                        updateView();
+                    } catch(e) {
+                        console.log('Erro ao atualizar view:', e);
+                    }
+                }
+                if (isAdmin) {
+                    try {
+                        renderAdmin();
+                    } catch(e) {
+                        console.log('Erro ao renderizar admin:', e);
+                    }
                 }
                 resolve();
             }, err => {
@@ -618,6 +1039,11 @@ function loginEmployee(e){
     currentUser = trainees[currentTrainee];
     isAdmin = false;
     showMainSystem();
+    
+    // Verificar e mostrar quiz diário (acumula dias pendentes)
+    if (checkPendingQuizzes()) {
+        setTimeout(() => showDailyQuiz(), 500);
+    }
 }
 function loginAdmin(e){e.preventDefault();const u=document.getElementById('admin-username').value;const p=document.getElementById('admin-password').value;if(u===adminCreds.username&&p===adminCreds.password){isAdmin=true;currentUser={name:'Administrador'};showMainSystem();}else{showError('❌ Usuário ou senha incorretos');}}
 function showMainSystem(){document.getElementById('login-screen').style.display='none';document.getElementById('main-system').style.display='block';document.getElementById('user-name').textContent=currentUser.name;document.getElementById('user-role').textContent=isAdmin?'Administrador':'Colaborador';document.getElementById('user-role').classList.toggle('admin',isAdmin);const a=document.getElementById('admin-btn');if(isAdmin)a.classList.remove('disabled');else a.classList.add('disabled');updateView();renderEvalButtons();}
@@ -625,23 +1051,21 @@ function logout(){if(confirm('Sair?')){document.getElementById('login-screen').s
 function changePassword(){const c=prompt('Senha atual:');if(c!==adminCreds.password){alert('❌ Incorreta');return;}const n=prompt('Nova senha (min 6):');if(!n||n.length<6){alert('❌ Min 6 chars');return;}const f=prompt('Confirme:');if(n!==f){alert('❌ Não coincidem');return;}adminCreds.password=n;saveData();alert('✅ Alterada!');}
 function switchMode(m){if(m==='admin'&&!isAdmin){alert('⚠️ Só admin!');return;}document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));if(m==='view'){document.querySelector('.mode-btn:first-child').classList.add('active');document.getElementById('view-mode').classList.add('active');updateView();}else if(m==='eval'){document.querySelector('.mode-btn:nth-child(2)').classList.add('active');document.getElementById('eval-mode').classList.add('active');renderEvalButtons();}else{document.querySelector('.mode-btn:nth-child(3)').classList.add('active');document.getElementById('admin-mode').classList.add('active');renderAdmin();}}
 function addTrainee(){
-    const n=document.getElementById('trainee-name').value;
+    const n=document.getElementById('trainee-name').value.trim();
     const f=document.getElementById('trainee-function').value;
     const b=document.getElementById('trainee-brand').value;
     if(!n){alert('⚠️ Nome!');return;}
     
     const code = generateCode(n);
-    const newTrainee = {name:n, function:f, brand:b, points:0, badges:[], code:code, evalHistory:[]};
+    const newTrainee = {name:n, function:f, brand:b, points:0, badges:[], code:code, evalHistory:[], quizData:null};
     
     if(useFirebase && db) {
         db.collection('trainees').add(newTrainee).then(() => {
             document.getElementById('trainee-name').value='';
-            renderAdmin();
-            populateEmployeeSelect();
             alert('✅ Adicionado!\n\nCódigo de acesso: ' + code);
         }).catch(e => {
             console.log('Erro ao adicionar:', e);
-            alert('❌ Erro ao adicionar');
+            alert('❌ Erro ao adicionar: ' + e.message);
         });
     } else {
         trainees.push(newTrainee);
@@ -670,7 +1094,7 @@ function deleteTrainee(i){
     }
 }
 function renderAdmin(){populateAdminTraineeSelect();const l=document.getElementById('trainees-list');l.innerHTML=trainees.map((t,i)=>'<div class="list-item"><div class="list-item-info"><div class="list-item-name">'+t.name+'</div><div class="list-item-details">'+t.function+' • '+t.brand+' • '+t.points+'pts • '+t.badges.length+' badges</div><div class="list-item-details" style="margin-top:5px;"><strong>Código:</strong> <span style="background:#667eea;color:white;padding:2px 8px;border-radius:4px;font-family:monospace;">'+(t.code||'N/A')+'</span></div></div><button class="btn-delete" onclick="deleteTrainee('+i+')">🗑️</button></div>').join('');const tb=Object.values(badgeCategories).reduce((s,c)=>s+c.badges.length,0);const tp=trainees.reduce((s,t)=>s+t.points,0);const ap=trainees.length?Math.round(tp/trainees.length):0;document.getElementById('admin-stats').innerHTML='<div class="list-item"><div class="list-item-info"><div class="list-item-name">Colaboradores</div><div class="list-item-details">'+trainees.length+' cadastrados</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Total Badges</div><div class="list-item-details">'+tb+' disponíveis</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Pontos</div><div class="list-item-details">'+tp+' distribuídos</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Média</div><div class="list-item-details">'+ap+' pts/pessoa</div></div></div><div class="list-item" style="background:#e8f5e9;"><div class="list-item-info"><div class="list-item-name">🌐 Firebase</div><div class="list-item-details">'+(useFirebase?'✅ Conectado - Sincronização em tempo real':'❌ Offline - Usando localStorage')+'</div></div></div>';}
-function updateView(){renderBadges();updateStats();}
+function updateView(){renderBadges();updateStats();renderUserQuizProgress();}
 function renderBadges(){
     const c=document.getElementById('badges-container');
     const t=trainees[currentTrainee];
@@ -746,8 +1170,9 @@ function updateStats(){
     // Lista de marcas válidas
     const marcasValidas = ['ECA USP', 'ESALQ/PECEGE', 'MACKENZIE', 'POLI'];
     
-    // Contar apenas badges disponíveis para este colaborador
+    // Contar apenas badges e pontos disponíveis para este colaborador
     let availableBadges = 0;
+    let availablePoints = 0;
     for(const[k,cat] of Object.entries(badgeCategories)){
         const isB2BCategory = cat.isB2B === true;
         const isB2CCategory = cat.isB2C === true;
@@ -763,14 +1188,89 @@ function updateStats(){
         
         if(deveMostrar){
             availableBadges += cat.badges.length;
+            cat.badges.forEach(b => { availablePoints += b.points; });
         }
     }
     const cp = Math.round((t.badges.length/availableBadges)*100);
     document.getElementById('total-points').textContent = t.points;
     document.getElementById('badges-count').textContent = t.badges.length + '/' + availableBadges;
     document.getElementById('completion').textContent = cp + '%';
+    
+    // Atualizar barra de progresso
+    document.getElementById('progress-percent').textContent = cp + '%';
+    document.getElementById('progress-bar').style.width = cp + '%';
+    document.getElementById('progress-bar-text').textContent = cp >= 10 ? cp + '%' : '';
+    document.getElementById('progress-badges').textContent = t.badges.length + ' de ' + availableBadges + ' badges';
+    document.getElementById('progress-points').textContent = t.points + ' de ' + availablePoints + ' pontos';
 }
 
+
+function renderUserQuizProgress(){
+    const container = document.getElementById('quiz-user-progress');
+    const btn = document.getElementById('quiz-play-btn');
+    if(!container || !currentUser || isAdmin) {
+        if(container) container.innerHTML = '';
+        if(btn) btn.style.display = 'none';
+        return;
+    }
+    
+    const t = currentUser;
+    const completedDays = getCompletedDays(t);
+    const totalPoints = getTotalQuizPoints(t);
+    const streak = getQuizStreak(t);
+    const pendingDays = getPendingDays(t);
+    const completedToday = hasCompletedQuizToday(t);
+    
+    let html = '';
+    
+    // Progresso visual dos dias
+    html += '<div style="display:flex;justify-content:center;gap:12px;margin-bottom:15px;">';
+    for(let d=1; d<=5; d++){
+        const completed = completedDays.includes(d);
+        html += '<div style="width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;';
+        html += completed ? 'background:#28a745;color:white;' : 'background:#e0e0e0;color:#666;';
+        html += '">';
+        html += completed ? '✓' : d;
+        html += '</div>';
+    }
+    html += '</div>';
+    
+    // Stats
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center;">';
+    html += '<div style="background:#f8f9fa;padding:10px;border-radius:8px;">';
+    html += '<div style="font-size:20px;font-weight:bold;color:#1e3c72;">' + completedDays.length + '/5</div>';
+    html += '<div style="font-size:11px;color:#666;">Dias</div>';
+    html += '</div>';
+    html += '<div style="background:#f8f9fa;padding:10px;border-radius:8px;">';
+    html += '<div style="font-size:20px;font-weight:bold;color:#1e3c72;">' + totalPoints + '</div>';
+    html += '<div style="font-size:11px;color:#666;">Pontos</div>';
+    html += '</div>';
+    html += '<div style="background:#f8f9fa;padding:10px;border-radius:8px;">';
+    html += '<div style="font-size:20px;font-weight:bold;color:#1e3c72;">🔥 ' + streak + '</div>';
+    html += '<div style="font-size:11px;color:#666;">Perfeitos</div>';
+    html += '</div>';
+    html += '</div>';
+    
+    // Status e botão
+    if(completedDays.length === 5){
+        html += '<div style="margin-top:15px;padding:10px;background:#d4edda;border-radius:8px;text-align:center;color:#155724;">';
+        html += '🎓 <strong>Parabéns!</strong> Você completou todos os 5 dias do quiz!';
+        html += '</div>';
+        btn.style.display = 'none';
+    } else if(completedToday){
+        html += '<div style="margin-top:15px;padding:10px;background:#fff3cd;border-radius:8px;text-align:center;color:#856404;">';
+        html += '✅ Quiz de hoje concluído! Volte amanhã para continuar.';
+        html += '</div>';
+        btn.style.display = 'none';
+    } else {
+        html += '<div style="margin-top:15px;padding:10px;background:#cce5ff;border-radius:8px;text-align:center;color:#004085;">';
+        html += '📚 ' + pendingDays.length + ' dia(s) pendente(s) - Próximo: <strong>Dia ' + pendingDays[0] + '</strong>';
+        html += '</div>';
+        btn.style.display = 'block';
+    }
+    
+    container.innerHTML = html;
+}
 
 function renderEvalButtons(){const btn=document.getElementById('eval-buttons');const t=trainees[currentTrainee];let html='<div class="btn-group">';if(isAdmin){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'POLI\')">B2B - POLI</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ESALQ/PECEGE\')">B2B - ESALQ</button><button class="btn-primary" onclick="startEval(\'b2b\',\'MACKENZIE\')">B2B - MACK</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ECA USP\')">B2B - ECA</button><button class="btn-primary" onclick="startEval(\'b2c\',\'\')">B2C</button><button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Backoffice</button>';}else{if(t.function==='B2B'){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\''+t.brand+'\')">Avaliação B2B - '+t.brand+'</button>';}else if(t.function==='B2C'){html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'\')">Avaliação B2C</button>';}else if(t.function==='Backoffice'){html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Avaliação Backoffice</button>';}}html+='</div>';btn.innerHTML=html;document.getElementById('eval-content').innerHTML='';}
 
@@ -858,12 +1358,15 @@ function selectTraineeToManage(){
         document.getElementById('managing-points').textContent=t.points;
         document.getElementById('admin-badges-section').style.display='block';
         document.getElementById('admin-eval-section').style.display='block';
+        document.getElementById('admin-quiz-section').style.display='block';
         renderAdminBadges();
         renderAdminEvalHistory();
+        renderAdminQuizProgress();
     }else{
         document.getElementById('selected-trainee-info').style.display='none';
         document.getElementById('admin-badges-section').style.display='none';
         document.getElementById('admin-eval-section').style.display='none';
+        document.getElementById('admin-quiz-section').style.display='none';
     }
 }
 
@@ -955,6 +1458,75 @@ function renderAdminEvalHistory(){
     h+='</tbody></table></div>';
     h+='<div id="eval-details-container"></div>';
     c.innerHTML=h;
+}
+
+function renderAdminQuizProgress(){
+    if(adminSelectedTrainee<0)return;
+    const c=document.getElementById('admin-quiz-progress');
+    const t=trainees[adminSelectedTrainee];
+    
+    const completedDays = getCompletedDays(t);
+    const totalPoints = getTotalQuizPoints(t);
+    const streak = getQuizStreak(t);
+    const history = getQuizHistory(t);
+    
+    let h = '';
+    
+    // Progresso visual dos dias
+    h += '<div style="margin-bottom:20px;">';
+    h += '<p style="font-weight:bold;margin-bottom:10px;">Progresso: ' + completedDays.length + '/5 dias completos</p>';
+    h += '<div style="display:flex;gap:10px;margin-bottom:15px;">';
+    for(let d=1; d<=5; d++){
+        const completed = completedDays.includes(d);
+        h += '<div style="width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;';
+        h += completed ? 'background:#28a745;color:white;">' : 'background:#e0e0e0;color:#666;">';
+        h += completed ? '✓' : d;
+        h += '</div>';
+    }
+    h += '</div>';
+    h += '</div>';
+    
+    // Stats
+    h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px;">';
+    h += '<div style="background:#f8f9fa;padding:15px;border-radius:10px;text-align:center;">';
+    h += '<div style="font-size:24px;font-weight:bold;color:#1e3c72;">' + totalPoints + '</div>';
+    h += '<div style="font-size:12px;color:#666;">Pontos do Quiz</div>';
+    h += '</div>';
+    h += '<div style="background:#f8f9fa;padding:15px;border-radius:10px;text-align:center;">';
+    h += '<div style="font-size:24px;font-weight:bold;color:#1e3c72;">' + streak + '</div>';
+    h += '<div style="font-size:12px;color:#666;">🔥 Dias Perfeitos</div>';
+    h += '</div>';
+    h += '<div style="background:#f8f9fa;padding:15px;border-radius:10px;text-align:center;">';
+    h += '<div style="font-size:24px;font-weight:bold;color:#1e3c72;">' + (75 - totalPoints) + '</div>';
+    h += '<div style="font-size:12px;color:#666;">Pontos Restantes</div>';
+    h += '</div>';
+    h += '</div>';
+    
+    // Histórico detalhado
+    if(history.length > 0){
+        h += '<h4 style="margin-bottom:10px;color:#1e3c72;">📋 Histórico de Respostas</h4>';
+        h += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">';
+        h += '<thead><tr style="background:#667eea;color:white;">';
+        h += '<th style="padding:10px;text-align:left;">Data</th>';
+        h += '<th style="padding:10px;text-align:center;">Dia</th>';
+        h += '<th style="padding:10px;text-align:center;">Acertos</th>';
+        h += '<th style="padding:10px;text-align:center;">Pontos</th>';
+        h += '</tr></thead><tbody>';
+        history.forEach((item, i) => {
+            const bg = i % 2 === 0 ? '#f8f9fa' : 'white';
+            h += '<tr style="background:' + bg + ';">';
+            h += '<td style="padding:10px;">' + item.date + '</td>';
+            h += '<td style="padding:10px;text-align:center;">Dia ' + item.day + '</td>';
+            h += '<td style="padding:10px;text-align:center;">' + item.correct + '/3</td>';
+            h += '<td style="padding:10px;text-align:center;font-weight:bold;color:#28a745;">+' + item.points + '</td>';
+            h += '</tr>';
+        });
+        h += '</tbody></table></div>';
+    } else {
+        h += '<div class="info-box"><strong>📋 Nenhum quiz respondido</strong><br>Este colaborador ainda não respondeu o quiz diário.</div>';
+    }
+    
+    c.innerHTML = h;
 }
 
 function viewEvalDetails(evalIndex){
@@ -1174,6 +1746,42 @@ function exportTraineeReport(){
                         <div class="eval-score ${e.passed?'passed':'failed'}">${e.score}%</div>
                     </div>
                 `).join(''):'<div class="no-data">Nenhuma avaliação realizada ainda.</div>'}
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🎯 Quiz Diário (${getCompletedDays(t).length}/5 dias)</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Dias Completados</div>
+                        <div class="info-value">${getCompletedDays(t).length} de 5</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Pontos do Quiz</div>
+                        <div class="info-value">${getTotalQuizPoints(t)} de 75 possíveis</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Dias Perfeitos</div>
+                        <div class="info-value">🔥 ${getQuizStreak(t)}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">${getCompletedDays(t).length === 5 ? '✅ Completo' : '⏳ Em andamento'}</div>
+                    </div>
+                </div>
+                ${getQuizHistory(t).length > 0 ? `
+                    <div style="margin-top:15px;">
+                        <strong>Histórico:</strong>
+                        ${getQuizHistory(t).map(item => `
+                            <div class="eval-item" style="margin-top:8px;">
+                                <div class="eval-info">
+                                    <div class="eval-date">Dia ${item.day} - ${item.date}</div>
+                                    <div class="eval-type">Acertos: ${item.correct}/3</div>
+                                </div>
+                                <div class="eval-score passed">+${item.points} pts</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '<div class="no-data">Quiz diário ainda não iniciado.</div>'}
             </div>
             
             <div class="summary">
