@@ -1031,6 +1031,32 @@ function exportTraineeReport(){
     const t=trainees[adminSelectedTrainee];
     const history=evalHistory.filter(e=>e.traineeIndex===adminSelectedTrainee);
     
+    // Calcular totais possíveis (pontos e badges) APENAS para função e marca do colaborador
+    const marcasValidas = ['ECA USP', 'ESALQ/PECEGE', 'MACKENZIE', 'POLI'];
+    let totalBadgesPossiveis = 0;
+    let totalPontosPossiveis = 0;
+    
+    for(const[k,cat] of Object.entries(badgeCategories)){
+        const isB2BCategory = cat.isB2B === true;
+        const isB2CCategory = cat.isB2C === true;
+        const isBackofficeCategory = cat.isBackoffice === true;
+        const isGeralCategory = k.startsWith('Geral');
+        
+        const isSuaMarca = k === t.brand;
+        const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
+                                     (t.function === 'B2C' && isB2CCategory) || 
+                                     (t.function === 'Backoffice' && isBackofficeCategory);
+        
+        const deveMostrar = isGeralCategory || isSuaMarca || isSubcategoriaFuncao;
+        
+        if(deveMostrar){
+            totalBadgesPossiveis += cat.badges.length;
+            cat.badges.forEach(b => {
+                totalPontosPossiveis += b.points;
+            });
+        }
+    }
+    
     // Obter badges conquistados com detalhes
     const badgesConquistados=[];
     t.badges.forEach(id=>{
@@ -1118,13 +1144,13 @@ function exportTraineeReport(){
                     </div>
                     <div class="info-item">
                         <div class="info-label">Total de Pontos</div>
-                        <div class="info-value">${t.points} pts</div>
+                        <div class="info-value">${t.points} de ${totalPontosPossiveis} possíveis</div>
                     </div>
                 </div>
             </div>
             
             <div class="section">
-                <h2 class="section-title">🏅 Conquistas de Badges (${badgesConquistados.length})</h2>
+                <h2 class="section-title">🏅 Conquistas de Badges (${badgesConquistados.length} de ${totalBadgesPossiveis} possíveis)</h2>
                 ${badgesConquistados.length>0?badgesConquistados.map(b=>`
                     <div class="badge-item">
                         <div class="badge-icon">${b.icon}</div>
@@ -1154,11 +1180,11 @@ function exportTraineeReport(){
                 <h3>📊 Resumo Geral</h3>
                 <div class="summary-grid">
                     <div class="summary-item">
-                        <div class="summary-value">${t.points}</div>
-                        <div class="summary-label">Pontos Totais</div>
+                        <div class="summary-value">${t.points}/${totalPontosPossiveis}</div>
+                        <div class="summary-label">Pontos Conquistados</div>
                     </div>
                     <div class="summary-item">
-                        <div class="summary-value">${badgesConquistados.length}</div>
+                        <div class="summary-value">${badgesConquistados.length}/${totalBadgesPossiveis}</div>
                         <div class="summary-label">Badges Conquistados</div>
                     </div>
                     <div class="summary-item">
