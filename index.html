@@ -136,6 +136,361 @@
         .quiz-header p { color: #666; font-size: 14px; }
         .quiz-streak { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 10px 20px; border-radius: 25px; display: inline-block; margin-bottom: 20px; font-weight: bold; }
         .quiz-question { background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 20px; border-left: 5px solid #667eea; }
+        
+        /* ===== DASHBOARD ADMIN STYLES ===== */
+        .admin-dashboard { display: none; }
+        .admin-dashboard.active { display: block; }
+        
+        .dashboard-welcome {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
+            border-radius: 20px;
+            padding: 35px;
+            color: white;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .welcome-text h1 { font-size: 28px; margin-bottom: 8px; }
+        .welcome-text p { opacity: 0.9; font-size: 16px; }
+        .welcome-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+        .welcome-stat { text-align: center; }
+        .welcome-stat-value { font-size: 42px; font-weight: bold; }
+        .welcome-stat-label { font-size: 13px; opacity: 0.8; }
+        
+        .priority-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .priority-section.no-pending { border-left-color: #28a745; }
+        .priority-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .priority-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .priority-section.no-pending .priority-title { color: #28a745; }
+        .priority-count {
+            background: #dc3545;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .priority-section.no-pending .priority-count { background: #28a745; }
+        
+        .priority-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .priority-item {
+            background: #fff8f8;
+            border: 1px solid #ffcdd2;
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+            flex-wrap: wrap;
+        }
+        .priority-item:hover {
+            background: #ffebee;
+            transform: translateX(5px);
+        }
+        .priority-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .priority-info { flex: 1; min-width: 150px; }
+        .priority-name { font-weight: 600; color: #333; }
+        .priority-detail { font-size: 13px; color: #666; margin-top: 3px; }
+        .priority-meta { font-size: 11px; color: #999; margin-top: 5px; }
+        .priority-action {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .priority-action:hover { background: #2a5298; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+        @media (max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+        
+        .kpi-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+        }
+        .kpi-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+        .kpi-card.purple::before { background: #667eea; }
+        .kpi-card.green::before { background: #28a745; }
+        .kpi-card.orange::before { background: #fd7e14; }
+        .kpi-card.blue::before { background: #17a2b8; }
+        .kpi-label { font-size: 13px; color: #666; margin-bottom: 8px; }
+        .kpi-value { font-size: 32px; font-weight: bold; color: #1e3c72; }
+        
+        .team-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+        .filter-btn:hover { background: #e0e0e0; }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+        }
+        .filter-btn .count {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+        .filter-btn.active .count { background: rgba(255,255,255,0.2); }
+        
+        .team-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .team-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .team-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .team-card-header {
+            padding: 20px;
+            color: white;
+            position: relative;
+        }
+        .team-card-header.poli { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .team-card-header.esalq { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .team-card-header.mackenzie { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .team-card-header.eca { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .team-card-header.b2c { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .team-card-header.backoffice { background: linear-gradient(135deg, #30cfd0, #330867); }
+        .team-card-title { font-size: 18px; font-weight: bold; }
+        .team-card-subtitle { font-size: 13px; opacity: 0.9; margin-top: 3px; }
+        .team-card-count {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 32px;
+            font-weight: bold;
+            opacity: 0.3;
+        }
+        .team-card-body { padding: 20px; }
+        .team-card-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        .team-card-stat:last-child { border-bottom: none; }
+        .team-stat-label { color: #666; }
+        .team-stat-value { font-weight: 600; color: #333; }
+        .team-stat-value.pending { color: #dc3545; }
+        .team-stat-value.success { color: #28a745; }
+        
+        .quick-actions-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding: 15px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        .quick-action-btn:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        .quick-action-btn:last-child { margin-bottom: 0; }
+        .action-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .action-icon.purple { background: #ede7f6; }
+        .action-icon.green { background: #e8f5e9; }
+        .action-icon.blue { background: #e3f2fd; }
+        .action-icon.orange { background: #fff3e0; }
+        .action-icon.pink { background: #fce4ec; }
+        .action-text { flex: 1; }
+        .action-title { font-weight: 600; color: #333; font-size: 15px; }
+        .action-desc { font-size: 12px; color: #666; margin-top: 2px; }
+        .action-arrow { color: #999; font-size: 18px; }
+        
+        .activity-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .activity-list { max-height: 350px; overflow-y: auto; }
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+        .activity-dot.eval { background: #667eea; }
+        .activity-dot.badge { background: #28a745; }
+        .activity-dot.quiz { background: #fd7e14; }
+        .activity-dot.new { background: #17a2b8; }
+        .activity-content { flex: 1; }
+        .activity-text { color: #333; font-size: 14px; }
+        .activity-text strong { color: #1e3c72; }
+        .activity-time { font-size: 12px; color: #999; margin-top: 3px; }
+        
+        .section-header-dash {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .section-title-dash {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        .section-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .section-link:hover { text-decoration: underline; }
+        
+        .detail-panel {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .detail-panel.active { display: block; }
+        .detail-back-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .detail-back-btn:hover { text-decoration: underline; }
+        
+        .eval-details-container { margin-top: 20px; }
         .quiz-question-text { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px; }
         .quiz-options { display: flex; flex-direction: column; gap: 12px; }
         .quiz-option { padding: 15px 20px; background: white; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-size: 15px; }
@@ -262,57 +617,162 @@
             </div>
             
             <div id="admin-mode" class="view-section">
-                <!-- Seletor de Colaborador para Gerenciar -->
-                <div class="eval-card" style="margin-bottom: 25px;">
-                    <h2 class="section-title">🎯 Selecionar Colaborador para Gerenciar</h2>
-                    <div class="form-group">
-                        <label>Colaborador:</label>
-                        <select id="admin-trainee-select" onchange="selectTraineeToManage()">
-                            <option value="">-- Selecione um colaborador --</option>
-                        </select>
-                    </div>
-                    <div id="selected-trainee-info" style="display:none;">
-                        <div class="info-box" style="background:#d4edda;border-color:#28a745;">
-                            <strong style="color:#155724;">👤 Gerenciando:</strong> <span id="managing-name"></span> | <span id="managing-function"></span> | <span id="managing-brand"></span> | <span id="managing-points"></span> pts
+                <!-- DASHBOARD PRINCIPAL -->
+                <div id="admin-dashboard" class="admin-dashboard active">
+                    <!-- Welcome Section -->
+                    <div class="dashboard-welcome">
+                        <div class="welcome-text">
+                            <h1 id="welcome-greeting">Bom dia! 👋</h1>
+                            <p id="welcome-message">Carregando informações...</p>
                         </div>
-                        <button class="btn-primary" style="margin-top:15px;background:linear-gradient(135deg, #28a745 0%, #20c997 100%);" onclick="exportTraineeReport()">📄 Exportar Relatório do Colaborador</button>
+                        <div class="welcome-stats">
+                            <div class="welcome-stat">
+                                <div class="welcome-stat-value" id="dash-total-colab">0</div>
+                                <div class="welcome-stat-label">Colaboradores</div>
+                            </div>
+                            <div class="welcome-stat">
+                                <div class="welcome-stat-value" id="dash-taxa-aprovacao">0%</div>
+                                <div class="welcome-stat-label">Aprovação</div>
+                            </div>
+                            <div class="welcome-stat">
+                                <div class="welcome-stat-value" id="dash-total-badges">0</div>
+                                <div class="welcome-stat-label">Badges</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Priority Section -->
+                    <div class="priority-section" id="priority-section">
+                        <div class="priority-header">
+                            <div class="priority-title" id="priority-title">🚨 Requer sua atenção</div>
+                            <span class="priority-count" id="priority-count">0 pendências</span>
+                        </div>
+                        <div class="priority-list" id="priority-list">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Dashboard Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Left Column -->
+                        <div>
+                            <!-- KPIs -->
+                            <div class="kpi-section">
+                                <div class="section-header-dash">
+                                    <div class="section-title-dash">📊 Indicadores de Performance</div>
+                                </div>
+                                <div class="kpi-grid">
+                                    <div class="kpi-card purple">
+                                        <div class="kpi-label">Avaliações Concluídas</div>
+                                        <div class="kpi-value" id="kpi-avaliacoes">0</div>
+                                    </div>
+                                    <div class="kpi-card green">
+                                        <div class="kpi-label">Taxa de Aprovação</div>
+                                        <div class="kpi-value" id="kpi-aprovacao">0%</div>
+                                    </div>
+                                    <div class="kpi-card orange">
+                                        <div class="kpi-label">Média Geral</div>
+                                        <div class="kpi-value" id="kpi-media">0%</div>
+                                    </div>
+                                    <div class="kpi-card blue">
+                                        <div class="kpi-label">Quiz Completados</div>
+                                        <div class="kpi-value" id="kpi-quiz">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Team Filter + Cards -->
+                            <div class="kpi-section">
+                                <div class="section-header-dash">
+                                    <div class="section-title-dash">👥 Equipes</div>
+                                    <span class="section-link" onclick="showAllTrainees()">Ver todos colaboradores →</span>
+                                </div>
+                                <div class="team-filter" id="team-filter">
+                                    <button class="filter-btn active" data-filter="all">Todas <span class="count" id="filter-all-count">0</span></button>
+                                    <button class="filter-btn" data-filter="b2b">B2B <span class="count" id="filter-b2b-count">0</span></button>
+                                    <button class="filter-btn" data-filter="b2c">B2C <span class="count" id="filter-b2c-count">0</span></button>
+                                    <button class="filter-btn" data-filter="backoffice">Backoffice <span class="count" id="filter-back-count">0</span></button>
+                                </div>
+                                <div class="team-cards-grid" id="team-cards-grid">
+                                    <!-- Preenchido via JS -->
+                                </div>
+                            </div>
+                            
+                            <!-- Activity Section -->
+                            <div class="activity-section">
+                                <div class="section-header-dash">
+                                    <div class="section-title-dash">🕐 Atividade Recente</div>
+                                </div>
+                                <div class="activity-list" id="activity-list">
+                                    <!-- Preenchido via JS -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column -->
+                        <div>
+                            <div class="quick-actions-panel">
+                                <div class="section-header-dash">
+                                    <div class="section-title-dash">⚡ Ações Rápidas</div>
+                                </div>
+                                
+                                <button class="quick-action-btn" onclick="showPendingCorrections()">
+                                    <div class="action-icon purple">📝</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Corrigir Avaliações</div>
+                                        <div class="action-desc" id="pending-corrections-count">0 pendentes</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                                
+                                <button class="quick-action-btn" onclick="showBadgesPanel()">
+                                    <div class="action-icon green">🏅</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Atribuir Badges</div>
+                                        <div class="action-desc">Reconhecer conquistas</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                                
+                                <button class="quick-action-btn" onclick="showAddTraineePanel()">
+                                    <div class="action-icon blue">👤</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Novo Colaborador</div>
+                                        <div class="action-desc">Cadastrar acesso</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                                
+                                <button class="quick-action-btn" onclick="showAllTrainees()">
+                                    <div class="action-icon orange">👥</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Gerenciar Colaboradores</div>
+                                        <div class="action-desc">Ver e editar cadastros</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                                
+                                <button class="quick-action-btn" onclick="exportAllReports()">
+                                    <div class="action-icon pink">📊</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Relatórios</div>
+                                        <div class="action-desc">Exportar dados</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Badges do Colaborador Selecionado -->
-                <div class="eval-card" id="admin-badges-section" style="display:none; margin-bottom: 25px;">
-                    <h2 class="section-title">🏅 Gerenciar Badges</h2>
-                    <p style="color:#666; margin-bottom:20px;">Clique nos badges para ativar/desativar conquistas do colaborador selecionado.</p>
-                    <div id="admin-badges-container"></div>
+                
+                <!-- PAINEL DE DETALHES (gerenciar colaborador, badges, etc) -->
+                <div id="detail-panel" class="detail-panel">
+                    <button class="detail-back-btn" onclick="backToDashboard()">← Voltar ao Dashboard</button>
+                    <div id="detail-content"></div>
                 </div>
-
-                <!-- Histórico de Avaliações -->
-                <div class="eval-card" id="admin-eval-section" style="display:none; margin-bottom: 25px;">
-                    <h2 class="section-title">📝 Histórico de Avaliações</h2>
-                    <div id="admin-eval-history"></div>
-                </div>
-
-                <!-- Progresso Quiz Diário -->
-                <div class="eval-card" id="admin-quiz-section" style="display:none; margin-bottom: 25px;">
-                    <h2 class="section-title">🎯 Progresso no Quiz Diário</h2>
-                    <div id="admin-quiz-progress"></div>
-                </div>
-
-                <div class="admin-container">
-                    <div class="admin-card">
-                        <h2 class="section-title">➕ Adicionar Colaborador</h2>
-                        <div class="form-group"><label>Nome</label><input type="text" id="trainee-name" placeholder="Nome completo"></div>
-                        <div class="form-group"><label>Função</label><select id="trainee-function"><option value="B2B">B2B</option><option value="B2C">B2C</option><option value="Backoffice">Backoffice</option></select></div>
-                        <div class="form-group"><label>Marca</label><select id="trainee-brand"><option value="ECA USP">ECA USP</option><option value="ESALQ/PECEGE">ESALQ/PECEGE</option><option value="MACKENZIE">MACKENZIE</option><option value="POLI">POLI</option></select></div>
-                        <button class="btn-primary" onclick="addTrainee()">➕ Adicionar</button>
-                        <div style="margin-top: 20px;"><div id="trainees-list"></div></div>
-                        <button class="btn-secondary" onclick="changePassword()">🔑 Alterar Senha</button>
-                    </div>
-                    <div class="admin-card">
-                        <h2 class="section-title">📊 Stats Gerais</h2>
-                        <div id="admin-stats"></div>
-                    </div>
-                </div>
+                
+                <!-- Container para detalhes de avaliação -->
+                <div id="eval-details-container" class="eval-details-container"></div>
             </div>
         </div>
         
@@ -943,6 +1403,8 @@ async function loadData() {
             if (unsubscribeTrainees) unsubscribeTrainees();
             unsubscribeTrainees = db.collection('trainees').onSnapshot(snap => {
                 trainees = [];
+                evalHistory = []; // Resetar evalHistory global
+                
                 snap.forEach(doc => {
                     const data = doc.data();
                     data.firebaseId = doc.id;
@@ -953,6 +1415,32 @@ async function loadData() {
                     }
                     trainees.push(data);
                 });
+                
+                // Reconstruir evalHistory global a partir dos dados de cada colaborador
+                trainees.forEach((t, idx) => {
+                    if (t.evalHistory && Array.isArray(t.evalHistory)) {
+                        t.evalHistory.forEach(e => {
+                            // Garantir que o traineeIndex está correto
+                            e.traineeIndex = idx;
+                            e.traineeName = t.name;
+                            evalHistory.push(e);
+                        });
+                    }
+                });
+                
+                // Ordenar por data (mais recentes primeiro)
+                evalHistory.sort((a, b) => {
+                    try {
+                        const dateA = new Date(a.date.split(',')[0].split('/').reverse().join('-'));
+                        const dateB = new Date(b.date.split(',')[0].split('/').reverse().join('-'));
+                        return dateB - dateA;
+                    } catch(e) {
+                        return 0;
+                    }
+                });
+                
+                console.log('Dados carregados - Colaboradores:', trainees.length, '| Avaliações:', evalHistory.length);
+                
                 if (!trainees.length) {
                     // Adicionar colaboradores padrão
                     addDefaultTrainees();
@@ -1124,7 +1612,21 @@ function deleteTrainee(i){
         }
     }
 }
-function renderAdmin(){populateAdminTraineeSelect();const l=document.getElementById('trainees-list');l.innerHTML=trainees.map((t,i)=>'<div class="list-item"><div class="list-item-info"><div class="list-item-name">'+t.name+'</div><div class="list-item-details">'+t.function+' • '+t.brand+' • '+t.points+'pts • '+t.badges.length+' badges</div><div class="list-item-details" style="margin-top:5px;"><strong>Código:</strong> <span style="background:#667eea;color:white;padding:2px 8px;border-radius:4px;font-family:monospace;">'+(t.code||'N/A')+'</span></div></div><button class="btn-delete" onclick="deleteTrainee('+i+')">🗑️</button></div>').join('');const tb=Object.values(badgeCategories).reduce((s,c)=>s+c.badges.length,0);const tp=trainees.reduce((s,t)=>s+t.points,0);const ap=trainees.length?Math.round(tp/trainees.length):0;document.getElementById('admin-stats').innerHTML='<div class="list-item"><div class="list-item-info"><div class="list-item-name">Colaboradores</div><div class="list-item-details">'+trainees.length+' cadastrados</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Total Badges</div><div class="list-item-details">'+tb+' disponíveis</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Pontos</div><div class="list-item-details">'+tp+' distribuídos</div></div></div><div class="list-item"><div class="list-item-info"><div class="list-item-name">Média</div><div class="list-item-details">'+ap+' pts/pessoa</div></div></div><div class="list-item" style="background:#e8f5e9;"><div class="list-item-info"><div class="list-item-name">🌐 Firebase</div><div class="list-item-details">'+(useFirebase?'✅ Conectado - Sincronização em tempo real':'❌ Offline - Usando localStorage')+'</div></div></div>';}
+function renderAdmin(){
+    populateAdminTraineeSelect();
+    
+    // Renderizar lista de colaboradores se existir
+    const l=document.getElementById('trainees-list');
+    if(l) {
+        l.innerHTML=trainees.map((t,i)=>'<div class="list-item"><div class="list-item-info"><div class="list-item-name">'+t.name+'</div><div class="list-item-details">'+t.function+' • '+t.brand+' • '+t.points+'pts • '+(t.badges?t.badges.length:0)+' badges</div><div class="list-item-details" style="margin-top:5px;"><strong>Código:</strong> <span style="background:#667eea;color:white;padding:2px 8px;border-radius:4px;font-family:monospace;">'+(t.code||'N/A')+'</span></div></div><button class="btn-delete" onclick="deleteTrainee('+i+')">🗑️</button></div>').join('');
+    }
+    
+    // Renderizar dashboard admin se estiver visível
+    const dashEl = document.getElementById('admin-dashboard');
+    if(dashEl && dashEl.classList.contains('active')) {
+        renderAdminDashboard();
+    }
+}
 function updateView(){renderBadges();updateStats();renderUserQuizProgress();}
 function renderBadges(){
     const c=document.getElementById('badges-container');
@@ -1490,6 +1992,572 @@ async function init() {
 }
 
 init();
+
+// ========== DASHBOARD ADMIN FUNCTIONS ==========
+function renderAdminDashboard() {
+    updateWelcomeSection();
+    updateKPIs();
+    updatePrioritySection();
+    updateTeamCards('all');
+    updateActivityList();
+    setupTeamFilter();
+}
+
+function updateWelcomeSection() {
+    const hour = new Date().getHours();
+    let greeting = 'Boa noite';
+    if (hour < 12) greeting = 'Bom dia';
+    else if (hour < 18) greeting = 'Boa tarde';
+    
+    document.getElementById('welcome-greeting').textContent = greeting + '! 👋';
+    
+    // Contar pendências
+    const pendencias = getPendingCorrections();
+    if (pendencias.length > 0) {
+        document.getElementById('welcome-message').textContent = 'Você tem ' + pendencias.length + ' avaliação(ões) aguardando correção';
+    } else {
+        document.getElementById('welcome-message').textContent = 'Tudo em dia! Nenhuma correção pendente.';
+    }
+    
+    // Stats
+    document.getElementById('dash-total-colab').textContent = trainees.length;
+    
+    const totalBadges = trainees.reduce((sum, t) => sum + (t.badges ? t.badges.length : 0), 0);
+    document.getElementById('dash-total-badges').textContent = totalBadges;
+    
+    // Taxa de aprovação
+    const todasAvaliacoes = evalHistory.filter(e => e.score !== undefined);
+    const aprovadas = todasAvaliacoes.filter(e => e.passed);
+    const taxaAprovacao = todasAvaliacoes.length > 0 ? Math.round((aprovadas.length / todasAvaliacoes.length) * 100) : 0;
+    document.getElementById('dash-taxa-aprovacao').textContent = taxaAprovacao + '%';
+}
+
+function updateKPIs() {
+    // Total avaliações
+    document.getElementById('kpi-avaliacoes').textContent = evalHistory.length;
+    
+    // Taxa aprovação
+    const aprovadas = evalHistory.filter(e => e.passed);
+    const taxa = evalHistory.length > 0 ? Math.round((aprovadas.length / evalHistory.length) * 100) : 0;
+    document.getElementById('kpi-aprovacao').textContent = taxa + '%';
+    
+    // Média geral
+    const somaNotas = evalHistory.reduce((sum, e) => sum + (e.score || 0), 0);
+    const media = evalHistory.length > 0 ? Math.round(somaNotas / evalHistory.length) : 0;
+    document.getElementById('kpi-media').textContent = media + '%';
+    
+    // Quiz completados
+    let quizCompletos = 0;
+    trainees.forEach(t => {
+        if (t.quizProgress) {
+            quizCompletos += Object.keys(t.quizProgress).length;
+        }
+    });
+    document.getElementById('kpi-quiz').textContent = quizCompletos;
+}
+
+function getPendingCorrections() {
+    const pendencias = [];
+    evalHistory.forEach((e, idx) => {
+        if (!e.answers) return;
+        
+        let dissertativasTotal = 0;
+        let dissertativasCorrigidas = 0;
+        
+        for (const [key, ans] of Object.entries(e.answers)) {
+            if (ans.tipo === 'text') {
+                dissertativasTotal++;
+                if (ans.corrigida !== undefined) dissertativasCorrigidas++;
+            }
+        }
+        
+        if (dissertativasTotal > 0 && dissertativasCorrigidas < dissertativasTotal) {
+            pendencias.push({
+                evalIndex: idx,
+                traineeIndex: e.traineeIndex,
+                traineeName: e.traineeName,
+                type: e.type,
+                brand: e.brand,
+                date: e.date,
+                pendentes: dissertativasTotal - dissertativasCorrigidas,
+                total: dissertativasTotal
+            });
+        }
+    });
+    return pendencias;
+}
+
+function updatePrioritySection() {
+    const pendencias = getPendingCorrections();
+    const section = document.getElementById('priority-section');
+    const title = document.getElementById('priority-title');
+    const count = document.getElementById('priority-count');
+    const list = document.getElementById('priority-list');
+    
+    document.getElementById('pending-corrections-count').textContent = pendencias.length + ' pendentes';
+    
+    if (pendencias.length === 0) {
+        section.classList.add('no-pending');
+        title.innerHTML = '✅ Tudo em dia!';
+        count.textContent = 'Nenhuma pendência';
+        list.innerHTML = '<p style="color:#28a745;text-align:center;padding:20px;">🎉 Parabéns! Todas as avaliações foram corrigidas.</p>';
+        return;
+    }
+    
+    section.classList.remove('no-pending');
+    title.innerHTML = '🚨 Requer sua atenção';
+    count.textContent = pendencias.length + ' pendência(s)';
+    
+    let html = '';
+    pendencias.slice(0, 6).forEach(p => {
+        const initials = p.traineeName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        html += `
+            <div class="priority-item">
+                <div class="priority-avatar">${initials}</div>
+                <div class="priority-info">
+                    <div class="priority-name">${p.traineeName}</div>
+                    <div class="priority-detail">${p.pendentes} dissertativa(s) para corrigir</div>
+                    <div class="priority-meta">${p.type.toUpperCase()}${p.brand ? ' - ' + p.brand : ''} • ${p.date}</div>
+                </div>
+                <button class="priority-action" onclick="openEvalCorrection(${p.evalIndex})">Corrigir →</button>
+            </div>
+        `;
+    });
+    
+    list.innerHTML = html;
+}
+
+function updateTeamCards(filter) {
+    const container = document.getElementById('team-cards-grid');
+    
+    // Agrupar por equipe
+    const teams = {
+        'POLI': { name: 'B2B - POLI', subtitle: 'POLI USP Pro', class: 'poli', members: [], pendentes: 0 },
+        'ESALQ/PECEGE': { name: 'B2B - ESALQ', subtitle: 'MBA USP ESALQ', class: 'esalq', members: [], pendentes: 0 },
+        'MACKENZIE': { name: 'B2B - MACKENZIE', subtitle: 'Multicompany Mackenzie', class: 'mackenzie', members: [], pendentes: 0 },
+        'ECA USP': { name: 'B2B - ECA', subtitle: 'ECA USP', class: 'eca', members: [], pendentes: 0 },
+        'B2C': { name: 'B2C', subtitle: 'Vendas Diretas', class: 'b2c', members: [], pendentes: 0 },
+        'Backoffice': { name: 'Backoffice', subtitle: 'Operações', class: 'backoffice', members: [], pendentes: 0 }
+    };
+    
+    trainees.forEach((t, idx) => {
+        if (t.function === 'B2B' && teams[t.brand]) {
+            teams[t.brand].members.push({ ...t, index: idx });
+        } else if (t.function === 'B2C') {
+            teams['B2C'].members.push({ ...t, index: idx });
+        } else if (t.function === 'Backoffice') {
+            teams['Backoffice'].members.push({ ...t, index: idx });
+        }
+    });
+    
+    // Contar pendências por equipe
+    const pendencias = getPendingCorrections();
+    pendencias.forEach(p => {
+        const t = trainees[p.traineeIndex];
+        if (t) {
+            if (t.function === 'B2B' && teams[t.brand]) {
+                teams[t.brand].pendentes++;
+            } else if (teams[t.function]) {
+                teams[t.function].pendentes++;
+            }
+        }
+    });
+    
+    // Update filter counts
+    document.getElementById('filter-all-count').textContent = trainees.length;
+    document.getElementById('filter-b2b-count').textContent = trainees.filter(t => t.function === 'B2B').length;
+    document.getElementById('filter-b2c-count').textContent = trainees.filter(t => t.function === 'B2C').length;
+    document.getElementById('filter-back-count').textContent = trainees.filter(t => t.function === 'Backoffice').length;
+    
+    // Filtrar equipes
+    let teamsToShow = Object.entries(teams);
+    if (filter === 'b2b') {
+        teamsToShow = teamsToShow.filter(([key]) => !['B2C', 'Backoffice'].includes(key));
+    } else if (filter === 'b2c') {
+        teamsToShow = teamsToShow.filter(([key]) => key === 'B2C');
+    } else if (filter === 'backoffice') {
+        teamsToShow = teamsToShow.filter(([key]) => key === 'Backoffice');
+    }
+    
+    // Só mostrar equipes com membros
+    teamsToShow = teamsToShow.filter(([key, team]) => team.members.length > 0);
+    
+    let html = '';
+    teamsToShow.forEach(([key, team]) => {
+        // Calcular média de aprovação da equipe
+        const membersIds = team.members.map(m => m.index);
+        const teamEvals = evalHistory.filter(e => membersIds.includes(e.traineeIndex));
+        const teamAprovadas = teamEvals.filter(e => e.passed);
+        const mediaAprovacao = teamEvals.length > 0 ? Math.round((teamAprovadas.length / teamEvals.length) * 100) : 0;
+        
+        html += `
+            <div class="team-card" onclick="showTeamDetail('${key}')">
+                <div class="team-card-header ${team.class}">
+                    <div class="team-card-title">${team.name}</div>
+                    <div class="team-card-subtitle">${team.subtitle}</div>
+                    <div class="team-card-count">${team.members.length}</div>
+                </div>
+                <div class="team-card-body">
+                    <div class="team-card-stat">
+                        <span class="team-stat-label">Colaboradores</span>
+                        <span class="team-stat-value">${team.members.length}</span>
+                    </div>
+                    <div class="team-card-stat">
+                        <span class="team-stat-label">Correções Pendentes</span>
+                        <span class="team-stat-value ${team.pendentes > 0 ? 'pending' : ''}">${team.pendentes}</span>
+                    </div>
+                    <div class="team-card-stat">
+                        <span class="team-stat-label">Taxa de Aprovação</span>
+                        <span class="team-stat-value success">${mediaAprovacao}%</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    if (html === '') {
+        html = '<p style="text-align:center;color:#666;padding:30px;">Nenhuma equipe encontrada para este filtro.</p>';
+    }
+    
+    container.innerHTML = html;
+}
+
+function setupTeamFilter() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            buttons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            updateTeamCards(this.dataset.filter);
+        });
+    });
+}
+
+function updateActivityList() {
+    const list = document.getElementById('activity-list');
+    
+    // Pegar últimas atividades (avaliações recentes)
+    const activities = [];
+    
+    evalHistory.slice(-10).reverse().forEach(e => {
+        activities.push({
+            type: 'eval',
+            text: `<strong>${e.traineeName}</strong> completou avaliação ${e.type.toUpperCase()}${e.brand ? ' - ' + e.brand : ''}`,
+            time: e.date
+        });
+    });
+    
+    if (activities.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">Nenhuma atividade recente.</p>';
+        return;
+    }
+    
+    let html = '';
+    activities.slice(0, 8).forEach(a => {
+        html += `
+            <div class="activity-item">
+                <div class="activity-dot ${a.type}"></div>
+                <div class="activity-content">
+                    <div class="activity-text">${a.text}</div>
+                    <div class="activity-time">${a.time}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    list.innerHTML = html;
+}
+
+function openEvalCorrection(evalIndex) {
+    adminSelectedTrainee = evalHistory[evalIndex].traineeIndex;
+    viewEvalDetails(evalIndex);
+    document.getElementById('eval-details-container').scrollIntoView({ behavior: 'smooth' });
+}
+
+function showTeamDetail(teamKey) {
+    const panel = document.getElementById('detail-panel');
+    const content = document.getElementById('detail-content');
+    
+    document.getElementById('admin-dashboard').classList.remove('active');
+    panel.classList.add('active');
+    
+    // Filtrar membros da equipe
+    let members = [];
+    if (['POLI', 'ESALQ/PECEGE', 'MACKENZIE', 'ECA USP'].includes(teamKey)) {
+        members = trainees.filter((t, idx) => t.function === 'B2B' && t.brand === teamKey).map((t, idx) => ({ ...t, index: trainees.indexOf(t) }));
+    } else if (teamKey === 'B2C') {
+        members = trainees.filter(t => t.function === 'B2C').map((t, idx) => ({ ...t, index: trainees.indexOf(t) }));
+    } else if (teamKey === 'Backoffice') {
+        members = trainees.filter(t => t.function === 'Backoffice').map((t, idx) => ({ ...t, index: trainees.indexOf(t) }));
+    }
+    
+    let html = `<h2 class="section-title">👥 Equipe: ${teamKey}</h2>`;
+    html += '<div style="display:grid;gap:15px;">';
+    
+    members.forEach(m => {
+        const initials = m.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        html += `
+            <div class="list-item" style="cursor:pointer;" onclick="showTraineeDetail(${m.index})">
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <div class="priority-avatar">${initials}</div>
+                    <div class="list-item-info">
+                        <div class="list-item-name">${m.name}</div>
+                        <div class="list-item-details">${m.function}${m.brand ? ' - ' + m.brand : ''} | ${m.points} pts | Código: ${m.code}</div>
+                    </div>
+                </div>
+                <span style="color:#667eea;">Ver detalhes →</span>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    content.innerHTML = html;
+}
+
+function showTraineeDetail(traineeIdx) {
+    adminSelectedTrainee = traineeIdx;
+    const t = trainees[traineeIdx];
+    
+    const panel = document.getElementById('detail-panel');
+    const content = document.getElementById('detail-content');
+    
+    document.getElementById('admin-dashboard').classList.remove('active');
+    panel.classList.add('active');
+    
+    let html = `
+        <div class="info-box" style="background:#d4edda;border-color:#28a745;margin-bottom:20px;">
+            <strong style="color:#155724;">👤 ${t.name}</strong> | ${t.function}${t.brand ? ' - ' + t.brand : ''} | ${t.points} pts | Código: ${t.code}
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px;">
+            <button class="btn-primary" style="width:auto;" onclick="exportTraineeReport()">📄 Exportar Relatório</button>
+        </div>
+        
+        <h3 class="section-title">🏅 Badges</h3>
+        <div id="detail-badges-container"></div>
+        
+        <h3 class="section-title" style="margin-top:25px;">📝 Histórico de Avaliações</h3>
+        <div id="detail-eval-history"></div>
+        
+        <h3 class="section-title" style="margin-top:25px;">🎯 Quiz Diário</h3>
+        <div id="detail-quiz-progress"></div>
+    `;
+    
+    content.innerHTML = html;
+    
+    // Renderizar conteúdos
+    renderDetailBadges();
+    renderDetailEvalHistory();
+    renderDetailQuizProgress();
+}
+
+function renderDetailBadges() {
+    if (adminSelectedTrainee < 0) return;
+    const c = document.getElementById('detail-badges-container');
+    const t = trainees[adminSelectedTrainee];
+    let h = '';
+    
+    const marcasValidas = ['ECA USP', 'ESALQ/PECEGE', 'MACKENZIE', 'POLI'];
+    
+    for (const [k, cat] of Object.entries(badgeCategories)) {
+        const isB2BCategory = cat.isB2B === true;
+        const isB2CCategory = cat.isB2C === true;
+        const isBackofficeCategory = cat.isBackoffice === true;
+        const isGeralCategory = k.startsWith('Geral');
+        const isMarcaCategory = marcasValidas.includes(k);
+        
+        const isSuaMarca = (k === t.brand);
+        const isSubcategoriaFuncao = (t.function === 'B2B' && isB2BCategory) || 
+                                     (t.function === 'B2C' && isB2CCategory) || 
+                                     (t.function === 'Backoffice' && isBackofficeCategory);
+        
+        const deveMostrar = isGeralCategory || isSuaMarca || isSubcategoriaFuncao;
+        
+        if (!deveMostrar) continue;
+        
+        let tag = 'Função';
+        if (isGeralCategory) tag = 'Geral';
+        else if (isMarcaCategory) tag = 'Marca';
+        
+        h += '<div class="category-section"><div class="category-header"><div class="category-icon">' + cat.icon + '</div><div class="category-info"><h3>' + cat.name + '</h3><p>' + cat.description + '</p></div></div><div class="badges-grid">';
+        cat.badges.forEach(b => {
+            const u = t.badges.includes(b.id);
+            h += '<div class="badge ' + (u ? 'unlocked' : 'locked') + '" onclick="toggleAdminBadge(\'' + b.id + '\')"><span class="badge-tag">' + tag + '</span><div class="badge-icon">' + b.icon + '</div><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div><div class="badge-points">+' + b.points + 'pts</div></div>';
+        });
+        h += '</div></div>';
+    }
+    c.innerHTML = h;
+}
+
+function renderDetailEvalHistory() {
+    if (adminSelectedTrainee < 0) return;
+    const c = document.getElementById('detail-eval-history');
+    const history = evalHistory.filter(e => e.traineeIndex === adminSelectedTrainee);
+    
+    if (history.length === 0) {
+        c.innerHTML = '<p style="color:#666;">Nenhuma avaliação realizada ainda.</p>';
+        return;
+    }
+    
+    let h = '<table style="width:100%;border-collapse:collapse;">';
+    h += '<tr style="background:#f8f9fa;"><th style="padding:12px;text-align:left;">Data</th><th style="padding:12px;text-align:left;">Tipo</th><th style="padding:12px;text-align:center;">Nota</th><th style="padding:12px;text-align:center;">Status</th><th style="padding:12px;text-align:center;">Ações</th></tr>';
+    
+    history.forEach((e, i) => {
+        e.origIndex = evalHistory.indexOf(e);
+        const statusColor = e.passed ? '#28a745' : '#dc3545';
+        const statusText = e.passed ? 'Aprovado' : 'Reprovado';
+        const bg = i % 2 === 0 ? '#fff' : '#f8f9fa';
+        h += '<tr style="background:' + bg + ';"><td style="padding:12px;">' + e.date + '</td><td style="padding:12px;">' + e.type.toUpperCase() + (e.brand ? ' - ' + e.brand : '') + '</td><td style="padding:12px;text-align:center;font-weight:bold;">' + e.score + '%</td><td style="padding:12px;text-align:center;color:' + statusColor + ';font-weight:bold;">' + statusText + '</td><td style="padding:12px;text-align:center;"><button class="btn-primary" style="padding:8px 16px;width:auto;" onclick="viewEvalDetails(' + e.origIndex + ')">👁️ Ver</button></td></tr>';
+    });
+    
+    h += '</table>';
+    c.innerHTML = h;
+}
+
+function renderDetailQuizProgress() {
+    if (adminSelectedTrainee < 0) return;
+    const c = document.getElementById('detail-quiz-progress');
+    const t = trainees[adminSelectedTrainee];
+    
+    const completedDays = getCompletedDays(t);
+    const totalPoints = getTotalQuizPoints(t);
+    
+    let h = `<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:15px;">`;
+    for (let day = 1; day <= 5; day++) {
+        const completed = completedDays.includes(day);
+        const dayData = t.quizProgress ? t.quizProgress['day' + day] : null;
+        const bg = completed ? 'linear-gradient(135deg, #28a745, #20c997)' : '#e0e0e0';
+        const color = completed ? 'white' : '#666';
+        h += `<div style="background:${bg};color:${color};padding:15px;border-radius:10px;text-align:center;">
+            <div style="font-size:24px;font-weight:bold;">Dia ${day}</div>
+            ${completed ? `<div style="font-size:12px;">${dayData ? dayData.correct : 0}/3 acertos</div>` : '<div style="font-size:12px;">Pendente</div>'}
+        </div>`;
+    }
+    h += `</div>`;
+    h += `<p><strong>Total:</strong> ${completedDays.length}/5 dias | <strong>Pontos:</strong> ${totalPoints} pts</p>`;
+    c.innerHTML = h;
+}
+
+function backToDashboard() {
+    document.getElementById('detail-panel').classList.remove('active');
+    document.getElementById('admin-dashboard').classList.add('active');
+    document.getElementById('eval-details-container').innerHTML = '';
+    renderAdminDashboard();
+}
+
+function showPendingCorrections() {
+    const pendencias = getPendingCorrections();
+    if (pendencias.length === 0) {
+        alert('Não há avaliações pendentes de correção!');
+        return;
+    }
+    openEvalCorrection(pendencias[0].evalIndex);
+}
+
+function showBadgesPanel() {
+    showAllTrainees();
+}
+
+function showAddTraineePanel() {
+    const panel = document.getElementById('detail-panel');
+    const content = document.getElementById('detail-content');
+    
+    document.getElementById('admin-dashboard').classList.remove('active');
+    panel.classList.add('active');
+    
+    content.innerHTML = `
+        <h2 class="section-title">➕ Adicionar Novo Colaborador</h2>
+        <div class="form-group"><label>Nome</label><input type="text" id="trainee-name" placeholder="Nome completo"></div>
+        <div class="form-group"><label>Função</label><select id="trainee-function"><option value="B2B">B2B</option><option value="B2C">B2C</option><option value="Backoffice">Backoffice</option></select></div>
+        <div class="form-group"><label>Marca</label><select id="trainee-brand"><option value="POLI">POLI</option><option value="ESALQ/PECEGE">ESALQ/PECEGE</option><option value="MACKENZIE">MACKENZIE</option><option value="ECA USP">ECA USP</option></select></div>
+        <button class="btn-primary" onclick="addTrainee();backToDashboard();">➕ Adicionar</button>
+        
+        <h2 class="section-title" style="margin-top:30px;">📋 Colaboradores Cadastrados</h2>
+        <div id="trainees-list-detail"></div>
+        
+        <button class="btn-secondary" style="margin-top:20px;" onclick="changePassword()">🔑 Alterar Senha Admin</button>
+    `;
+    
+    renderTraineesList();
+}
+
+function renderTraineesList() {
+    const c = document.getElementById('trainees-list-detail');
+    if (!c) return;
+    
+    let h = '';
+    trainees.forEach((t, i) => {
+        h += `<div class="list-item">
+            <div class="list-item-info">
+                <div class="list-item-name">${t.name}</div>
+                <div class="list-item-details">${t.function}${t.brand ? ' - ' + t.brand : ''} | Código: ${t.code}</div>
+            </div>
+            <button class="btn-delete" onclick="deleteTrainee(${i})">🗑️ Remover</button>
+        </div>`;
+    });
+    
+    c.innerHTML = h || '<p style="color:#666;">Nenhum colaborador cadastrado.</p>';
+}
+
+function showAllTrainees() {
+    const panel = document.getElementById('detail-panel');
+    const content = document.getElementById('detail-content');
+    
+    document.getElementById('admin-dashboard').classList.remove('active');
+    panel.classList.add('active');
+    
+    let html = '<h2 class="section-title">👥 Todos os Colaboradores</h2>';
+    html += '<div style="display:grid;gap:15px;">';
+    
+    trainees.forEach((t, idx) => {
+        const initials = t.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        html += `
+            <div class="list-item" style="cursor:pointer;" onclick="showTraineeDetail(${idx})">
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <div class="priority-avatar">${initials}</div>
+                    <div class="list-item-info">
+                        <div class="list-item-name">${t.name}</div>
+                        <div class="list-item-details">${t.function}${t.brand ? ' - ' + t.brand : ''} | ${t.points} pts | Código: ${t.code}</div>
+                    </div>
+                </div>
+                <span style="color:#667eea;">Ver detalhes →</span>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    content.innerHTML = html;
+}
+
+function exportAllReports() {
+    alert('Funcionalidade de exportação em lote será implementada em breve!');
+}
+
+// Modificar switchMode para chamar o dashboard
+const originalSwitchMode = typeof switchMode === 'function' ? switchMode : null;
+
+function switchMode(mode) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    
+    if (mode === 'view') {
+        document.getElementById('view-mode').classList.add('active');
+        document.querySelector('.mode-btn[onclick*="view"]').classList.add('active');
+        renderBadges();
+        renderQuizProgress();
+    } else if (mode === 'eval') {
+        document.getElementById('eval-mode').classList.add('active');
+        document.querySelector('.mode-btn[onclick*="eval"]').classList.add('active');
+        renderEvalButtons();
+    } else if (mode === 'admin') {
+        document.getElementById('admin-mode').classList.add('active');
+        document.querySelector('.mode-btn[onclick*="admin"]').classList.add('active');
+        // Mostrar dashboard e esconder detail panel
+        document.getElementById('admin-dashboard').classList.add('active');
+        document.getElementById('detail-panel').classList.remove('active');
+        document.getElementById('eval-details-container').innerHTML = '';
+        renderAdminDashboard();
+    }
+}
 
 // Funções do Admin para gerenciar colaboradores
 function selectTraineeToManage(){
