@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -500,68 +499,93 @@ const badgeCategories = {
 
 const Q={
 "b2b_comum":[
-{"n":1,"t":"Sinais de Reunião Bem Recebida","tipo":"multi","q":"Quais são os sinais de que uma reunião de apresentação está sendo bem recebida pelo RH?","opts":["Perguntas sobre o Grupo Ello","Interesse nos cursos oferecidos pela escola","Perguntas sobre os materiais de trabalho que utilizamos (notebook, celular, etc)","Perguntas detalhadas e interesse em saber mais sobre o projeto","Demonstração de interesse pela posição e fala do RH"],"correct":[3,4]},
-{"n":2,"t":"Informações Essenciais Pré-Reunião","tipo":"multi","q":"Quais informações são essenciais de serem coletadas antes da apresentação de parceria para garantir sua eficácia?","opts":["Pesquisar sobre a empresa no Google, LinkedIn, redes sociais, etc","Pesquisar histórico de atendimento","Pesquisar o número de colaboradores da empresa","Pesquisar sobre a pessoa (RH), que falaremos na reunião","Pesquisar se a empresa disponibiliza subsídio aos colaboradores","Pesquisar sobre o CEO da empresa","Pesquisar se a empresa usa o Teams","Pesquisar se os funcionários recebem material adequado para trabalhar"],"correct":[0,1,2,3,4]},
+// Alternativas primeiro
+{"n":1,"t":"Sinais de Reunião Bem Recebida","tipo":"multi","q":"Quais são os sinais de que uma reunião de apresentação está sendo bem recebida pelo RH?","opts":["Perguntas sobre o Grupo Ello","Interesse nos cursos oferecidos pela escola","Perguntas sobre os materiais de trabalho que utilizamos (notebook, celular, etc)","Perguntas detalhadas e interesse em saber mais sobre o projeto","Demonstração de interesse pela posição e fala do RH"],"correct":[1,3,4]},
+{"n":2,"t":"Informações Essenciais Pré-Reunião","tipo":"multi","q":"Quais informações são essenciais de serem coletadas antes da apresentação de parceria para garantir sua eficácia?","opts":["Pesquisar sobre a empresa no Google, LinkedIn, redes sociais, etc","Pesquisar histórico de atendimento","Pesquisar o número de colaboradores da empresa","Pesquisar sobre a pessoa (RH), que falaremos na reunião","Pesquisar sobre o CEO da empresa","Pesquisar se a empresa usa o Teams","Pesquisar se os funcionários recebem material adequado para trabalhar"],"correct":[0,1,2,3]},
 {"n":3,"t":"Segmentação de Mercado","tipo":"single","q":"Qual é a importância da segmentação de mercado na prospecção das empresas?","opts":["Permite um foco mais eficiente nos recursos","Ajuda a personalizar a abordagem de vendas","Facilita o acompanhamento e medição de resultados","Todas as opções acima"],"correct":3},
-{"n":4,"t":"Projeto Multicompany","tipo":"single","q":"O que é o projeto Multicompany?","opts":["Turmas de cursos de pós-graduação de colaboradores da mesma empresa","Turmas de cursos de pós-graduação de colaboradores de empresas diversas","Turmas de cursos de pós e graduação para colaboradores da mesma empresa","Turmas de cursos de graduação de colaboradores de empresas diversas"],"correct":0},
+{"n":4,"t":"Projeto Multicompany","tipo":"single","q":"O que é o projeto Multicompany?","opts":["Turmas de cursos de pós-graduação de colaboradores da mesma empresa","Turmas de cursos de pós-graduação de colaboradores de empresas diversas","Turmas de cursos de pós e graduação para colaboradores da mesma empresa","Turmas de cursos de graduação de colaboradores de empresas diversas"],"correct":1},
 {"n":5,"t":"Benefícios do Multicompany","tipo":"single","q":"Quais benefícios as empresas obtêm ao participar do Projeto Multicompany?","opts":["Facilitar o acesso à educação aos colaboradores","Acesso à uma opção gratuita de retenção de talentos","Aumento de opções no pacote de benefícios da empresa","Todas as opções"],"correct":3},
 {"n":6,"t":"Ferramentas para Reunião Eficiente","tipo":"single","q":"Quais ferramentas ou recursos você utilizaria para garantir uma reunião bem estruturada e eficiente?","opts":["Pesquisa prévia sobre a empresa, preparação do material e tópicos que serão abordados na reunião. Identificação do perfil do RH e direcionamento da conversa.","Pesquisar se os funcionários da empresa recebem um bom salário","Pesquisa sobre a empresa, pesquisa sobre a vida pessoal do RH (onde mora, se tem filhos), e pesquisa sobre o número de colaboradores da empresa","Pesquisa sobre o vendedor anterior da empresa, e pesquisa no LinkedIn sobre o nicho da empresa"],"correct":0},
-{"n":7,"t":"Perguntas para Identificar Perfil do RH","tipo":"multi","q":"Quais perguntas iniciais você faria para identificar rapidamente o perfil do RH?","opts":["Como estão estruturadas as parcerias da empresa, atualmente?","Como funciona o pacote de benefícios da empresa?","Quais ações de incentivo educacional você realiza na empresa?","Que tipo de benefícios educacionais a empresa mais valoriza?","A empresa trabalha com subsídio aos colaboradores?","Qual a carga horária de trabalho semanal do colaborador da empresa?","Os funcionários da empresa recebem benefícios como VR, VA, VT ou cartão de multibenefícios?","Qual a periodicidade para aplicação dos indicadores de desempenho dos colaboradores?"],"correct":[0,1,2,3,4]},
+{"n":7,"t":"Perguntas para Identificar Perfil do RH","tipo":"multi","q":"Quais perguntas iniciais você faria para identificar rapidamente o perfil do RH?","opts":["Como estão estruturadas as parcerias da empresa, atualmente?","Como funciona o pacote de benefícios da empresa?","Quais ações de incentivo educacional você realiza na empresa?","Que tipo de benefícios educacionais a empresa mais valoriza?","Qual a carga horária de trabalho semanal do colaborador da empresa?","Os funcionários da empresa recebem benefícios como VR, VA, VT ou cartão de multibenefícios?","Qual a periodicidade para aplicação dos indicadores de desempenho dos colaboradores?"],"correct":[0,1,2,3]},
 {"n":8,"t":"Perfis de RH Receptivos","tipo":"single","q":"Quais perfis de RH são mais receptivos a parcerias educacionais e por quê?","opts":["RH Generalista, porque precisa de soluções abrangentes","RH de Treinamento, porque foca no desenvolvimento de habilidades","RH de Benefícios, porque busca valor agregado para os colaboradores","Todos os perfis mencionados"],"correct":3},
+// Dissertativas técnicas
 {"n":9,"t":"Importância do Follow-up","tipo":"text","q":"Qual a importância do follow-up após uma reunião com a empresa?"},
 {"n":10,"t":"Identificação do Perfil do RH","tipo":"text","q":"Como a identificação correta do perfil do RH pode impactar o sucesso da parceria e o aproveitamento da reunião?"},
 {"n":11,"t":"Identificação de Empresas Propensas","tipo":"text","q":"Como você identifica as empresas mais propensas a se beneficiar da parceria?"},
 {"n":12,"t":"Etapas do Multicompany","tipo":"text","q":"Quais são as etapas envolvidas no desenvolvimento de um projeto dentro do Multicompany?"},
-{"n":13,"t":"Avaliação do Treinamento","tipo":"text","q":"De um modo geral como você avalia o processo de treinamento até agora? Dicas, críticas ou elogios são bem-vindos para melhorarmos o processo."}
+// Avaliação do treinamento por último
+{"n":13,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "b2b_poli":[
-{"n":14,"t":"Explicar POLI USP Pro","tipo":"text","q":"Explique de forma breve o que é a POLI USP Pro"},
-{"n":15,"t":"Diferença POLI vs USP Tradicional","tipo":"text","q":"Qual a diferença entre a POLI USP Pro e os cursos tradicionais da USP?"},
-{"n":16,"t":"Setores Beneficiados - POLI","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas da POLI USP Pro?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
-{"n":17,"t":"Vantagens Competitivas - POLI","tipo":"multi","q":"Quais vantagens competitivas a POLI USP Pro oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Corpo docente composto por professores renomados da USP","Flexibilidade nos formatos dos cursos","Opções de pagamento facilitadas"],"correct":[1,2]}
+// Alternativas primeiro
+{"n":14,"t":"Setores Beneficiados - POLI","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas da POLI USP Pro?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
+{"n":15,"t":"Vantagens Competitivas - POLI","tipo":"multi","q":"Quais vantagens competitivas a POLI USP Pro oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Corpo docente composto por professores renomados da USP","Flexibilidade nos formatos dos cursos","Opções de pagamento facilitadas"],"correct":[1,2]},
+// Dissertativas
+{"n":16,"t":"Explicar POLI USP Pro","tipo":"text","q":"Explique de forma breve o que é a POLI USP Pro"},
+{"n":17,"t":"Diferença POLI vs USP Tradicional","tipo":"text","q":"Qual a diferença entre a POLI USP Pro e os cursos tradicionais da USP?"},
+// Avaliação do treinamento por último
+{"n":18,"t":"Avaliação do Treinamento POLI","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "b2b_esalq":[
-{"n":18,"t":"Explicar MBA USP ESALQ","tipo":"text","q":"Explique de forma breve o que é o MBA USP ESALQ"},
-{"n":19,"t":"Diferença ESALQ vs USP Tradicional","tipo":"text","q":"Qual a diferença entre o MBA USP ESALQ e os cursos tradicionais da USP?"},
-{"n":20,"t":"Setores Beneficiados - ESALQ","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas do MBA USP ESALQ?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
-{"n":21,"t":"Vantagens Competitivas - ESALQ","tipo":"multi","q":"Quais vantagens competitivas o MBA USP ESALQ oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Corpo docente composto por professores renomados da USP","Flexibilidade nos formatos dos cursos","Opções de pagamento facilitadas"],"correct":[1,2]}
+// Alternativas primeiro
+{"n":19,"t":"Setores Beneficiados - ESALQ","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas do MBA USP ESALQ?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
+{"n":20,"t":"Vantagens Competitivas - ESALQ","tipo":"multi","q":"Quais vantagens competitivas o MBA USP ESALQ oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Corpo docente composto por professores renomados da USP","Flexibilidade nos formatos dos cursos","Opções de pagamento facilitadas"],"correct":[1,2]},
+// Dissertativas
+{"n":21,"t":"Explicar MBA USP ESALQ","tipo":"text","q":"Explique de forma breve o que é o MBA USP ESALQ"},
+{"n":22,"t":"Diferença ESALQ vs USP Tradicional","tipo":"text","q":"Qual a diferença entre o MBA USP ESALQ e os cursos tradicionais da USP?"},
+// Avaliação do treinamento por último
+{"n":23,"t":"Avaliação do Treinamento ESALQ","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "b2b_mackenzie":[
-{"n":22,"t":"Falar da Universidade Mackenzie","tipo":"text","q":"Fale um pouco da Universidade Presbiteriana Mackenzie"},
-{"n":23,"t":"MBA vs Pós-Graduação (Lato vs Stricto)","tipo":"text","q":"Qual a diferença entre MBA e Pós-Graduação?"},
+// Alternativas primeiro
 {"n":24,"t":"Setores Beneficiados - MACKENZIE","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas do Multicompany MACKENZIE?","opts":["Finanças e Gestão","Engenharia e Indústria","Tecnologia da Informação","Todos os setores mencionados"],"correct":3},
-{"n":25,"t":"Vantagens Competitivas - MACKENZIE","tipo":"multi","q":"Quais vantagens competitivas o Multicompany MACKENZIE oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Networking","Opções de pagamento facilitadas","Flexibilidade nos formatos dos cursos","Opções de cursos gratuitos para os funcionários das empresas parceiras","Corpo docente composto por professores renomados"],"correct":[1,3,4]}
+{"n":25,"t":"Vantagens Competitivas - MACKENZIE","tipo":"single","q":"Quais vantagens competitivas o Multicompany MACKENZIE oferece em comparação com outras instituições de educação continuada?","opts":["Localização privilegiada na cidade de São Paulo","Networking","Opções de pagamento facilitadas","Corpo docente composto por professores renomados","Todas as opções acima"],"correct":4},
+// Dissertativas
+{"n":26,"t":"Falar da Universidade Mackenzie","tipo":"text","q":"Fale um pouco da Universidade Presbiteriana Mackenzie"},
+{"n":27,"t":"MBA vs Pós-Graduação (Lato vs Stricto)","tipo":"text","q":"Qual a diferença entre MBA e Pós-Graduação?"},
+// Avaliação do treinamento por último
+{"n":28,"t":"Avaliação do Treinamento MACKENZIE","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "b2b_eca":[
-{"n":26,"t":"Explicar ECA USP","tipo":"text","q":"Explique de forma breve o que é a ECA USP (Escola de Comunicações e Artes)"},
-{"n":27,"t":"Diferença ECA vs USP Tradicional","tipo":"text","q":"Qual a diferença entre a ECA USP e os cursos tradicionais da USP?"},
-{"n":28,"t":"Setores Beneficiados - ECA USP","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas da ECA USP (Comunicação, Marketing, BI)?","opts":["Comunicação e Marketing","Business Intelligence & Analytics","Artes e Design","Todos os setores mencionados"],"correct":3},
-{"n":29,"t":"Vantagens Competitivas - ECA USP","tipo":"multi","q":"Quais vantagens competitivas a ECA USP oferece em comparação com outras instituições?","opts":["Corpo docente renomado da USP","Flexibilidade nos formatos (EAD)","Especialização em Comunicação e Artes","Localização privilegiada em São Paulo"],"correct":[0,1,2]}
+// Alternativas primeiro
+{"n":29,"t":"Setores Beneficiados - ECA USP","tipo":"single","q":"Quais setores de mercado são mais beneficiados pelos programas da ECA USP (Comunicação, Marketing, BI)?","opts":["Comunicação e Marketing","Business Intelligence & Analytics","Artes e Design","Todos os setores mencionados"],"correct":3},
+{"n":30,"t":"Vantagens Competitivas - ECA USP","tipo":"multi","q":"Quais vantagens competitivas a ECA USP oferece em comparação com outras instituições?","opts":["Corpo docente renomado da USP","Flexibilidade nos formatos (EAD)","Especialização em Comunicação e Artes","Localização privilegiada em São Paulo"],"correct":[0,1,2]},
+// Dissertativas
+{"n":31,"t":"Explicar ECA USP","tipo":"text","q":"Explique de forma breve o que é a ECA USP (Escola de Comunicações e Artes)"},
+{"n":32,"t":"Diferença ECA vs USP Tradicional","tipo":"text","q":"Qual a diferença entre a ECA USP e os cursos tradicionais da USP?"},
+// Avaliação do treinamento por último
+{"n":33,"t":"Avaliação do Treinamento ECA","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "b2c":[
-{"n":30,"t":"Canais de Atendimento B2C","tipo":"multi","q":"Quais canais você utiliza para atendimento ao lead?","opts":["Telefone","E-mail","WhatsApp","Presencial"],"correct":[0,1,2]},
-{"n":31,"t":"Primeira Abordagem ao Lead","tipo":"single","q":"Como deve ser feita a abordagem inicial ao lead?","opts":["Contato telefônico + envio de material + agendamento de follow-up","Apenas envio de material por e-mail","Esperar o lead retornar contato","Enviar proposta comercial imediatamente"],"correct":0},
-{"n":32,"t":"Lead Negativo - Procedimento","tipo":"single","q":"O que fazer quando o lead não quer seguir com inscrição?","opts":["Perguntar se deseja receber informações na próxima turma + colocar histórico + dar PERDIDO no sistema","Insistir na venda","Apenas dar PERDIDO no sistema","Transferir para outro vendedor"],"correct":0},
-{"n":33,"t":"Documentação Obrigatória","tipo":"multi","q":"Quais documentos são obrigatórios para inscrição?","opts":["RG (não pode ser substituído)","CPF (ou CNH)","Diploma de Graduação","Formulário online preenchido","Certidão de nascimento"],"correct":[0,1,2,3]},
-{"n":34,"t":"Prazo Follow-up","tipo":"single","q":"Qual o prazo ideal para retornar contato com lead após envio de material?","opts":["1 semana","3 dias","24 a 48 horas","Aguardar lead retornar"],"correct":2},
-{"n":35,"t":"Qualificação de Lead","tipo":"single","q":"Como identificar se um lead está qualificado?","opts":["Possui graduação completa + demonstra interesse real + está dentro do público-alvo da parceria","Apenas se possui condições financeiras para pagar","Se respondeu rápido ao primeiro contato","Se tem cargo de gerência ou superior"],"correct":0},
-{"n":36,"t":"Contorno de Objeções","tipo":"multi","q":"Quais as objeções mais comuns e como contorná-las?","opts":["\"Está caro\" - Mostrar desconto exclusivo da parceria e opções de pagamento","\"Não tenho tempo\" - Destacar flexibilidade do EAD e aulas ao vivo gravadas","\"Preciso pensar\" - Criar senso de urgência (vagas limitadas, turma fechando)","\"Já fiz pós-graduação\" - Mostrar diferencial da certificação USP/Mackenzie"],"correct":[0,1,2,3]},
-{"n":37,"t":"Processo de Inscrição","tipo":"text","q":"Descreva brevemente as etapas do processo de inscrição desde o contato inicial até a matrícula"},
-{"n":38,"t":"Tratamento de Pendências Documentais","tipo":"text","q":"Como proceder quando o lead envia documentação incompleta ou com problemas?"},
-{"n":39,"t":"Avaliação do Treinamento B2C","tipo":"text","q":"Como você avalia o processo de treinamento B2C? Dicas e sugestões de melhoria são bem-vindas."}
+// Alternativas primeiro
+{"n":34,"t":"Canais de Atendimento B2C","tipo":"multi","q":"Quais canais você utiliza para atendimento ao lead?","opts":["Telefone","E-mail","WhatsApp","Presencial"],"correct":[0,1,2]},
+{"n":35,"t":"Primeira Abordagem ao Lead","tipo":"single","q":"Como deve ser feita a abordagem inicial ao lead?","opts":["Contato telefônico + envio de material + agendamento de follow-up","Apenas envio de material por e-mail","Esperar o lead retornar contato","Enviar proposta comercial imediatamente"],"correct":0},
+{"n":36,"t":"Lead Negativo - Procedimento","tipo":"single","q":"O que fazer quando o lead não quer seguir com inscrição?","opts":["Perguntar se deseja receber informações na próxima turma + colocar histórico + dar PERDIDO no sistema","Insistir na venda","Apenas dar PERDIDO no sistema","Transferir para outro vendedor"],"correct":0},
+{"n":37,"t":"Documentação Obrigatória","tipo":"multi","q":"Quais documentos são obrigatórios para inscrição?","opts":["RG (não pode ser substituído)","CPF (ou CNH)","Diploma de Graduação","Formulário online preenchido","Certidão de nascimento"],"correct":[0,1,2,3]},
+{"n":38,"t":"Prazo Follow-up","tipo":"single","q":"Qual o prazo ideal para retornar contato com lead após envio de material?","opts":["1 semana","3 dias","24 a 48 horas","Aguardar lead retornar"],"correct":2},
+{"n":39,"t":"Qualificação de Lead","tipo":"single","q":"Como identificar se um lead está qualificado?","opts":["Possui graduação completa + demonstra interesse real + está dentro do público-alvo da parceria","Apenas se possui condições financeiras para pagar","Se respondeu rápido ao primeiro contato","Se tem cargo de gerência ou superior"],"correct":0},
+{"n":40,"t":"Contorno de Objeções","tipo":"multi","q":"Quais as objeções mais comuns e como contorná-las?","opts":["\"Está caro\" - Mostrar desconto exclusivo da parceria e opções de pagamento","\"Não tenho tempo\" - Destacar flexibilidade do EAD e aulas ao vivo gravadas","\"Preciso pensar\" - Criar senso de urgência (vagas limitadas, turma fechando)","\"Já fiz pós-graduação\" - Mostrar diferencial da certificação USP/Mackenzie"],"correct":[0,1,2,3]},
+// Dissertativas técnicas
+{"n":41,"t":"Processo de Inscrição","tipo":"text","q":"Descreva brevemente as etapas do processo de inscrição desde o contato inicial até a matrícula"},
+{"n":42,"t":"Tratamento de Pendências Documentais","tipo":"text","q":"Como proceder quando o lead envia documentação incompleta ou com problemas?"},
+// Avaliação do treinamento por último
+{"n":43,"t":"Avaliação do Treinamento B2C","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "backoffice":[
-{"n":40,"t":"Fluxo de Trabalho - Ordem Correta","tipo":"multi","q":"Ordene corretamente as etapas do processo de matrícula:","opts":["1. Trabalhar lead","2. Aprovação interna de formulário","3. Matrícula eletrônica","4. Validar matrícula com a marca","5. Inserir aluno na marca","6. Processo seletivo (quando aplicável)","7. Status do processo seletivo","8. Gerar boleto 1ª parcela","9. Pagamento 1ª parcela"],"correct":[0,1,2,3,4,5,6,7,8]},
-{"n":41,"t":"Aprovação de Formulários","tipo":"multi","q":"O que verificar na aprovação de formulários?","opts":["Dados pessoais completos e corretos","Documentos anexados corretamente (formato e legibilidade)","Curso selecionado está correto","Empresa/parceria identificada","Score de crédito do aluno"],"correct":[0,1,2,3]},
-{"n":42,"t":"Validação de Documentação","tipo":"multi","q":"Quais documentos precisam de validação especial (autenticação)?","opts":["Diploma de graduação (autenticação em cartório, digital ou física da universidade)","Histórico de graduação (autenticação em cartório, digital ou física)","Comprovante de vínculo empregatício (quando aplicável)","RG (cópia simples aceita)"],"correct":[0,1,2]},
-{"n":43,"t":"Sistemas Utilizados","tipo":"multi","q":"Quais sistemas você utiliza no dia a dia do Backoffice?","opts":["iELLO (sistema interno Grupo Ello)","Sistemas das marcas (APOLO para ESALQ, MOVE para POLI, etc)","E-mail corporativo","CRM externo"],"correct":[0,1,2]},
-{"n":44,"t":"Matrícula Eletrônica no iELLO","tipo":"text","q":"Descreva o processo de matrícula eletrônica no sistema iELLO"},
-{"n":45,"t":"Validação com a Marca","tipo":"text","q":"Como proceder para validar a matrícula com a escola parceira?"},
-{"n":46,"t":"Cobrança de Documentos Faltantes","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes após identificar a pendência?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar espontaneamente"],"correct":1},
-{"n":47,"t":"Processo Seletivo POLI","tipo":"single","q":"Como funciona o processo seletivo específico da POLI?","opts":["Análise curricular eliminatória","Prova escrita presencial","Entrevista online","Não há processo seletivo na POLI"],"correct":0},
-{"n":48,"t":"Gestão Financeira - Responsabilidades","tipo":"multi","q":"Quais são suas responsabilidades na parte financeira?","opts":["Gerar boleto da 1ª parcela após aprovação","Confirmar pagamento da 1ª parcela","Informar inadimplência ao setor responsável","Negociar desconto diretamente com aluno"],"correct":[0,1,2]},
-{"n":49,"t":"Boas Práticas Backoffice","tipo":"text","q":"Quais boas práticas você aplicaria para garantir zero erros no processo de matrícula?"},
-{"n":50,"t":"Avaliação do Treinamento Backoffice","tipo":"text","q":"Como você avalia o treinamento de Backoffice? Sugestões de melhoria são bem-vindas."}
+// Alternativas primeiro
+{"n":44,"t":"Fluxo de Trabalho - Ordem Correta","tipo":"multi","q":"Ordene corretamente as etapas do processo de matrícula:","opts":["1. Trabalhar lead","2. Aprovação interna de formulário","3. Matrícula eletrônica","4. Validar matrícula com a marca","5. Inserir aluno na marca","6. Processo seletivo (quando aplicável)","7. Status do processo seletivo","8. Gerar boleto 1ª parcela","9. Pagamento 1ª parcela"],"correct":[0,1,2,3,4,5,6,7,8]},
+{"n":45,"t":"Aprovação de Formulários","tipo":"multi","q":"O que verificar na aprovação de formulários?","opts":["Dados pessoais completos e corretos","Documentos anexados corretamente (formato e legibilidade)","Curso selecionado está correto","Empresa/parceria identificada","Score de crédito do aluno"],"correct":[0,1,2,3]},
+{"n":46,"t":"Validação de Documentação","tipo":"multi","q":"Quais documentos precisam de validação especial (autenticação)?","opts":["Diploma de graduação (autenticação em cartório, digital ou física da universidade)","Histórico de graduação (autenticação em cartório, digital ou física)","Comprovante de vínculo empregatício (quando aplicável)","RG (cópia simples aceita)"],"correct":[0,1,2]},
+{"n":47,"t":"Sistemas Utilizados","tipo":"multi","q":"Quais sistemas você utiliza no dia a dia do Backoffice?","opts":["iELLO (sistema interno Grupo Ello)","Sistemas das marcas (APOLO para ESALQ, MOVE para POLI, etc)","E-mail corporativo","CRM externo"],"correct":[0,1,2]},
+{"n":48,"t":"Cobrança de Documentos Faltantes","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes após identificar a pendência?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar espontaneamente"],"correct":1},
+{"n":49,"t":"Processo Seletivo POLI","tipo":"single","q":"Como funciona o processo seletivo específico da POLI?","opts":["Análise curricular eliminatória","Prova escrita presencial","Entrevista online","Não há processo seletivo na POLI"],"correct":0},
+{"n":50,"t":"Gestão Financeira - Responsabilidades","tipo":"multi","q":"Quais são suas responsabilidades na parte financeira?","opts":["Gerar boleto da 1ª parcela após aprovação","Confirmar pagamento da 1ª parcela","Informar inadimplência ao setor responsável","Negociar desconto diretamente com aluno"],"correct":[0,1,2]},
+// Dissertativas técnicas
+{"n":51,"t":"Matrícula Eletrônica no iELLO","tipo":"text","q":"Descreva o processo de matrícula eletrônica no sistema iELLO"},
+{"n":52,"t":"Validação com a Marca","tipo":"text","q":"Como proceder para validar a matrícula com a escola parceira?"},
+{"n":53,"t":"Boas Práticas Backoffice","tipo":"text","q":"Quais boas práticas você aplicaria para garantir zero erros no processo de matrícula?"},
+// Avaliação do treinamento por último
+{"n":54,"t":"Avaliação do Treinamento Backoffice","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ]
 };
 
@@ -1279,11 +1303,126 @@ function renderUserQuizProgress(){
     container.innerHTML = html;
 }
 
-function renderEvalButtons(){const btn=document.getElementById('eval-buttons');const t=trainees[currentTrainee];let html='<div class="btn-group">';if(isAdmin){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'POLI\')">B2B - POLI</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ESALQ/PECEGE\')">B2B - ESALQ</button><button class="btn-primary" onclick="startEval(\'b2b\',\'MACKENZIE\')">B2B - MACK</button><button class="btn-primary" onclick="startEval(\'b2b\',\'ECA USP\')">B2B - ECA</button><button class="btn-primary" onclick="startEval(\'b2c\',\'\')">B2C</button><button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Backoffice</button>';}else{if(t.function==='B2B'){html+='<button class="btn-primary" onclick="startEval(\'b2b\',\''+t.brand+'\')">Avaliação B2B - '+t.brand+'</button>';}else if(t.function==='B2C'){html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'\')">Avaliação B2C</button>';}else if(t.function==='Backoffice'){html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Avaliação Backoffice</button>';}}html+='</div>';btn.innerHTML=html;document.getElementById('eval-content').innerHTML='';}
+function renderEvalButtons(){
+    const btn=document.getElementById('eval-buttons');
+    const t=trainees[currentTrainee];
+    
+    // Função para verificar se já fez a avaliação
+    function jaFezAvaliacao(type, brand) {
+        return evalHistory.some(e => 
+            e.traineeIndex === currentTrainee && 
+            e.type === type && 
+            e.brand === brand
+        );
+    }
+    
+    // Função para obter resultado anterior
+    function getResultadoAnterior(type, brand) {
+        return evalHistory.find(e => 
+            e.traineeIndex === currentTrainee && 
+            e.type === type && 
+            e.brand === brand
+        );
+    }
+    
+    let html='<div class="btn-group">';
+    
+    if(isAdmin){
+        // Admin pode fazer todas as avaliações sem restrição
+        html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'POLI\')">B2B - POLI</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'ESALQ/PECEGE\')">B2B - ESALQ</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'MACKENZIE\')">B2B - MACK</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'ECA USP\')">B2B - ECA</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'\')">B2C</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Backoffice</button>';
+    } else {
+        // Colaborador - verificar se já fez
+        let type = '';
+        let brand = '';
+        let label = '';
+        
+        if(t.function==='B2B'){
+            type = 'b2b';
+            brand = t.brand;
+            label = 'Avaliação B2B - ' + t.brand;
+        } else if(t.function==='B2C'){
+            type = 'b2c';
+            brand = '';
+            label = 'Avaliação B2C';
+        } else if(t.function==='Backoffice'){
+            type = 'backoffice';
+            brand = '';
+            label = 'Avaliação Backoffice';
+        }
+        
+        if(jaFezAvaliacao(type, brand)) {
+            const resultado = getResultadoAnterior(type, brand);
+            const statusColor = resultado.passed ? '#28a745' : '#dc3545';
+            const statusText = resultado.passed ? '✅ Aprovado' : '❌ Reprovado';
+            html += '<div class="info-box" style="background:#f8f9fa;border-color:'+statusColor+';text-align:center;">';
+            html += '<h3 style="color:'+statusColor+';margin-bottom:10px;">Avaliação já realizada</h3>';
+            html += '<div style="font-size:48px;font-weight:bold;color:'+statusColor+';">'+resultado.score+'%</div>';
+            html += '<p style="color:'+statusColor+';font-size:18px;margin:10px 0;">'+statusText+'</p>';
+            html += '<p style="color:#666;font-size:13px;">Realizada em: '+resultado.date+'</p>';
+            html += '<p style="color:#888;font-size:12px;margin-top:15px;">⚠️ Cada avaliação pode ser feita apenas 1 vez.<br>As questões dissertativas serão corrigidas pelo coordenador.</p>';
+            html += '</div>';
+        } else {
+            html += '<button class="btn-primary" onclick="startEval(\''+type+'\',\''+brand+'\')">'+label+'</button>';
+        }
+    }
+    
+    html+='</div>';
+    btn.innerHTML=html;
+    document.getElementById('eval-content').innerHTML='';
+}
 
 function startEval(type,brand){currentEval={type,brand,answers:{},started:true};renderEval();}
 
-function renderEval(){const c=document.getElementById('eval-content');let qs=[];if(currentEval.type==='b2b'){qs=[...Q.b2b_comum];if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);}else if(currentEval.type==='b2c'){qs=Q.b2c;}else if(currentEval.type==='backoffice'){qs=Q.backoffice;}let html='<div class="eval-card"><h2 class="section-title">'+(currentEval.type==='b2b'?'Avaliação B2B - '+currentEval.brand:currentEval.type==='b2c'?'Avaliação B2C':'Avaliação Backoffice')+'</h2>';qs.forEach(q=>{html+='<div class="question"><div class="question-header"><span class="question-number">Q'+q.n+'</span><span class="question-type">'+(q.tipo==='multi'?'Múltipla escolha':q.tipo==='single'?'Única escolha':'Dissertativa')+'</span></div><div class="question-text">'+q.q+'</div>';if(q.opts){html+='<div class="options">';q.opts.forEach((o,i)=>{const inputType=q.tipo==='multi'?'checkbox':'radio';const name='q'+q.n;html+='<div class="option"><input type="'+inputType+'" name="'+name+'" value="'+i+'" id="'+name+'_'+i+'"><label for="'+name+'_'+i+'">'+o+'</label></div>';});html+='</div>';}else{html+='<textarea class="textarea-answer" id="q'+q.n+'_text" placeholder="Digite sua resposta aqui..."></textarea>';}html+='</div>';});html+='<button class="btn-primary" onclick="submitEval()">✅ Enviar Avaliação</button></div>';c.innerHTML=html;}
+function renderEval(){
+    const c=document.getElementById('eval-content');
+    let qs=[];
+    if(currentEval.type==='b2b'){
+        qs=[...Q.b2b_comum];
+        if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);
+        else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);
+        else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);
+        else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);
+    }else if(currentEval.type==='b2c'){
+        qs=[...Q.b2c];
+    }else if(currentEval.type==='backoffice'){
+        qs=[...Q.backoffice];
+    }
+    
+    // Ordenar: alternativas primeiro, dissertativas depois
+    const alternativas = qs.filter(q => q.tipo !== 'text');
+    const dissertativas = qs.filter(q => q.tipo === 'text');
+    qs = [...alternativas, ...dissertativas];
+    
+    let html='<div class="eval-card"><h2 class="section-title">'+(currentEval.type==='b2b'?'Avaliação B2B - '+currentEval.brand:currentEval.type==='b2c'?'Avaliação B2C':'Avaliação Backoffice')+'</h2>';
+    
+    // Seção de Alternativas
+    html+='<h3 style="color:#1e3c72;margin:20px 0 15px;border-bottom:2px solid #667eea;padding-bottom:10px;">📊 Questões Objetivas ('+alternativas.length+')</h3>';
+    alternativas.forEach(q=>{
+        html+='<div class="question"><div class="question-header"><span class="question-number">Q'+q.n+'</span><span class="question-type">'+(q.tipo==='multi'?'Múltipla escolha':'Única escolha')+'</span></div><div class="question-text">'+q.q+'</div>';
+        html+='<div class="options">';
+        q.opts.forEach((o,i)=>{
+            const inputType=q.tipo==='multi'?'checkbox':'radio';
+            const name='q'+q.n;
+            html+='<div class="option"><input type="'+inputType+'" name="'+name+'" value="'+i+'" id="'+name+'_'+i+'"><label for="'+name+'_'+i+'">'+o+'</label></div>';
+        });
+        html+='</div></div>';
+    });
+    
+    // Seção de Dissertativas
+    html+='<h3 style="color:#1e3c72;margin:30px 0 15px;border-bottom:2px solid #667eea;padding-bottom:10px;">📝 Questões Dissertativas ('+dissertativas.length+')</h3>';
+    dissertativas.forEach(q=>{
+        html+='<div class="question"><div class="question-header"><span class="question-number">Q'+q.n+'</span><span class="question-type">Dissertativa</span></div><div class="question-text">'+q.q+'</div>';
+        html+='<textarea class="textarea-answer" id="q'+q.n+'_text" placeholder="Digite sua resposta aqui..."></textarea></div>';
+    });
+    
+    html+='<button class="btn-primary" onclick="submitEval()">✅ Enviar Avaliação</button></div>';
+    c.innerHTML=html;
+}
 
 function submitEval(){let qs=[];if(currentEval.type==='b2b'){qs=[...Q.b2b_comum];if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);}else if(currentEval.type==='b2c'){qs=Q.b2c;}else{qs=Q.backoffice;}let correct=0,total=0;qs.forEach(q=>{if(q.tipo==='text')return;total++;const answers=[];document.querySelectorAll('input[name="q'+q.n+'"]:checked').forEach(el=>{answers.push(parseInt(el.value));});let isCorrect=false;if(q.tipo==='single'){isCorrect=answers.length===1&&answers[0]===q.correct;}else{isCorrect=answers.length===q.correct.length&&answers.every(a=>q.correct.includes(a));}if(isCorrect)correct++;});const score=total>0?Math.round((correct/total)*100):0;const passed=score>=70;
 // Salvar histórico da avaliação
@@ -1340,7 +1479,7 @@ if(useFirebase && db && trainees[currentTrainee].firebaseId) {
     saveToLocalStorage();
 }
 
-document.getElementById('eval-content').innerHTML='<div class="result-card"><h2>'+(passed?'🎉 Parabéns! Aprovado!':'📚 Necessário Revisar Conteúdo')+'</h2><div class="score-big">'+score+'%</div><p><strong>Acertos:</strong> '+correct+' de '+total+' questões objetivas</p><p><strong>Nota mínima:</strong> 70%</p><p style="margin-top:20px;font-size:14px;opacity:0.9">As questões dissertativas serão avaliadas pelo coordenador</p><button class="btn-secondary" onclick="renderEvalButtons();document.getElementById(\'eval-content\').innerHTML=\'\';">🔄 Fazer Outra Avaliação</button></div>';}
+document.getElementById('eval-content').innerHTML='<div class="result-card" style="text-align:center;"><h2 style="color:'+(passed?'#28a745':'#dc3545')+';">'+(passed?'🎉 Parabéns! Aprovado!':'📚 Reprovado')+'</h2><div class="score-big" style="font-size:72px;color:'+(passed?'#28a745':'#dc3545')+';">'+score+'%</div><p style="font-size:16px;color:#666;margin:20px 0;"><strong>Nota mínima para aprovação:</strong> 70%</p><div style="background:#f8f9fa;padding:15px;border-radius:10px;margin:20px 0;"><p style="color:#888;font-size:14px;margin:0;">📝 As questões dissertativas serão avaliadas pelo coordenador e podem alterar sua nota final.</p></div><button class="btn-secondary" onclick="renderEvalButtons();">← Voltar</button></div>';}
 
 // ========== INICIALIZAÇÃO ==========
 async function init() {
@@ -1544,7 +1683,7 @@ function viewEvalDetails(evalIndex){
     }
     const c=document.getElementById('eval-details-container');
     let h='<div class="eval-card" style="margin-top:25px;"><h2 class="section-title">📋 Detalhes da Avaliação - '+e.traineeName+'</h2>';
-    h+='<div class="info-box" style="background:#e7f3ff;border-color:#0066cc;margin-bottom:20px;"><strong style="color:#004085;">📅 '+e.date+'</strong> | '+e.type.toUpperCase()+(e.brand?' - '+e.brand:'')+' | Nota: <strong>'+e.score+'%</strong> ('+(e.passed?'Aprovado':'Reprovado')+')</div>';
+    h+='<div class="info-box" style="background:#e7f3ff;border-color:#0066cc;margin-bottom:20px;"><strong style="color:#004085;">📅 '+e.date+'</strong> | '+e.type.toUpperCase()+(e.brand?' - '+e.brand:'')+' | Nota: <strong id="nota-atual-'+evalIndex+'">'+e.score+'%</strong> ('+(e.passed?'Aprovado':'Reprovado')+')</div>';
     
     // Separar questões objetivas e dissertativas
     const objetivas=[];
@@ -1583,16 +1722,29 @@ function viewEvalDetails(evalIndex){
         });
     }
     
-    // Questões Dissertativas
+    // Questões Dissertativas com botões de correção
     if(dissertativas.length>0){
-        h+='<h3 style="color:#1e3c72;margin:30px 0 15px;border-bottom:2px solid #1e3c72;padding-bottom:10px;">📝 Questões Dissertativas ('+dissertativas.length+')</h3>';
+        h+='<h3 style="color:#1e3c72;margin:30px 0 15px;border-bottom:2px solid #1e3c72;padding-bottom:10px;">📝 Questões Dissertativas ('+dissertativas.length+') - Correção Manual</h3>';
+        h+='<p style="color:#666;margin-bottom:15px;font-size:13px;">⚠️ Marque cada questão como Correta ou Incorreta. A nota será recalculada automaticamente incluindo as dissertativas.</p>';
         dissertativas.forEach(({key,ans})=>{
-            h+='<div class="question">';
+            const corrigida = ans.corrigida !== undefined;
+            const correta = ans.corrigida === true;
+            const statusBg = corrigida ? (correta ? '#d4edda' : '#f8d7da') : '#fff';
+            const statusBorder = corrigida ? (correta ? '#28a745' : '#dc3545') : '#667eea';
+            h+='<div class="question" id="diss-'+evalIndex+'-'+key+'" style="border-left-color:'+statusBorder+';background:'+statusBg+';">';
             h+='<div class="question-header"><span class="question-number">'+key.toUpperCase()+'</span><span class="question-type">'+ans.tema+'</span></div>';
             h+='<div class="question-text">'+ans.pergunta+'</div>';
             h+='<div style="background:white;padding:15px;border-radius:8px;margin-top:10px;border:2px solid #e0e0e0;min-height:60px;">';
             h+=ans.resposta?'<p style="color:#333;white-space:pre-wrap;">'+ans.resposta+'</p>':'<p style="color:#999;font-style:italic;">Não respondida</p>';
-            h+='</div></div>';
+            h+='</div>';
+            h+='<div style="margin-top:15px;display:flex;gap:10px;">';
+            h+='<button onclick="corrigirDissertativa('+evalIndex+',\''+key+'\',true)" class="btn-primary" style="background:'+(corrigida && correta ? '#28a745' : '#6c757d')+';padding:10px 20px;width:auto;flex:1;">✅ Correta</button>';
+            h+='<button onclick="corrigirDissertativa('+evalIndex+',\''+key+'\',false)" class="btn-primary" style="background:'+(corrigida && !correta ? '#dc3545' : '#6c757d')+';padding:10px 20px;width:auto;flex:1;">❌ Incorreta</button>';
+            h+='</div>';
+            if(corrigida){
+                h+='<div style="margin-top:10px;padding:8px;background:'+(correta?'#28a745':'#dc3545')+';color:white;border-radius:6px;text-align:center;font-weight:bold;">'+(correta?'✅ Marcada como CORRETA':'❌ Marcada como INCORRETA')+'</div>';
+            }
+            h+='</div>';
         });
     }
     
@@ -1600,6 +1752,126 @@ function viewEvalDetails(evalIndex){
     h+='</div>';
     c.innerHTML=h;
     c.scrollIntoView({behavior:'smooth'});
+}
+
+async function corrigirDissertativa(evalIndex, questionKey, correta) {
+    const e = evalHistory[evalIndex];
+    if (!e || !e.answers || !e.answers[questionKey]) return;
+    
+    // Marcar como corrigida
+    e.answers[questionKey].corrigida = correta;
+    
+    // Contar objetivas e dissertativas
+    let totalObjetivas = 0;
+    let acertosObjetivas = 0;
+    let totalDissertativas = 0;
+    let totalDissertativasCorrigidas = 0;
+    let acertosDissertativas = 0;
+    
+    for (const [key, ans] of Object.entries(e.answers)) {
+        if (ans.tipo === 'text') {
+            totalDissertativas++;
+            if (ans.corrigida !== undefined) {
+                totalDissertativasCorrigidas++;
+                if (ans.corrigida === true) acertosDissertativas++;
+            }
+        } else {
+            totalObjetivas++;
+            if (ans.acertou) acertosObjetivas++;
+        }
+    }
+    
+    // Calcular porcentagem de cada tipo
+    const pctObjetivas = totalObjetivas > 0 ? (acertosObjetivas / totalObjetivas) * 100 : 0;
+    const pctDissertativas = totalDissertativasCorrigidas > 0 ? (acertosDissertativas / totalDissertativasCorrigidas) * 100 : 0;
+    
+    // Nota = média das duas porcentagens (só considera dissertativas se pelo menos 1 foi corrigida)
+    let novaNota;
+    if (totalDissertativasCorrigidas > 0) {
+        novaNota = Math.round((pctObjetivas + pctDissertativas) / 2);
+    } else {
+        novaNota = Math.round(pctObjetivas);
+    }
+    const aprovado = novaNota >= 70;
+    
+    // Atualizar registro
+    e.score = novaNota;
+    e.passed = aprovado;
+    e.correct = acertosObjetivas;
+    e.total = totalObjetivas;
+    e.correctDissertativas = acertosDissertativas;
+    e.totalDissertativas = totalDissertativas;
+    e.totalDissertativasCorrigidas = totalDissertativasCorrigidas;
+    e.pctObjetivas = Math.round(pctObjetivas);
+    e.pctDissertativas = Math.round(pctDissertativas);
+    
+    // Salvar no Firebase
+    const trainee = trainees[e.traineeIndex];
+    if (useFirebase && db && trainee && trainee.firebaseId) {
+        const traineeEvalHistory = trainee.evalHistory || [];
+        const evalInTrainee = traineeEvalHistory.find(ev => ev.date === e.date && ev.type === e.type);
+        if (evalInTrainee) {
+            Object.assign(evalInTrainee, {
+                answers: e.answers,
+                score: e.score,
+                passed: e.passed,
+                correctDissertativas: e.correctDissertativas,
+                totalDissertativas: e.totalDissertativas,
+                totalDissertativasCorrigidas: e.totalDissertativasCorrigidas,
+                pctObjetivas: e.pctObjetivas,
+                pctDissertativas: e.pctDissertativas
+            });
+        }
+        await db.collection('trainees').doc(trainee.firebaseId).update({
+            evalHistory: traineeEvalHistory
+        });
+    } else {
+        saveToLocalStorage();
+    }
+    
+    // Atualizar apenas a questão específica visualmente (sem fechar a tela)
+    const questionDiv = document.getElementById('diss-' + evalIndex + '-' + questionKey);
+    if (questionDiv) {
+        const statusBg = correta ? '#d4edda' : '#f8d7da';
+        const statusBorder = correta ? '#28a745' : '#dc3545';
+        questionDiv.style.background = statusBg;
+        questionDiv.style.borderLeftColor = statusBorder;
+        
+        // Atualizar botões
+        const buttons = questionDiv.querySelectorAll('button');
+        if (buttons.length >= 2) {
+            buttons[0].style.background = correta ? '#28a745' : '#6c757d';
+            buttons[1].style.background = !correta ? '#dc3545' : '#6c757d';
+        }
+        
+        // Adicionar ou atualizar status
+        let statusDiv = questionDiv.querySelector('.correcao-status');
+        if (!statusDiv) {
+            statusDiv = document.createElement('div');
+            statusDiv.className = 'correcao-status';
+            statusDiv.style.cssText = 'margin-top:10px;padding:8px;color:white;border-radius:6px;text-align:center;font-weight:bold;';
+            questionDiv.appendChild(statusDiv);
+        }
+        statusDiv.style.background = correta ? '#28a745' : '#dc3545';
+        statusDiv.textContent = correta ? '✅ Marcada como CORRETA' : '❌ Marcada como INCORRETA';
+    }
+    
+    // Atualizar nota e detalhes no cabeçalho
+    const infoBox = document.querySelector('#eval-details-container .info-box');
+    if (infoBox) {
+        const statusText = aprovado ? 'Aprovado' : 'Reprovado';
+        const statusColor = aprovado ? '#28a745' : '#dc3545';
+        let detalhes = '<strong style="color:#004085;">📅 '+e.date+'</strong> | '+e.type.toUpperCase()+(e.brand?' - '+e.brand:'');
+        detalhes += '<br><span style="font-size:13px;">📊 Objetivas: '+acertosObjetivas+'/'+totalObjetivas+' ('+Math.round(pctObjetivas)+'%)';
+        detalhes += ' | 📝 Dissertativas: '+acertosDissertativas+'/'+totalDissertativasCorrigidas+' ('+Math.round(pctDissertativas)+'%)</span>';
+        detalhes += '<br><strong style="font-size:18px;color:'+statusColor+';">Nota Final: '+novaNota+'% - '+statusText+'</strong>';
+        infoBox.innerHTML = detalhes;
+    }
+    
+    console.log('Dissertativa corrigida:', questionKey, correta ? 'CORRETA' : 'INCORRETA');
+    console.log('Objetivas:', acertosObjetivas+'/'+totalObjetivas+' = '+Math.round(pctObjetivas)+'%');
+    console.log('Dissertativas:', acertosDissertativas+'/'+totalDissertativasCorrigidas+' = '+Math.round(pctDissertativas)+'%');
+    console.log('Nota Final (média):', novaNota+'%');
 }
 
 function exportTraineeReport(){
@@ -1744,15 +2016,40 @@ function exportTraineeReport(){
             
             <div class="section">
                 <h2 class="section-title">📝 Histórico de Avaliações (${history.length})</h2>
-                ${history.length>0?history.map(e=>`
-                    <div class="eval-item">
-                        <div class="eval-info">
-                            <div class="eval-date">${e.date}</div>
-                            <div class="eval-type">${e.type.toUpperCase()}${e.brand?' - '+e.brand:''} | Acertos: ${e.correct}/${e.total}</div>
+                ${history.length>0?history.map(e=>{
+                    // Calcular nota correta (média objetivas + dissertativas)
+                    let notaExibir = e.score;
+                    let detalhesNota = 'Acertos: '+e.correct+'/'+e.total;
+                    if(e.pctObjetivas !== undefined && e.pctDissertativas !== undefined && e.totalDissertativasCorrigidas > 0) {
+                        detalhesNota = 'Obj: '+e.pctObjetivas+'% | Diss: '+e.pctDissertativas+'%';
+                    }
+                    // Buscar depoimento da avaliação do treinamento
+                    let depoimento = '';
+                    if(e.answers) {
+                        for(const[key,ans] of Object.entries(e.answers)) {
+                            if(ans.tipo === 'text' && ans.tema && ans.tema.includes('Avaliação do Treinamento') && ans.resposta) {
+                                depoimento = ans.resposta;
+                                break;
+                            }
+                        }
+                    }
+                    return `
+                    <div class="eval-item" style="flex-direction:column;align-items:stretch;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="eval-info">
+                                <div class="eval-date">${e.date}</div>
+                                <div class="eval-type">${e.type.toUpperCase()}${e.brand?' - '+e.brand:''} | ${detalhesNota}</div>
+                            </div>
+                            <div class="eval-score ${e.passed?'passed':'failed'}">${notaExibir}%</div>
                         </div>
-                        <div class="eval-score ${e.passed?'passed':'failed'}">${e.score}%</div>
+                        ${depoimento ? `
+                        <div style="margin-top:12px;padding:12px;background:#f8f9fa;border-left:4px solid #667eea;border-radius:4px;">
+                            <div style="font-size:12px;color:#666;margin-bottom:5px;">💬 Feedback sobre o treinamento:</div>
+                            <div style="color:#333;font-style:italic;">"${depoimento}"</div>
+                        </div>
+                        ` : ''}
                     </div>
-                `).join(''):'<div class="no-data">Nenhuma avaliação realizada ainda.</div>'}
+                `}).join(''):'<div class="no-data">Nenhuma avaliação realizada ainda.</div>'}
             </div>
             
             <div class="section">
