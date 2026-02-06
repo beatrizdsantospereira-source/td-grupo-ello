@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -852,9 +853,12 @@ async function finishQuizDay(day) {
     // Atualizar referência local
     trainees[currentTrainee] = currentUser;
     
-    // Atualizar lista de pendentes
+    // Atualizar lista de pendentes e resetar índice
     pendingQuizDays = getPendingDays(currentUser);
+    currentQuizDayIndex = 0; // Sempre resetar para 0
+    
     const hasMoreDays = pendingQuizDays.length > 0;
+    const nextDay = hasMoreDays ? pendingQuizDays[0] : null;
     const newStreak = getQuizStreak(currentUser);
     
     let message = '';
@@ -884,7 +888,7 @@ async function finishQuizDay(day) {
                 <p style="margin-top:15px;background:#fff3cd;padding:10px;border-radius:8px;">
                     📚 Ainda ${pendingQuizDays.length === 1 ? 'resta 1 dia' : `restam ${pendingQuizDays.length} dias`} pendente${pendingQuizDays.length > 1 ? 's' : ''}!
                 </p>
-                <button class="quiz-btn" onclick="continueToNextDay()">Continuar para o Dia ${pendingQuizDays[0]}</button>
+                <button class="quiz-btn" onclick="continueToNextDay()">Continuar para o Dia ${nextDay}</button>
             ` : `
                 <p style="margin-top:15px;color:#28a745;font-weight:bold;">🎓 Parabéns! Você completou todos os 5 dias!</p>
                 <p>Total de pontos do quiz: <strong>${getTotalQuizPoints(currentUser)} pts</strong></p>
@@ -895,7 +899,10 @@ async function finishQuizDay(day) {
 }
 
 function continueToNextDay() {
-    currentQuizDayIndex++;
+    // O pendingQuizDays já foi atualizado, então o índice 0 é sempre o próximo dia
+    currentQuizDayIndex = 0;
+    // Recarregar lista de pendentes para garantir ordem correta
+    pendingQuizDays = getPendingDays(currentUser);
     showQuizDayIntro();
 }
 
