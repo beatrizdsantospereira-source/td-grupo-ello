@@ -137,6 +137,109 @@
         .quiz-streak { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 10px 20px; border-radius: 25px; display: inline-block; margin-bottom: 20px; font-weight: bold; }
         .quiz-question { background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 20px; border-left: 5px solid #667eea; }
         
+        /* ===== TREINAMENTOS PONTUAIS STYLES ===== */
+        .pending-training-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 16px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px rgba(238, 90, 36, 0.3);
+            animation: pulse-training 2s infinite;
+        }
+        .pending-training-card.urgent {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            animation: pulse-urgent 1s infinite;
+        }
+        .pending-training-card.completed {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            animation: none;
+        }
+        @keyframes pulse-training {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+        @keyframes pulse-urgent {
+            0%, 100% { box-shadow: 0 8px 25px rgba(192, 57, 43, 0.3); }
+            50% { box-shadow: 0 8px 35px rgba(192, 57, 43, 0.6); }
+        }
+        .training-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .training-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .training-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .training-desc {
+            opacity: 0.9;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .training-deadline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .training-deadline-urgent {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 8px;
+        }
+        .training-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .training-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .training-btn.material {
+            background: white;
+            color: #ee5a24;
+        }
+        .training-btn.avaliar {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+        .training-btn:hover {
+            transform: scale(1.05);
+        }
+        .training-progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .training-progress-bar {
+            background: white;
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
         /* ===== CONTEÚDOS STYLES ===== */
         .content-card {
             background: white;
@@ -645,6 +748,9 @@
             </div>
             
             <div id="view-mode" class="view-section active">
+                <!-- TREINAMENTOS PONTUAIS PENDENTES -->
+                <div id="pending-trainings-container" style="display:none;margin-bottom:25px;"></div>
+                
                 <!-- Barra de Progresso -->
                 <div class="progress-container">
                     <div class="progress-header">
@@ -920,6 +1026,15 @@
                                     <div class="action-text">
                                         <div class="action-title">Corrigir Avaliações</div>
                                         <div class="action-desc" id="pending-corrections-count">0 pendentes</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                                
+                                <button class="quick-action-btn" onclick="showPunctualTrainingsPanel()">
+                                    <div class="action-icon" style="background:#ffebee;">🎯</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Treinamentos Pontuais</div>
+                                        <div class="action-desc" id="punctual-trainings-count">Criar e gerenciar</div>
                                     </div>
                                     <span class="action-arrow">→</span>
                                 </button>
@@ -1308,8 +1423,11 @@ function getCompletedDays(trainee) {
 
 function getPendingDays(trainee) {
     const completed = getCompletedDays(trainee);
+    const releasedDays = trainee.releasedQuizDays || [];
     const allDays = [1, 2, 3, 4, 5];
-    return allDays.filter(d => !completed.includes(d)).sort((a, b) => a - b);
+    
+    // Retorna dias que: não foram completados E estão liberados manualmente
+    return allDays.filter(d => !completed.includes(d) && releasedDays.includes(d)).sort((a, b) => a - b);
 }
 
 function getQuizStreak(trainee) {
@@ -1391,18 +1509,34 @@ function showDailyQuiz() {
     const content = document.getElementById('quiz-content');
     
     pendingQuizDays = getPendingDays(currentUser);
+    const completedDays = getCompletedDays(currentUser);
     
     if (pendingQuizDays.length === 0) {
-        // Todos os dias completos
-        content.innerHTML = `
-            <div class="quiz-result">
-                <div class="quiz-result-icon">🎓</div>
-                <h3>Parabéns!</h3>
-                <p>Você já completou todos os 5 dias de quiz!</p>
-                <p style="margin-top:10px;">Total de pontos do quiz: <strong>${getTotalQuizPoints(currentUser)} pts</strong></p>
-                <button class="quiz-btn" onclick="closeQuiz()">Continuar</button>
-            </div>
-        `;
+        // Verificar se completou todos ou se não tem dias liberados
+        if (completedDays.length === 5) {
+            // Todos os dias completos
+            content.innerHTML = `
+                <div class="quiz-result">
+                    <div class="quiz-result-icon">🎓</div>
+                    <h3>Parabéns!</h3>
+                    <p>Você já completou todos os 5 dias de quiz!</p>
+                    <p style="margin-top:10px;">Total de pontos do quiz: <strong>${getTotalQuizPoints(currentUser)} pts</strong></p>
+                    <button class="quiz-btn" onclick="closeQuiz()">Continuar</button>
+                </div>
+            `;
+        } else {
+            // Não tem dias liberados
+            content.innerHTML = `
+                <div class="quiz-result">
+                    <div class="quiz-result-icon">🔒</div>
+                    <h3>Aguarde!</h3>
+                    <p>Os próximos dias do quiz ainda não foram liberados.</p>
+                    <p style="margin-top:10px;color:#666;">Entre em contato com o T&D para liberação.</p>
+                    <p style="margin-top:10px;">Dias completados: <strong>${completedDays.length}/5</strong></p>
+                    <button class="quiz-btn" onclick="closeQuiz()">Fechar</button>
+                </div>
+            `;
+        }
         overlay.style.display = 'flex';
         return;
     }
@@ -1753,6 +1887,12 @@ function loginEmployee(e){
         return;
     }
     
+    // Verificar se está bloqueado
+    if(trainees[index].blocked){
+        showError('🚫 Acesso bloqueado. Entre em contato com o T&D.');
+        return;
+    }
+    
     currentTrainee = index;
     currentUser = trainees[currentTrainee];
     isAdmin = false;
@@ -1811,6 +1951,35 @@ function deleteTrainee(i){
         }
     }
 }
+
+async function toggleBlockTrainee(i) {
+    const t = trainees[i];
+    if (!t) return;
+    
+    const isBlocked = t.blocked === true;
+    const action = isBlocked ? 'desbloquear' : 'bloquear';
+    
+    if (!confirm(`Tem certeza que deseja ${action} o acesso de ${t.name}?`)) return;
+    
+    t.blocked = !isBlocked;
+    
+    if (useFirebase && db && t.firebaseId) {
+        try {
+            await db.collection('trainees').doc(t.firebaseId).update({ blocked: t.blocked });
+        } catch (e) {
+            console.log('Erro ao atualizar bloqueio:', e);
+        }
+    } else {
+        saveToLocalStorage();
+    }
+    
+    const statusMsg = t.blocked ? '🚫 Acesso BLOQUEADO' : '✅ Acesso LIBERADO';
+    alert(`${statusMsg} para ${t.name}`);
+    
+    // Atualizar a tela
+    showTraineeDetail(i);
+}
+
 function renderAdmin(){
     populateAdminTraineeSelect();
     
@@ -1826,7 +1995,7 @@ function renderAdmin(){
         renderAdminDashboard();
     }
 }
-function updateView(){renderBadges();updateStats();renderUserQuizProgress();}
+function updateView(){renderBadges();updateStats();renderUserQuizProgress();renderPendingTrainings();}
 function renderBadges(){
     const c=document.getElementById('badges-container');
     const t=trainees[currentTrainee];
@@ -1948,6 +2117,7 @@ function renderUserQuizProgress(){
     
     const t = currentUser;
     const completedDays = getCompletedDays(t);
+    const releasedDays = t.releasedQuizDays || [];
     const totalPoints = getTotalQuizPoints(t);
     const streak = getQuizStreak(t);
     const pendingDays = getPendingDays(t);
@@ -1959,10 +2129,17 @@ function renderUserQuizProgress(){
     html += '<div style="display:flex;justify-content:center;gap:12px;margin-bottom:15px;">';
     for(let d=1; d<=5; d++){
         const completed = completedDays.includes(d);
+        const released = releasedDays.includes(d);
         html += '<div style="width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;';
-        html += completed ? 'background:#28a745;color:white;' : 'background:#e0e0e0;color:#666;';
+        if (completed) {
+            html += 'background:#28a745;color:white;';
+        } else if (released) {
+            html += 'background:#667eea;color:white;';
+        } else {
+            html += 'background:#e0e0e0;color:#999;';
+        }
         html += '">';
-        html += completed ? '✓' : d;
+        html += completed ? '✓' : (released ? d : '🔒');
         html += '</div>';
     }
     html += '</div>';
@@ -1994,9 +2171,18 @@ function renderUserQuizProgress(){
         html += '✅ Quiz de hoje concluído! Volte amanhã para continuar.';
         html += '</div>';
         btn.style.display = 'none';
+    } else if(pendingDays.length === 0) {
+        // Não completou todos, mas não tem dias liberados
+        const releasedDays = t.releasedQuizDays || [];
+        if (releasedDays.length === 0 || releasedDays.every(d => completedDays.includes(d))) {
+            html += '<div style="margin-top:15px;padding:10px;background:#f8f9fa;border-radius:8px;text-align:center;color:#666;">';
+            html += '🔒 Aguarde a liberação dos próximos dias pelo T&D.';
+            html += '</div>';
+            btn.style.display = 'none';
+        }
     } else {
         html += '<div style="margin-top:15px;padding:10px;background:#cce5ff;border-radius:8px;text-align:center;color:#004085;">';
-        html += '📚 ' + pendingDays.length + ' dia(s) pendente(s) - Próximo: <strong>Dia ' + pendingDays[0] + '</strong>';
+        html += '📚 ' + pendingDays.length + ' dia(s) liberado(s) - Próximo: <strong>Dia ' + pendingDays[0] + '</strong>';
         html += '</div>';
         btn.style.display = 'block';
     }
@@ -2523,12 +2709,23 @@ function showTraineeDetail(traineeIdx) {
     document.getElementById('admin-dashboard').classList.remove('active');
     panel.classList.add('active');
     
+    const isBlocked = t.blocked === true;
+    const statusBg = isBlocked ? '#ffebee' : '#d4edda';
+    const statusBorder = isBlocked ? '#dc3545' : '#28a745';
+    const statusColor = isBlocked ? '#c62828' : '#155724';
+    const statusIcon = isBlocked ? '🚫' : '👤';
+    const statusText = isBlocked ? ' | <span style="color:#dc3545;font-weight:bold;">BLOQUEADO</span>' : '';
+    
+    const blockBtnText = isBlocked ? '🔓 Desbloquear Acesso' : '🔒 Bloquear Acesso';
+    const blockBtnColor = isBlocked ? '#28a745' : '#dc3545';
+    
     let html = `
-        <div class="info-box" style="background:#d4edda;border-color:#28a745;margin-bottom:20px;">
-            <strong style="color:#155724;">👤 ${t.name}</strong> | ${t.function}${t.brand ? ' - ' + t.brand : ''} | ${t.points} pts | Código: ${t.code}
+        <div class="info-box" style="background:${statusBg};border-color:${statusBorder};margin-bottom:20px;">
+            <strong style="color:${statusColor};">${statusIcon} ${t.name}</strong> | ${t.function}${t.brand ? ' - ' + t.brand : ''} | ${t.points} pts | Código: ${t.code}${statusText}
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px;">
             <button class="btn-primary" style="width:auto;" onclick="exportTraineeReport()">📄 Exportar Relatório</button>
+            <button class="btn-primary" style="width:auto;background:${blockBtnColor};" onclick="toggleBlockTrainee(${traineeIdx})">${blockBtnText}</button>
         </div>
         
         <h3 class="section-title">🏅 Badges</h3>
@@ -2618,22 +2815,137 @@ function renderDetailQuizProgress() {
     const t = trainees[adminSelectedTrainee];
     
     const completedDays = getCompletedDays(t);
+    const releasedDays = t.releasedQuizDays || [];
     const totalPoints = getTotalQuizPoints(t);
     
     let h = `<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:15px;">`;
     for (let day = 1; day <= 5; day++) {
         const completed = completedDays.includes(day);
+        const released = releasedDays.includes(day);
         const dayData = t.quizProgress ? t.quizProgress['day' + day] : null;
-        const bg = completed ? 'linear-gradient(135deg, #28a745, #20c997)' : '#e0e0e0';
-        const color = completed ? 'white' : '#666';
+        
+        let bg, color, statusText;
+        if (completed) {
+            bg = 'linear-gradient(135deg, #28a745, #20c997)';
+            color = 'white';
+            statusText = `${dayData ? dayData.correct : 0}/3 acertos`;
+        } else if (released) {
+            bg = 'linear-gradient(135deg, #667eea, #764ba2)';
+            color = 'white';
+            statusText = '🔓 Liberado';
+        } else {
+            bg = '#e0e0e0';
+            color = '#666';
+            statusText = '🔒 Bloqueado';
+        }
+        
         h += `<div style="background:${bg};color:${color};padding:15px;border-radius:10px;text-align:center;">
             <div style="font-size:24px;font-weight:bold;">Dia ${day}</div>
-            ${completed ? `<div style="font-size:12px;">${dayData ? dayData.correct : 0}/3 acertos</div>` : '<div style="font-size:12px;">Pendente</div>'}
+            <div style="font-size:12px;">${statusText}</div>
         </div>`;
     }
     h += `</div>`;
     h += `<p><strong>Total:</strong> ${completedDays.length}/5 dias | <strong>Pontos:</strong> ${totalPoints} pts</p>`;
+    
+    // Botões para liberar dias
+    h += `
+        <div style="margin-top:20px;padding:20px;background:#f8f9fa;border-radius:12px;">
+            <h4 style="color:#1e3c72;margin-bottom:15px;">🔓 Liberar Dias do Quiz</h4>
+            <p style="color:#666;font-size:13px;margin-bottom:15px;">Clique nos dias para liberar/bloquear o acesso do colaborador:</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    `;
+    
+    for (let day = 1; day <= 5; day++) {
+        const completed = completedDays.includes(day);
+        const released = releasedDays.includes(day);
+        
+        if (completed) {
+            h += `<button disabled style="padding:12px 20px;border-radius:8px;border:none;background:#28a745;color:white;cursor:not-allowed;opacity:0.7;">Dia ${day} ✅</button>`;
+        } else if (released) {
+            h += `<button onclick="toggleQuizDay(${adminSelectedTrainee}, ${day})" style="padding:12px 20px;border-radius:8px;border:none;background:#667eea;color:white;cursor:pointer;">Dia ${day} 🔓</button>`;
+        } else {
+            h += `<button onclick="toggleQuizDay(${adminSelectedTrainee}, ${day})" style="padding:12px 20px;border-radius:8px;border:2px solid #667eea;background:white;color:#667eea;cursor:pointer;">Dia ${day} 🔒</button>`;
+        }
+    }
+    
+    h += `
+            </div>
+            <div style="margin-top:15px;display:flex;gap:10px;">
+                <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="releaseAllQuizDays(${adminSelectedTrainee})">🔓 Liberar Todos</button>
+                <button class="btn-secondary" style="width:auto;padding:10px 20px;margin:0;" onclick="blockAllQuizDays(${adminSelectedTrainee})">🔒 Bloquear Todos</button>
+            </div>
+        </div>
+    `;
+    
     c.innerHTML = h;
+}
+
+async function toggleQuizDay(traineeIdx, day) {
+    const t = trainees[traineeIdx];
+    if (!t) return;
+    
+    if (!t.releasedQuizDays) t.releasedQuizDays = [];
+    
+    const idx = t.releasedQuizDays.indexOf(day);
+    if (idx >= 0) {
+        t.releasedQuizDays.splice(idx, 1); // Bloquear
+    } else {
+        t.releasedQuizDays.push(day); // Liberar
+    }
+    
+    // Salvar no Firebase
+    if (useFirebase && db && t.firebaseId) {
+        try {
+            await db.collection('trainees').doc(t.firebaseId).update({ releasedQuizDays: t.releasedQuizDays });
+        } catch (e) {
+            console.log('Erro ao salvar liberação de quiz:', e);
+        }
+    } else {
+        saveToLocalStorage();
+    }
+    
+    renderDetailQuizProgress();
+}
+
+async function releaseAllQuizDays(traineeIdx) {
+    const t = trainees[traineeIdx];
+    if (!t) return;
+    
+    const completedDays = getCompletedDays(t);
+    t.releasedQuizDays = [1, 2, 3, 4, 5].filter(d => !completedDays.includes(d));
+    
+    if (useFirebase && db && t.firebaseId) {
+        try {
+            await db.collection('trainees').doc(t.firebaseId).update({ releasedQuizDays: t.releasedQuizDays });
+        } catch (e) {
+            console.log('Erro ao salvar liberação de quiz:', e);
+        }
+    } else {
+        saveToLocalStorage();
+    }
+    
+    renderDetailQuizProgress();
+    alert('✅ Todos os dias do quiz foram liberados para ' + t.name);
+}
+
+async function blockAllQuizDays(traineeIdx) {
+    const t = trainees[traineeIdx];
+    if (!t) return;
+    
+    t.releasedQuizDays = [];
+    
+    if (useFirebase && db && t.firebaseId) {
+        try {
+            await db.collection('trainees').doc(t.firebaseId).update({ releasedQuizDays: t.releasedQuizDays });
+        } catch (e) {
+            console.log('Erro ao salvar liberação de quiz:', e);
+        }
+    } else {
+        saveToLocalStorage();
+    }
+    
+    renderDetailQuizProgress();
+    alert('🔒 Todos os dias do quiz foram bloqueados para ' + t.name);
 }
 
 function backToDashboard() {
@@ -2709,12 +3021,17 @@ function showAllTrainees() {
     
     trainees.forEach((t, idx) => {
         const initials = t.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const isBlocked = t.blocked === true;
+        const blockedBadge = isBlocked ? '<span style="background:#dc3545;color:white;padding:2px 8px;border-radius:12px;font-size:11px;margin-left:10px;">🚫 BLOQUEADO</span>' : '';
+        const avatarBg = isBlocked ? 'background:linear-gradient(135deg, #dc3545, #c0392b);' : '';
+        const itemBorder = isBlocked ? 'border-left:4px solid #dc3545;' : '';
+        
         html += `
-            <div class="list-item" style="cursor:pointer;" onclick="showTraineeDetail(${idx})">
+            <div class="list-item" style="cursor:pointer;${itemBorder}" onclick="showTraineeDetail(${idx})">
                 <div style="display:flex;align-items:center;gap:15px;">
-                    <div class="priority-avatar">${initials}</div>
+                    <div class="priority-avatar" style="${avatarBg}">${initials}</div>
                     <div class="list-item-info">
-                        <div class="list-item-name">${t.name}</div>
+                        <div class="list-item-name">${t.name}${blockedBadge}</div>
                         <div class="list-item-details">${t.function}${t.brand ? ' - ' + t.brand : ''} | ${t.points} pts | Código: ${t.code}</div>
                     </div>
                 </div>
@@ -2796,6 +3113,537 @@ function exportAllReports() {
             });
         });
     }, 100);
+}
+
+// ========== TREINAMENTOS PONTUAIS ==========
+let punctualTrainings = [];
+
+async function loadPunctualTrainings() {
+    if (useFirebase && db) {
+        try {
+            const doc = await db.collection('settings').doc('punctualTrainings').get();
+            if (doc.exists) {
+                punctualTrainings = doc.data().items || [];
+            }
+        } catch (e) {
+            console.log('Erro ao carregar treinamentos pontuais:', e);
+        }
+    } else {
+        const saved = localStorage.getItem('punctualTrainings');
+        if (saved) punctualTrainings = JSON.parse(saved);
+    }
+}
+
+async function savePunctualTrainings() {
+    if (useFirebase && db) {
+        try {
+            await db.collection('settings').doc('punctualTrainings').set({ items: punctualTrainings });
+        } catch (e) {
+            console.log('Erro ao salvar treinamentos pontuais:', e);
+        }
+    } else {
+        localStorage.setItem('punctualTrainings', JSON.stringify(punctualTrainings));
+    }
+}
+
+function showPunctualTrainingsPanel() {
+    const panel = document.getElementById('detail-panel');
+    const content = document.getElementById('detail-content');
+    
+    document.getElementById('admin-dashboard').classList.remove('active');
+    panel.classList.add('active');
+    
+    loadPunctualTrainings().then(() => {
+        let html = `
+            <h2 class="section-title">🎯 Treinamentos Pontuais</h2>
+            <p style="color:#666;margin-bottom:20px;">Crie treinamentos específicos para colaboradores selecionados.</p>
+            
+            <button class="btn-primary" style="margin-bottom:25px;" onclick="showCreateTrainingForm()">➕ Criar Novo Treinamento</button>
+            
+            <div id="create-training-form" style="display:none;"></div>
+            
+            <div id="punctual-trainings-list"></div>
+        `;
+        
+        content.innerHTML = html;
+        renderPunctualTrainingsList();
+    });
+}
+
+function renderPunctualTrainingsList() {
+    const list = document.getElementById('punctual-trainings-list');
+    
+    if (punctualTrainings.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">Nenhum treinamento pontual criado ainda.</p>';
+        return;
+    }
+    
+    let html = '<h3 style="color:#1e3c72;margin-bottom:15px;">📋 Treinamentos Criados</h3>';
+    
+    punctualTrainings.forEach((t, idx) => {
+        const deadline = new Date(t.deadline);
+        const hoje = new Date();
+        const isExpired = deadline < hoje;
+        const diasRestantes = Math.ceil((deadline - hoje) / (1000 * 60 * 60 * 24));
+        
+        // Contar conclusões
+        const totalAssigned = t.assignedTo ? t.assignedTo.length : 0;
+        const completions = t.completions || {};
+        const totalCompleted = Object.keys(completions).length;
+        
+        const statusColor = isExpired ? '#dc3545' : (diasRestantes <= 3 ? '#fd7e14' : '#28a745');
+        const statusText = isExpired ? 'Encerrado' : `${diasRestantes} dia(s) restante(s)`;
+        
+        html += `
+            <div style="background:white;border-radius:12px;padding:20px;margin-bottom:15px;border-left:4px solid ${statusColor};">
+                <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px;">
+                    <div style="flex:1;">
+                        <h4 style="color:#1e3c72;margin:0 0 8px 0;">${t.title}</h4>
+                        <p style="color:#666;font-size:14px;margin:0 0 10px 0;">${t.description || 'Sem descrição'}</p>
+                        <div style="display:flex;gap:15px;flex-wrap:wrap;font-size:13px;">
+                            <span style="color:${statusColor};">⏰ ${statusText}</span>
+                            <span>📅 Prazo: ${deadline.toLocaleDateString('pt-BR')}</span>
+                            <span>👥 ${totalCompleted}/${totalAssigned} concluídos</span>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn-primary" style="width:auto;padding:8px 16px;" onclick="viewTrainingDetails(${idx})">👁️ Ver</button>
+                        <button class="btn-delete" onclick="deletePunctualTraining(${idx})">🗑️</button>
+                    </div>
+                </div>
+                <div style="background:#e0e0e0;height:6px;border-radius:3px;margin-top:15px;">
+                    <div style="background:${statusColor};height:100%;border-radius:3px;width:${totalAssigned > 0 ? (totalCompleted/totalAssigned)*100 : 0}%;"></div>
+                </div>
+            </div>
+        `;
+    });
+    
+    list.innerHTML = html;
+}
+
+function showCreateTrainingForm() {
+    const form = document.getElementById('create-training-form');
+    
+    // Gerar lista de colaboradores
+    let colaboradoresHtml = '';
+    trainees.forEach((t, idx) => {
+        colaboradoresHtml += `
+            <label style="display:flex;align-items:center;gap:10px;padding:8px;background:#f8f9fa;border-radius:8px;margin-bottom:5px;cursor:pointer;">
+                <input type="checkbox" name="training-colaborador" value="${idx}">
+                <span>${t.name}</span>
+                <span style="color:#666;font-size:12px;">(${t.function}${t.brand ? ' - ' + t.brand : ''})</span>
+            </label>
+        `;
+    });
+    
+    form.innerHTML = `
+        <div style="background:#f8f9fa;padding:25px;border-radius:12px;margin-bottom:25px;border:2px dashed #667eea;">
+            <h3 style="color:#1e3c72;margin-bottom:20px;">➕ Novo Treinamento Pontual</h3>
+            
+            <div class="form-group">
+                <label>Título do Treinamento *</label>
+                <input type="text" id="training-title" placeholder="Ex: Reciclagem - Novo Sistema de Vendas">
+            </div>
+            
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="training-description" style="width:100%;min-height:80px;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-family:inherit;" placeholder="Descreva o objetivo do treinamento..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Link do Material (PDF/Vídeo) *</label>
+                <input type="text" id="training-material" placeholder="https://drive.google.com/...">
+            </div>
+            
+            <div class="form-group">
+                <label>Prazo de Conclusão *</label>
+                <input type="date" id="training-deadline" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;">
+            </div>
+            
+            <div class="form-group">
+                <label>Selecionar Colaboradores *</label>
+                <div style="display:flex;gap:10px;margin-bottom:10px;">
+                    <button type="button" class="btn-secondary" style="width:auto;margin:0;padding:8px 16px;" onclick="selectAllColaboradores()">Selecionar Todos</button>
+                    <button type="button" class="btn-secondary" style="width:auto;margin:0;padding:8px 16px;" onclick="deselectAllColaboradores()">Desmarcar Todos</button>
+                </div>
+                <div style="max-height:200px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:10px;">
+                    ${colaboradoresHtml}
+                </div>
+            </div>
+            
+            <h4 style="color:#1e3c72;margin:25px 0 15px 0;">📝 Questões da Avaliação</h4>
+            <p style="color:#666;font-size:13px;margin-bottom:15px;">Adicione questões objetivas (múltipla escolha)</p>
+            
+            <div id="training-questions-container"></div>
+            
+            <button type="button" class="btn-secondary" style="margin-bottom:20px;" onclick="addTrainingQuestion()">➕ Adicionar Questão</button>
+            
+            <div style="display:flex;gap:10px;">
+                <button class="btn-primary" onclick="saveNewTraining()">✅ Criar Treinamento</button>
+                <button class="btn-secondary" onclick="hideCreateTrainingForm()">❌ Cancelar</button>
+            </div>
+        </div>
+    `;
+    
+    form.style.display = 'block';
+    
+    // Definir data mínima como hoje
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('training-deadline').min = hoje;
+    
+    // Adicionar primeira questão
+    addTrainingQuestion();
+    
+    form.scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideCreateTrainingForm() {
+    document.getElementById('create-training-form').style.display = 'none';
+}
+
+let questionCount = 0;
+
+function addTrainingQuestion() {
+    questionCount++;
+    const container = document.getElementById('training-questions-container');
+    
+    const questionHtml = `
+        <div id="question-${questionCount}" style="background:white;padding:20px;border-radius:8px;margin-bottom:15px;border:1px solid #e0e0e0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <strong style="color:#667eea;">Questão ${questionCount}</strong>
+                <button type="button" onclick="removeTrainingQuestion(${questionCount})" style="background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">🗑️</button>
+            </div>
+            <div class="form-group">
+                <label>Pergunta</label>
+                <input type="text" id="q${questionCount}-text" placeholder="Digite a pergunta...">
+            </div>
+            <div class="form-group">
+                <label>Alternativas (marque a correta)</label>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                    <input type="radio" name="q${questionCount}-correct" value="0" checked>
+                    <input type="text" id="q${questionCount}-opt0" placeholder="Alternativa A" style="flex:1;">
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                    <input type="radio" name="q${questionCount}-correct" value="1">
+                    <input type="text" id="q${questionCount}-opt1" placeholder="Alternativa B" style="flex:1;">
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                    <input type="radio" name="q${questionCount}-correct" value="2">
+                    <input type="text" id="q${questionCount}-opt2" placeholder="Alternativa C" style="flex:1;">
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <input type="radio" name="q${questionCount}-correct" value="3">
+                    <input type="text" id="q${questionCount}-opt3" placeholder="Alternativa D" style="flex:1;">
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', questionHtml);
+}
+
+function removeTrainingQuestion(num) {
+    const el = document.getElementById('question-' + num);
+    if (el) el.remove();
+}
+
+function selectAllColaboradores() {
+    document.querySelectorAll('input[name="training-colaborador"]').forEach(cb => cb.checked = true);
+}
+
+function deselectAllColaboradores() {
+    document.querySelectorAll('input[name="training-colaborador"]').forEach(cb => cb.checked = false);
+}
+
+async function saveNewTraining() {
+    const title = document.getElementById('training-title').value.trim();
+    const description = document.getElementById('training-description').value.trim();
+    const material = document.getElementById('training-material').value.trim();
+    const deadline = document.getElementById('training-deadline').value;
+    
+    if (!title) { alert('⚠️ Digite o título do treinamento!'); return; }
+    if (!material) { alert('⚠️ Digite o link do material!'); return; }
+    if (!deadline) { alert('⚠️ Selecione o prazo de conclusão!'); return; }
+    
+    // Pegar colaboradores selecionados
+    const selectedColabs = [];
+    document.querySelectorAll('input[name="training-colaborador"]:checked').forEach(cb => {
+        selectedColabs.push(parseInt(cb.value));
+    });
+    
+    if (selectedColabs.length === 0) { alert('⚠️ Selecione pelo menos um colaborador!'); return; }
+    
+    // Pegar questões
+    const questions = [];
+    document.querySelectorAll('[id^="question-"]').forEach(qEl => {
+        const num = qEl.id.replace('question-', '');
+        const text = document.getElementById('q' + num + '-text')?.value?.trim();
+        if (!text) return;
+        
+        const opts = [];
+        for (let i = 0; i < 4; i++) {
+            const opt = document.getElementById('q' + num + '-opt' + i)?.value?.trim();
+            if (opt) opts.push(opt);
+        }
+        
+        const correctRadio = document.querySelector('input[name="q' + num + '-correct"]:checked');
+        const correct = correctRadio ? parseInt(correctRadio.value) : 0;
+        
+        if (opts.length >= 2) {
+            questions.push({ text, opts, correct });
+        }
+    });
+    
+    if (questions.length === 0) { alert('⚠️ Adicione pelo menos uma questão com 2 alternativas!'); return; }
+    
+    const newTraining = {
+        id: Date.now(),
+        title,
+        description,
+        material,
+        deadline,
+        assignedTo: selectedColabs,
+        questions,
+        completions: {},
+        createdAt: new Date().toISOString()
+    };
+    
+    punctualTrainings.push(newTraining);
+    await savePunctualTrainings();
+    
+    hideCreateTrainingForm();
+    renderPunctualTrainingsList();
+    questionCount = 0;
+    
+    alert('✅ Treinamento criado com sucesso!\n\nOs colaboradores selecionados verão o treinamento em destaque.');
+}
+
+async function deletePunctualTraining(idx) {
+    if (!confirm('Tem certeza que deseja excluir este treinamento?')) return;
+    punctualTrainings.splice(idx, 1);
+    await savePunctualTrainings();
+    renderPunctualTrainingsList();
+}
+
+function viewTrainingDetails(idx) {
+    const t = punctualTrainings[idx];
+    if (!t) return;
+    
+    const content = document.getElementById('detail-content');
+    
+    const deadline = new Date(t.deadline);
+    const totalAssigned = t.assignedTo ? t.assignedTo.length : 0;
+    const completions = t.completions || {};
+    
+    let colaboradoresHtml = '';
+    t.assignedTo.forEach(colabIdx => {
+        const colab = trainees[colabIdx];
+        if (!colab) return;
+        
+        const completed = completions[colabIdx];
+        const status = completed ? '✅ Concluído' : '⏳ Pendente';
+        const statusColor = completed ? '#28a745' : '#fd7e14';
+        const completedDate = completed ? ` em ${new Date(completed.date).toLocaleDateString('pt-BR')}` : '';
+        
+        colaboradoresHtml += `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8f9fa;border-radius:8px;margin-bottom:8px;">
+                <div>
+                    <strong>${colab.name}</strong>
+                    <span style="color:#666;font-size:12px;margin-left:10px;">${colab.function}${colab.brand ? ' - ' + colab.brand : ''}</span>
+                </div>
+                <span style="color:${statusColor};font-weight:bold;">${status}${completedDate}</span>
+            </div>
+        `;
+    });
+    
+    content.innerHTML = `
+        <h2 class="section-title">🎯 ${t.title}</h2>
+        <p style="color:#666;margin-bottom:20px;">${t.description || 'Sem descrição'}</p>
+        
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px;">
+            <div style="background:#e3f2fd;padding:20px;border-radius:12px;text-align:center;">
+                <div style="font-size:28px;font-weight:bold;color:#1565c0;">${Object.keys(completions).length}/${totalAssigned}</div>
+                <div style="font-size:13px;color:#666;">Concluídos</div>
+            </div>
+            <div style="background:#fff3e0;padding:20px;border-radius:12px;text-align:center;">
+                <div style="font-size:28px;font-weight:bold;color:#ef6c00;">${deadline.toLocaleDateString('pt-BR')}</div>
+                <div style="font-size:13px;color:#666;">Prazo</div>
+            </div>
+            <div style="background:#e8f5e9;padding:20px;border-radius:12px;text-align:center;">
+                <div style="font-size:28px;font-weight:bold;color:#2e7d32;">${t.questions.length}</div>
+                <div style="font-size:13px;color:#666;">Questões</div>
+            </div>
+        </div>
+        
+        <h3 style="color:#1e3c72;margin-bottom:15px;">👥 Status dos Colaboradores</h3>
+        ${colaboradoresHtml}
+        
+        <button class="btn-secondary" style="margin-top:20px;" onclick="showPunctualTrainingsPanel()">← Voltar</button>
+    `;
+}
+
+// Renderizar treinamentos pendentes para o colaborador
+function renderPendingTrainings() {
+    if (isAdmin || !currentUser || currentTrainee < 0) return;
+    
+    const container = document.getElementById('pending-trainings-container');
+    if (!container) return;
+    
+    loadPunctualTrainings().then(() => {
+        const hoje = new Date();
+        const meusTrainings = punctualTrainings.filter(t => {
+            if (!t.assignedTo || !t.assignedTo.includes(currentTrainee)) return false;
+            const deadline = new Date(t.deadline);
+            // Mostrar apenas não concluídos e não expirados
+            const completions = t.completions || {};
+            if (completions[currentTrainee]) return false;
+            return deadline >= hoje;
+        });
+        
+        if (meusTrainings.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+        
+        container.style.display = 'block';
+        
+        let html = '';
+        meusTrainings.forEach((t, idx) => {
+            const realIdx = punctualTrainings.indexOf(t);
+            const deadline = new Date(t.deadline);
+            const diasRestantes = Math.ceil((deadline - hoje) / (1000 * 60 * 60 * 24));
+            const isUrgent = diasRestantes <= 3;
+            
+            html += `
+                <div class="pending-training-card ${isUrgent ? 'urgent' : ''}">
+                    <div class="training-header">
+                        <div class="training-badge">🎯 Treinamento Pontual</div>
+                        ${isUrgent ? '<div class="training-badge" style="background:rgba(255,255,255,0.3);">⚠️ URGENTE</div>' : ''}
+                    </div>
+                    <div class="training-title">${t.title}</div>
+                    ${t.description ? `<div class="training-desc">${t.description}</div>` : ''}
+                    <div class="training-deadline">
+                        <span>⏰</span>
+                        <span class="training-deadline-urgent">Prazo: ${deadline.toLocaleDateString('pt-BR')} (${diasRestantes} dia${diasRestantes !== 1 ? 's' : ''})</span>
+                    </div>
+                    <div class="training-actions">
+                        <button class="training-btn material" onclick="window.open('${t.material}', '_blank')">📚 Ver Material</button>
+                        <button class="training-btn avaliar" onclick="startPunctualTrainingEval(${realIdx})">📝 Fazer Avaliação</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    });
+}
+
+function startPunctualTrainingEval(trainingIdx) {
+    const t = punctualTrainings[trainingIdx];
+    if (!t) return;
+    
+    // Criar modal de avaliação
+    const overlay = document.getElementById('quiz-overlay');
+    const content = document.getElementById('quiz-content');
+    
+    let questionsHtml = '';
+    t.questions.forEach((q, qIdx) => {
+        questionsHtml += `
+            <div class="question" style="margin-bottom:20px;">
+                <div class="question-header">
+                    <span class="question-number">Questão ${qIdx + 1}</span>
+                </div>
+                <div class="question-text">${q.text}</div>
+                <div class="options">
+                    ${q.opts.map((opt, optIdx) => `
+                        <div class="option">
+                            <input type="radio" name="pt-q${qIdx}" value="${optIdx}" id="pt-q${qIdx}-${optIdx}">
+                            <label for="pt-q${qIdx}-${optIdx}">${opt}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    
+    content.innerHTML = `
+        <div class="quiz-header">
+            <h2>📝 Avaliação: ${t.title}</h2>
+            <p>Responda todas as questões para concluir o treinamento</p>
+        </div>
+        
+        <div id="punctual-eval-questions">
+            ${questionsHtml}
+        </div>
+        
+        <div style="display:flex;gap:10px;margin-top:20px;">
+            <button class="btn-primary" onclick="submitPunctualTrainingEval(${trainingIdx})">✅ Enviar Avaliação</button>
+            <button class="btn-secondary" onclick="closePunctualTrainingEval()">❌ Cancelar</button>
+        </div>
+    `;
+    
+    overlay.style.display = 'flex';
+}
+
+function closePunctualTrainingEval() {
+    document.getElementById('quiz-overlay').style.display = 'none';
+}
+
+async function submitPunctualTrainingEval(trainingIdx) {
+    const t = punctualTrainings[trainingIdx];
+    if (!t) return;
+    
+    // Verificar se todas as questões foram respondidas
+    let allAnswered = true;
+    const answers = [];
+    
+    t.questions.forEach((q, qIdx) => {
+        const selected = document.querySelector(`input[name="pt-q${qIdx}"]:checked`);
+        if (!selected) {
+            allAnswered = false;
+        } else {
+            answers.push({
+                questionIdx: qIdx,
+                selected: parseInt(selected.value),
+                correct: q.correct,
+                isCorrect: parseInt(selected.value) === q.correct
+            });
+        }
+    });
+    
+    if (!allAnswered) {
+        alert('⚠️ Por favor, responda todas as questões!');
+        return;
+    }
+    
+    // Calcular resultado
+    const correctCount = answers.filter(a => a.isCorrect).length;
+    const totalQuestions = t.questions.length;
+    const score = Math.round((correctCount / totalQuestions) * 100);
+    
+    // Registrar conclusão
+    if (!t.completions) t.completions = {};
+    t.completions[currentTrainee] = {
+        date: new Date().toISOString(),
+        score,
+        correctCount,
+        totalQuestions,
+        answers
+    };
+    
+    await savePunctualTrainings();
+    
+    // Mostrar resultado
+    const content = document.getElementById('quiz-content');
+    content.innerHTML = `
+        <div style="text-align:center;padding:40px;">
+            <div style="font-size:72px;margin-bottom:20px;">🎉</div>
+            <h2 style="color:#28a745;margin-bottom:15px;">Treinamento Concluído!</h2>
+            <p style="font-size:18px;margin-bottom:10px;">Você acertou <strong>${correctCount}</strong> de <strong>${totalQuestions}</strong> questões</p>
+            <p style="font-size:32px;font-weight:bold;color:#1e3c72;margin:20px 0;">${score}%</p>
+            <button class="btn-primary" onclick="closePunctualTrainingEval();renderPendingTrainings();">✅ Fechar</button>
+        </div>
+    `;
 }
 
 // ========== CONTEÚDOS DO TREINAMENTO ==========
@@ -4067,42 +4915,6 @@ function exportTraineeReport(){
                         ` : ''}
                     </div>
                 `}).join(''):'<div class="no-data">Nenhuma avaliação realizada ainda.</div>'}
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">🎯 Quiz Diário (${getCompletedDays(t).length}/5 dias)</h2>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">Dias Completados</div>
-                        <div class="info-value">${getCompletedDays(t).length} de 5</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Pontos do Quiz</div>
-                        <div class="info-value">${getTotalQuizPoints(t)} de 75 possíveis</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Dias Perfeitos</div>
-                        <div class="info-value">🔥 ${getQuizStreak(t)}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Status</div>
-                        <div class="info-value">${getCompletedDays(t).length === 5 ? '✅ Completo' : '⏳ Em andamento'}</div>
-                    </div>
-                </div>
-                ${getQuizHistory(t).length > 0 ? `
-                    <div style="margin-top:15px;">
-                        <strong>Histórico:</strong>
-                        ${getQuizHistory(t).map(item => `
-                            <div class="eval-item" style="margin-top:8px;">
-                                <div class="eval-info">
-                                    <div class="eval-date">Dia ${item.day} - ${item.date}</div>
-                                    <div class="eval-type">Acertos: ${item.correct}/3</div>
-                                </div>
-                                <div class="eval-score passed">+${item.points} pts</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                ` : '<div class="no-data">Quiz diário ainda não iniciado.</div>'}
             </div>
             
             <div class="summary">
