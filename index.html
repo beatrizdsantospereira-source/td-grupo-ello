@@ -313,6 +313,185 @@
             margin-bottom: 15px;
         }
         
+        /* ===== MINIGAMES STYLES ===== */
+        .game-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        .game-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        .game-card.locked {
+            opacity: 0.6;
+            background: #f5f5f5;
+        }
+        .game-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .game-icon {
+            font-size: 48px;
+        }
+        .game-info h3 {
+            color: #1e3c72;
+            margin: 0 0 5px 0;
+        }
+        .game-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+        .game-status {
+            margin-left: auto;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .game-status.available {
+            background: #d4edda;
+            color: #155724;
+        }
+        .game-status.locked {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .game-status.completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .game-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .game-btn:hover {
+            transform: scale(1.05);
+        }
+        .game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Jogo da Memória */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            transition: all 0.3s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .memory-card:hover {
+            transform: scale(1.05);
+        }
+        .memory-card.flipped {
+            background: white;
+            color: #333;
+            border: 3px solid #667eea;
+        }
+        .memory-card.matched {
+            background: #28a745;
+            color: white;
+            cursor: default;
+        }
+        .memory-card .card-back {
+            font-size: 32px;
+        }
+        
+        /* Caça-Palavras */
+        .wordsearch-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .wordsearch-grid {
+            display: grid;
+            gap: 3px;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 12px;
+        }
+        .wordsearch-cell {
+            width: 35px;
+            height: 35px;
+            background: white;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .wordsearch-cell:hover {
+            background: #e3f2fd;
+        }
+        .wordsearch-cell.selected {
+            background: #667eea;
+            color: white;
+        }
+        .wordsearch-cell.found {
+            background: #28a745;
+            color: white;
+        }
+        .words-list {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            min-width: 200px;
+        }
+        .words-list h4 {
+            color: #1e3c72;
+            margin: 0 0 15px 0;
+        }
+        .word-item {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .word-item.found {
+            background: #d4edda;
+            color: #155724;
+            text-decoration: line-through;
+        }
+        
         /* ===== DASHBOARD ADMIN STYLES ===== */
         .admin-dashboard { display: none; }
         .admin-dashboard.active { display: block; }
@@ -741,6 +920,7 @@
                         <button class="mode-btn active" id="badges-btn" onclick="switchMode('view')">👁️ Badges</button>
                         <button class="mode-btn" onclick="switchMode('content')">📚 Conteúdos</button>
                         <button class="mode-btn" onclick="switchMode('eval')">📝 Avaliações</button>
+                        <button class="mode-btn" id="games-btn" onclick="switchMode('games')">🎮 Minigames</button>
                         <button class="mode-btn disabled" id="admin-btn" onclick="switchMode('admin')">⚙️ Admin</button>
                     </div>
                     <button class="btn-logout" onclick="logout()">🚪 Sair</button>
@@ -921,6 +1101,19 @@
                 </div>
             </div>
             
+            <!-- SEÇÃO DE MINIGAMES -->
+            <div id="games-mode" class="view-section">
+                <div class="eval-card">
+                    <h2 class="section-title" style="margin-bottom:10px;">🎮 Minigames</h2>
+                    <p style="color:#666;margin-bottom:25px;">Aprenda se divertindo! Jogue para reforçar o conhecimento.</p>
+                    
+                    <div id="games-container"></div>
+                    
+                    <!-- Container do Jogo Ativo -->
+                    <div id="active-game-container" style="display:none;"></div>
+                </div>
+            </div>
+            
             <div id="admin-mode" class="view-section">
                 <!-- DASHBOARD PRINCIPAL -->
                 <div id="admin-dashboard" class="admin-dashboard active">
@@ -1035,6 +1228,15 @@
                                     <div class="action-text">
                                         <div class="action-title">Treinamentos Pontuais</div>
                                         <div class="action-desc" id="punctual-trainings-count">Criar e gerenciar</div>
+                                    </div>
+                                    <span class="action-arrow">→</span>
+                                </button>
+                                
+                                <button class="quick-action-btn" onclick="showMinigamesAdminPanel()">
+                                    <div class="action-icon" style="background:#e8f5e9;">🎮</div>
+                                    <div class="action-text">
+                                        <div class="action-title">Minigames</div>
+                                        <div class="action-desc">Liberar jogos</div>
                                     </div>
                                     <span class="action-arrow">→</span>
                                 </button>
@@ -1417,8 +1619,21 @@ function hasCompletedQuizToday(trainee) {
 }
 
 function getCompletedDays(trainee) {
-    if (!trainee.quizData || !trainee.quizData.completedDays) return [];
-    return trainee.quizData.completedDays;
+    // Verificar estrutura nova (quizData)
+    if (trainee.quizData && trainee.quizData.completedDays && trainee.quizData.completedDays.length > 0) {
+        return trainee.quizData.completedDays;
+    }
+    // Verificar estrutura antiga (quizProgress)
+    if (trainee.quizProgress) {
+        const days = [];
+        for (let d = 1; d <= 5; d++) {
+            if (trainee.quizProgress['day' + d]) {
+                days.push(d);
+            }
+        }
+        return days;
+    }
+    return [];
 }
 
 function getPendingDays(trainee) {
@@ -1436,8 +1651,22 @@ function getQuizStreak(trainee) {
 }
 
 function getTotalQuizPoints(trainee) {
-    if (!trainee.quizData) return 0;
-    return trainee.quizData.totalPoints || 0;
+    // Verificar estrutura nova
+    if (trainee.quizData && trainee.quizData.totalPoints) {
+        return trainee.quizData.totalPoints;
+    }
+    // Calcular da estrutura antiga
+    if (trainee.quizProgress) {
+        let total = 0;
+        for (let d = 1; d <= 5; d++) {
+            const dayData = trainee.quizProgress['day' + d];
+            if (dayData && dayData.correct) {
+                total += dayData.correct * 5; // 5 pontos por acerto
+            }
+        }
+        return total;
+    }
+    return 0;
 }
 
 function getQuizHistory(trainee) {
@@ -1904,10 +2133,10 @@ function loginEmployee(e){
     }
 }
 function loginAdmin(e){e.preventDefault();const u=document.getElementById('admin-username').value;const p=document.getElementById('admin-password').value;if(u===adminCreds.username&&p===adminCreds.password){isAdmin=true;currentUser={name:'Administrador'};showMainSystem();switchMode('admin');}else{showError('❌ Usuário ou senha incorretos');}}
-function showMainSystem(){document.getElementById('login-screen').style.display='none';document.getElementById('main-system').style.display='block';document.getElementById('user-name').textContent=currentUser.name;document.getElementById('user-role').textContent=isAdmin?'Administrador':'Colaborador';document.getElementById('user-role').classList.toggle('admin',isAdmin);const a=document.getElementById('admin-btn');const b=document.getElementById('badges-btn');if(isAdmin){a.classList.remove('disabled');b.style.display='none';}else{a.classList.add('disabled');b.style.display='block';}updateView();renderEvalButtons();}
-function logout(){if(confirm('Sair?')){document.getElementById('login-screen').style.display='flex';document.getElementById('main-system').style.display='none';document.getElementById('employee-code').value='';document.getElementById('admin-username').value='';document.getElementById('admin-password').value='';currentUser=null;isAdmin=false;switchLoginTab('employee');}}
+function showMainSystem(){document.getElementById('login-screen').style.display='none';document.getElementById('main-system').style.display='block';document.getElementById('user-name').textContent=currentUser.name;document.getElementById('user-role').textContent=isAdmin?'Administrador':'Colaborador';document.getElementById('user-role').classList.toggle('admin',isAdmin);const a=document.getElementById('admin-btn');const b=document.getElementById('badges-btn');if(isAdmin){a.classList.remove('disabled');b.style.display='none';}else{a.classList.add('disabled');b.style.display='block';document.getElementById('admin-mode').classList.remove('active');document.getElementById('admin-dashboard').classList.remove('active');document.getElementById('detail-panel').classList.remove('active');document.getElementById('view-mode').classList.add('active');}updateView();renderEvalButtons();}
+function logout(){if(confirm('Sair?')){document.getElementById('login-screen').style.display='flex';document.getElementById('main-system').style.display='none';document.getElementById('employee-code').value='';document.getElementById('admin-username').value='';document.getElementById('admin-password').value='';document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));document.getElementById('detail-panel').classList.remove('active');document.getElementById('admin-dashboard').classList.remove('active');currentUser=null;currentTrainee=-1;isAdmin=false;adminSelectedTrainee=-1;switchLoginTab('employee');}}
 function changePassword(){const c=prompt('Senha atual:');if(c!==adminCreds.password){alert('❌ Incorreta');return;}const n=prompt('Nova senha (min 6):');if(!n||n.length<6){alert('❌ Min 6 chars');return;}const f=prompt('Confirme:');if(n!==f){alert('❌ Não coincidem');return;}adminCreds.password=n;saveData();alert('✅ Alterada!');}
-function switchMode(m){if(m==='admin'&&!isAdmin){alert('⚠️ Só admin!');return;}document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));if(m==='view'){document.querySelector('.mode-btn[onclick*="view"]').classList.add('active');document.getElementById('view-mode').classList.add('active');updateView();}else if(m==='content'){document.querySelector('.mode-btn[onclick*="content"]').classList.add('active');document.getElementById('content-mode').classList.add('active');loadContents().then(()=>renderContents());}else if(m==='eval'){document.querySelector('.mode-btn[onclick*="eval"]').classList.add('active');document.getElementById('eval-mode').classList.add('active');renderEvalButtons();}else{document.querySelector('.mode-btn[onclick*="admin"]').classList.add('active');document.getElementById('admin-mode').classList.add('active');document.getElementById('admin-dashboard').classList.add('active');document.getElementById('detail-panel').classList.remove('active');document.getElementById('eval-details-container').innerHTML='';renderAdminDashboard();}}
+function switchMode(m){if(m==='admin'&&!isAdmin){alert('⚠️ Só admin!');return;}if(!isAdmin&&(m==='admin')){return;}document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));document.getElementById('detail-panel').classList.remove('active');if(m==='view'){document.querySelector('.mode-btn[onclick*="view"]').classList.add('active');document.getElementById('view-mode').classList.add('active');updateView();}else if(m==='content'){document.querySelector('.mode-btn[onclick*="content"]').classList.add('active');document.getElementById('content-mode').classList.add('active');loadContents().then(()=>renderContents());}else if(m==='eval'){document.querySelector('.mode-btn[onclick*="eval"]').classList.add('active');document.getElementById('eval-mode').classList.add('active');renderEvalButtons();}else if(m==='games'){document.querySelector('.mode-btn[onclick*="games"]').classList.add('active');document.getElementById('games-mode').classList.add('active');renderGames();}else{document.querySelector('.mode-btn[onclick*="admin"]').classList.add('active');document.getElementById('admin-mode').classList.add('active');document.getElementById('admin-dashboard').classList.add('active');document.getElementById('detail-panel').classList.remove('active');document.getElementById('eval-details-container').innerHTML='';renderAdminDashboard();}}
 function addTrainee(){
     const n=document.getElementById('trainee-name').value.trim();
     const f=document.getElementById('trainee-function').value;
@@ -2373,6 +2602,7 @@ async function init() {
     useFirebase = await initFirebase();
     console.log('Firebase:', useFirebase ? 'Ativo' : 'Inativo (usando localStorage)');
     await loadData();
+    await loadCustomGameData();
     populateEmployeeSelect();
 }
 
@@ -2822,13 +3052,21 @@ function renderDetailQuizProgress() {
     for (let day = 1; day <= 5; day++) {
         const completed = completedDays.includes(day);
         const released = releasedDays.includes(day);
-        const dayData = t.quizProgress ? t.quizProgress['day' + day] : null;
+        
+        // Buscar dados do dia em ambas estruturas
+        let dayCorrect = 0;
+        if (t.quizProgress && t.quizProgress['day' + day]) {
+            dayCorrect = t.quizProgress['day' + day].correct || 0;
+        } else if (t.quizData && t.quizData.history) {
+            const dayHistory = t.quizData.history.find(h => h.day === day);
+            if (dayHistory) dayCorrect = dayHistory.correct || 0;
+        }
         
         let bg, color, statusText;
         if (completed) {
             bg = 'linear-gradient(135deg, #28a745, #20c997)';
             color = 'white';
-            statusText = `${dayData ? dayData.correct : 0}/3 acertos`;
+            statusText = `${dayCorrect}/3 acertos`;
         } else if (released) {
             bg = 'linear-gradient(135deg, #667eea, #764ba2)';
             color = 'white';
@@ -3113,6 +3351,797 @@ function exportAllReports() {
             });
         });
     }, 100);
+}
+
+// ========== MINIGAMES ==========
+
+// Dados dos jogos por marca
+const gameData = {
+    'POLI': {
+        memory: [
+            { term: 'Engenharia', definition: 'Aplicação de conhecimentos científicos' },
+            { term: 'Politécnica', definition: 'Escola de engenharia da USP' },
+            { term: 'Inovação', definition: 'Introdução de novidades' },
+            { term: 'Tecnologia', definition: 'Conjunto de técnicas e métodos' },
+            { term: 'Pesquisa', definition: 'Busca por novos conhecimentos' },
+            { term: 'Graduação', definition: 'Primeiro nível do ensino superior' }
+        ],
+        wordsearch: ['ENGENHARIA', 'POLI', 'USP', 'INOVACAO', 'TECNOLOGIA', 'CIENCIA']
+    },
+    'ESALQ/PECEGE': {
+        memory: [
+            { term: 'Agronegócio', definition: 'Setor da economia ligado à agricultura' },
+            { term: 'ESALQ', definition: 'Escola Superior de Agricultura' },
+            { term: 'PECEGE', definition: 'Programa de educação continuada' },
+            { term: 'Sustentabilidade', definition: 'Desenvolvimento sem esgotar recursos' },
+            { term: 'MBA', definition: 'Master in Business Administration' },
+            { term: 'Gestão', definition: 'Administração de recursos' }
+        ],
+        wordsearch: ['ESALQ', 'PECEGE', 'MBA', 'GESTAO', 'AGRO', 'RURAL']
+    },
+    'MACKENZIE': {
+        memory: [
+            { term: 'Mackenzie', definition: '150 anos de tradição em educação' },
+            { term: 'Presbiteriana', definition: 'Origem religiosa da instituição' },
+            { term: 'Excelência', definition: 'Qualidade superior' },
+            { term: 'Tradição', definition: 'Costumes passados entre gerações' },
+            { term: 'Lato Sensu', definition: 'Especialização e MBA' },
+            { term: 'Stricto Sensu', definition: 'Mestrado e Doutorado' }
+        ],
+        wordsearch: ['MACKENZIE', 'MBA', 'TRADICAO', 'EDUCACAO', 'LATO', 'STRICTO']
+    },
+    'ECA USP': {
+        memory: [
+            { term: 'Comunicação', definition: 'Troca de informações' },
+            { term: 'Artes', definition: 'Expressão criativa humana' },
+            { term: 'ECA', definition: 'Escola de Comunicações e Artes' },
+            { term: 'Mídia', definition: 'Meios de comunicação' },
+            { term: 'Cultura', definition: 'Conjunto de conhecimentos de um povo' },
+            { term: 'Criatividade', definition: 'Capacidade de criar coisas novas' }
+        ],
+        wordsearch: ['ECA', 'USP', 'ARTES', 'MIDIA', 'CULTURA', 'CINEMA']
+    }
+};
+
+// Minigames liberados para cada colaborador
+let minigamesData = {};
+
+async function loadMinigames() {
+    if (useFirebase && db) {
+        try {
+            const doc = await db.collection('settings').doc('minigames').get();
+            if (doc.exists) {
+                minigamesData = doc.data() || {};
+            }
+        } catch (e) {
+            console.log('Erro ao carregar minigames:', e);
+        }
+    } else {
+        const saved = localStorage.getItem('minigamesData');
+        if (saved) minigamesData = JSON.parse(saved);
+    }
+}
+
+async function saveMinigames() {
+    if (useFirebase && db) {
+        try {
+            await db.collection('settings').doc('minigames').set(minigamesData);
+        } catch (e) {
+            console.log('Erro ao salvar minigames:', e);
+        }
+    } else {
+        localStorage.setItem('minigamesData', JSON.stringify(minigamesData));
+    }
+}
+
+function renderGames() {
+    const container = document.getElementById('games-container');
+    const activeContainer = document.getElementById('active-game-container');
+    activeContainer.style.display = 'none';
+    
+    if (!currentUser || isAdmin) {
+        container.innerHTML = '<p style="text-align:center;color:#666;">Faça login como colaborador para ver os minigames.</p>';
+        return;
+    }
+    
+    loadMinigames().then(() => {
+        const traineeId = trainees[currentTrainee]?.firebaseId || currentTrainee;
+        const brand = trainees[currentTrainee]?.brand || 'POLI';
+        const released = minigamesData[traineeId] || { memory: false, wordsearch: false };
+        const completed = trainees[currentTrainee]?.gamesCompleted || {};
+        
+        let html = `
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:20px;">
+                
+                <!-- Jogo da Memória -->
+                <div class="game-card ${!released.memory ? 'locked' : ''}">
+                    <div class="game-card-header">
+                        <div class="game-icon">🃏</div>
+                        <div class="game-info">
+                            <h3>Jogo da Memória</h3>
+                            <p>Combine os termos com suas definições</p>
+                        </div>
+                        <span class="game-status ${released.memory ? (completed.memory ? 'completed' : 'available') : 'locked'}">
+                            ${released.memory ? (completed.memory ? '✅ Jogado' : '🔓 Liberado') : '🔒 Bloqueado'}
+                        </span>
+                    </div>
+                    <p style="color:#666;font-size:14px;margin-bottom:15px;">Encontre os pares corretos virando as cartas. Termos relacionados à marca ${brand}.</p>
+                    <button class="game-btn" ${!released.memory ? 'disabled' : ''} onclick="startMemoryGame()">
+                        ${released.memory ? '▶️ Jogar' : '🔒 Aguarde liberação'}
+                    </button>
+                </div>
+                
+                <!-- Caça-Palavras -->
+                <div class="game-card ${!released.wordsearch ? 'locked' : ''}">
+                    <div class="game-card-header">
+                        <div class="game-icon">🔍</div>
+                        <div class="game-info">
+                            <h3>Caça-Palavras</h3>
+                            <p>Encontre os termos escondidos</p>
+                        </div>
+                        <span class="game-status ${released.wordsearch ? (completed.wordsearch ? 'completed' : 'available') : 'locked'}">
+                            ${released.wordsearch ? (completed.wordsearch ? '✅ Jogado' : '🔓 Liberado') : '🔒 Bloqueado'}
+                        </span>
+                    </div>
+                    <p style="color:#666;font-size:14px;margin-bottom:15px;">Encontre todas as palavras relacionadas à marca ${brand} no grid.</p>
+                    <button class="game-btn" ${!released.wordsearch ? 'disabled' : ''} onclick="startWordsearchGame()">
+                        ${released.wordsearch ? '▶️ Jogar' : '🔒 Aguarde liberação'}
+                    </button>
+                </div>
+                
+            </div>
+        `;
+        
+        if (!released.memory && !released.wordsearch) {
+            html += `
+                <div style="text-align:center;margin-top:30px;padding:25px;background:#fff3cd;border-radius:12px;">
+                    <span style="font-size:48px;">🎮</span>
+                    <p style="color:#856404;margin-top:10px;">Os minigames serão liberados pelo seu treinador. Aguarde!</p>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+    });
+}
+
+// ========== JOGO DA MEMÓRIA ==========
+let memoryCards = [];
+let flippedCards = [];
+let matchedPairs = 0;
+let memoryMoves = 0;
+
+function startMemoryGame() {
+    const container = document.getElementById('active-game-container');
+    const gamesContainer = document.getElementById('games-container');
+    const brand = trainees[currentTrainee]?.brand || 'POLI';
+    const data = gameData[brand]?.memory || gameData['POLI'].memory;
+    
+    // Criar cartas (termo + definição para cada par)
+    memoryCards = [];
+    data.forEach((item, idx) => {
+        memoryCards.push({ id: idx, type: 'term', content: item.term, pairId: idx });
+        memoryCards.push({ id: idx + 100, type: 'def', content: item.definition, pairId: idx });
+    });
+    
+    // Embaralhar
+    memoryCards.sort(() => Math.random() - 0.5);
+    
+    flippedCards = [];
+    matchedPairs = 0;
+    memoryMoves = 0;
+    
+    gamesContainer.style.display = 'none';
+    container.style.display = 'block';
+    
+    let html = `
+        <div style="text-align:center;margin-bottom:20px;">
+            <h3 style="color:#1e3c72;">🃏 Jogo da Memória - ${brand}</h3>
+            <p style="color:#666;">Encontre os pares: termo + definição</p>
+            <div style="margin-top:10px;">
+                <span style="background:#e3f2fd;padding:8px 16px;border-radius:20px;margin-right:10px;">
+                    🎯 Pares: <strong id="memory-pairs">0/${data.length}</strong>
+                </span>
+                <span style="background:#fff3e0;padding:8px 16px;border-radius:20px;">
+                    👆 Jogadas: <strong id="memory-moves">0</strong>
+                </span>
+            </div>
+        </div>
+        
+        <div class="memory-grid" id="memory-grid"></div>
+        
+        <div style="text-align:center;margin-top:20px;">
+            <button class="btn-secondary" onclick="exitGame()">← Voltar aos Jogos</button>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    renderMemoryCards();
+}
+
+function renderMemoryCards() {
+    const grid = document.getElementById('memory-grid');
+    let html = '';
+    
+    memoryCards.forEach((card, idx) => {
+        const isFlipped = flippedCards.includes(idx) || card.matched;
+        html += `
+            <div class="memory-card ${isFlipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" 
+                 onclick="flipCard(${idx})" 
+                 data-idx="${idx}">
+                ${isFlipped ? `<span>${card.content}</span>` : '<span class="card-back">❓</span>'}
+            </div>
+        `;
+    });
+    
+    grid.innerHTML = html;
+}
+
+function flipCard(idx) {
+    const card = memoryCards[idx];
+    
+    // Ignorar se já está virada ou matched
+    if (flippedCards.includes(idx) || card.matched || flippedCards.length >= 2) return;
+    
+    flippedCards.push(idx);
+    renderMemoryCards();
+    
+    if (flippedCards.length === 2) {
+        memoryMoves++;
+        document.getElementById('memory-moves').textContent = memoryMoves;
+        
+        const card1 = memoryCards[flippedCards[0]];
+        const card2 = memoryCards[flippedCards[1]];
+        
+        if (card1.pairId === card2.pairId && card1.type !== card2.type) {
+            // Match!
+            setTimeout(() => {
+                card1.matched = true;
+                card2.matched = true;
+                matchedPairs++;
+                document.getElementById('memory-pairs').textContent = `${matchedPairs}/${memoryCards.length/2}`;
+                flippedCards = [];
+                renderMemoryCards();
+                
+                if (matchedPairs === memoryCards.length / 2) {
+                    completeMemoryGame();
+                }
+            }, 500);
+        } else {
+            // No match
+            setTimeout(() => {
+                flippedCards = [];
+                renderMemoryCards();
+            }, 1000);
+        }
+    }
+}
+
+async function completeMemoryGame() {
+    const container = document.getElementById('active-game-container');
+    
+    // Registrar conclusão
+    if (!trainees[currentTrainee].gamesCompleted) {
+        trainees[currentTrainee].gamesCompleted = {};
+    }
+    trainees[currentTrainee].gamesCompleted.memory = {
+        date: new Date().toISOString(),
+        moves: memoryMoves
+    };
+    
+    // Salvar no Firebase
+    if (useFirebase && db && trainees[currentTrainee].firebaseId) {
+        try {
+            await db.collection('trainees').doc(trainees[currentTrainee].firebaseId).update({
+                gamesCompleted: trainees[currentTrainee].gamesCompleted
+            });
+        } catch (e) {
+            console.log('Erro ao salvar conclusão do jogo:', e);
+        }
+    }
+    
+    container.innerHTML = `
+        <div style="text-align:center;padding:40px;">
+            <div style="font-size:80px;margin-bottom:20px;">🎉</div>
+            <h2 style="color:#28a745;margin-bottom:15px;">Parabéns!</h2>
+            <p style="font-size:18px;color:#666;margin-bottom:10px;">Você completou o Jogo da Memória!</p>
+            <p style="color:#999;">Concluído em ${memoryMoves} jogadas</p>
+            <button class="game-btn" style="margin-top:25px;" onclick="exitGame()">🎮 Voltar aos Jogos</button>
+        </div>
+    `;
+}
+
+// ========== CAÇA-PALAVRAS ==========
+let wordsearchGrid = [];
+let wordsearchWords = [];
+let foundWords = [];
+let selectedCells = [];
+let gridSize = 10;
+
+function startWordsearchGame() {
+    const container = document.getElementById('active-game-container');
+    const gamesContainer = document.getElementById('games-container');
+    const brand = trainees[currentTrainee]?.brand || 'POLI';
+    wordsearchWords = gameData[brand]?.wordsearch || gameData['POLI'].wordsearch;
+    foundWords = [];
+    selectedCells = [];
+    
+    generateWordsearchGrid();
+    
+    gamesContainer.style.display = 'none';
+    container.style.display = 'block';
+    
+    let html = `
+        <div style="text-align:center;margin-bottom:20px;">
+            <h3 style="color:#1e3c72;">🔍 Caça-Palavras - ${brand}</h3>
+            <p style="color:#666;">Encontre todas as palavras escondidas</p>
+        </div>
+        
+        <div class="wordsearch-container">
+            <div>
+                <div class="wordsearch-grid" id="wordsearch-grid" style="grid-template-columns: repeat(${gridSize}, 1fr);"></div>
+            </div>
+            
+            <div class="words-list">
+                <h4>📋 Palavras (${wordsearchWords.length})</h4>
+                <div id="words-list-items"></div>
+            </div>
+        </div>
+        
+        <div style="text-align:center;margin-top:20px;">
+            <button class="btn-secondary" onclick="exitGame()">← Voltar aos Jogos</button>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+    renderWordsearchGrid();
+    renderWordsList();
+}
+
+function generateWordsearchGrid() {
+    // Inicializar grid vazio
+    wordsearchGrid = [];
+    for (let i = 0; i < gridSize; i++) {
+        wordsearchGrid[i] = [];
+        for (let j = 0; j < gridSize; j++) {
+            wordsearchGrid[i][j] = { letter: '', wordIdx: -1 };
+        }
+    }
+    
+    // Colocar palavras no grid
+    wordsearchWords.forEach((word, wordIdx) => {
+        placeWord(word.toUpperCase(), wordIdx);
+    });
+    
+    // Preencher espaços vazios com letras aleatórias
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            if (!wordsearchGrid[i][j].letter) {
+                wordsearchGrid[i][j].letter = letters[Math.floor(Math.random() * letters.length)];
+            }
+        }
+    }
+}
+
+function placeWord(word, wordIdx) {
+    const directions = [
+        [0, 1],   // horizontal
+        [1, 0],   // vertical
+        [1, 1],   // diagonal
+    ];
+    
+    let placed = false;
+    let attempts = 0;
+    
+    while (!placed && attempts < 100) {
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        const startRow = Math.floor(Math.random() * gridSize);
+        const startCol = Math.floor(Math.random() * gridSize);
+        
+        if (canPlaceWord(word, startRow, startCol, dir)) {
+            for (let i = 0; i < word.length; i++) {
+                const row = startRow + i * dir[0];
+                const col = startCol + i * dir[1];
+                wordsearchGrid[row][col] = { letter: word[i], wordIdx: wordIdx };
+            }
+            placed = true;
+        }
+        attempts++;
+    }
+}
+
+function canPlaceWord(word, startRow, startCol, dir) {
+    for (let i = 0; i < word.length; i++) {
+        const row = startRow + i * dir[0];
+        const col = startCol + i * dir[1];
+        
+        if (row < 0 || row >= gridSize || col < 0 || col >= gridSize) return false;
+        if (wordsearchGrid[row][col].letter && wordsearchGrid[row][col].letter !== word[i]) return false;
+    }
+    return true;
+}
+
+function renderWordsearchGrid() {
+    const grid = document.getElementById('wordsearch-grid');
+    let html = '';
+    
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            const cell = wordsearchGrid[i][j];
+            const isSelected = selectedCells.some(c => c.row === i && c.col === j);
+            const isFound = cell.wordIdx >= 0 && foundWords.includes(wordsearchWords[cell.wordIdx].toUpperCase());
+            
+            html += `
+                <div class="wordsearch-cell ${isSelected ? 'selected' : ''} ${isFound ? 'found' : ''}"
+                     onclick="selectCell(${i}, ${j})"
+                     data-row="${i}" data-col="${j}">
+                    ${cell.letter}
+                </div>
+            `;
+        }
+    }
+    
+    grid.innerHTML = html;
+}
+
+function renderWordsList() {
+    const list = document.getElementById('words-list-items');
+    let html = '';
+    
+    wordsearchWords.forEach(word => {
+        const isFound = foundWords.includes(word.toUpperCase());
+        html += `<div class="word-item ${isFound ? 'found' : ''}">${word}</div>`;
+    });
+    
+    list.innerHTML = html;
+}
+
+function selectCell(row, col) {
+    const cellIdx = selectedCells.findIndex(c => c.row === row && c.col === col);
+    
+    if (cellIdx >= 0) {
+        // Deselect
+        selectedCells.splice(cellIdx, 1);
+    } else {
+        selectedCells.push({ row, col });
+    }
+    
+    // Verificar se forma uma palavra
+    checkForWord();
+    renderWordsearchGrid();
+}
+
+function checkForWord() {
+    if (selectedCells.length < 2) return;
+    
+    // Pegar letras selecionadas
+    const letters = selectedCells.map(c => wordsearchGrid[c.row][c.col].letter).join('');
+    const lettersReverse = letters.split('').reverse().join('');
+    
+    wordsearchWords.forEach(word => {
+        const wordUpper = word.toUpperCase();
+        if ((letters === wordUpper || lettersReverse === wordUpper) && !foundWords.includes(wordUpper)) {
+            foundWords.push(wordUpper);
+            selectedCells = [];
+            renderWordsList();
+            
+            if (foundWords.length === wordsearchWords.length) {
+                setTimeout(completeWordsearchGame, 500);
+            }
+        }
+    });
+}
+
+async function completeWordsearchGame() {
+    const container = document.getElementById('active-game-container');
+    
+    // Registrar conclusão
+    if (!trainees[currentTrainee].gamesCompleted) {
+        trainees[currentTrainee].gamesCompleted = {};
+    }
+    trainees[currentTrainee].gamesCompleted.wordsearch = {
+        date: new Date().toISOString()
+    };
+    
+    // Salvar no Firebase
+    if (useFirebase && db && trainees[currentTrainee].firebaseId) {
+        try {
+            await db.collection('trainees').doc(trainees[currentTrainee].firebaseId).update({
+                gamesCompleted: trainees[currentTrainee].gamesCompleted
+            });
+        } catch (e) {
+            console.log('Erro ao salvar conclusão do jogo:', e);
+        }
+    }
+    
+    container.innerHTML = `
+        <div style="text-align:center;padding:40px;">
+            <div style="font-size:80px;margin-bottom:20px;">🎉</div>
+            <h2 style="color:#28a745;margin-bottom:15px;">Parabéns!</h2>
+            <p style="font-size:18px;color:#666;margin-bottom:10px;">Você encontrou todas as palavras!</p>
+            <button class="game-btn" style="margin-top:25px;" onclick="exitGame()">🎮 Voltar aos Jogos</button>
+        </div>
+    `;
+}
+
+function exitGame() {
+    document.getElementById('active-game-container').style.display = 'none';
+    document.getElementById('games-container').style.display = 'block';
+    renderGames();
+}
+
+// ========== ADMIN: GERENCIAR MINIGAMES ==========
+function showMinigamesAdminPanel() {
+    const panel = document.getElementById('detail-panel');
+    const content = document.getElementById('detail-content');
+    
+    document.getElementById('admin-dashboard').classList.remove('active');
+    panel.classList.add('active');
+    
+    loadMinigames().then(() => {
+        let html = `
+            <h2 class="section-title">🎮 Gerenciar Minigames</h2>
+            
+            <div style="display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap;">
+                <button class="btn-primary" style="width:auto;" onclick="showMinigamesReleasePanel()">🔓 Liberar Jogos</button>
+                <button class="btn-secondary" style="width:auto;margin:0;" onclick="showMinigamesEditPanel()">✏️ Editar Termos/Palavras</button>
+            </div>
+            
+            <div id="minigames-panel-content"></div>
+        `;
+        
+        content.innerHTML = html;
+        showMinigamesReleasePanel();
+    });
+}
+
+function showMinigamesReleasePanel() {
+    const container = document.getElementById('minigames-panel-content');
+    
+    let html = `
+        <h3 style="color:#1e3c72;margin-bottom:15px;">🔓 Liberar Jogos por Colaborador</h3>
+        <p style="color:#666;margin-bottom:20px;">Marque os jogos que cada colaborador pode acessar:</p>
+        
+        <div style="display:grid;gap:15px;">
+    `;
+    
+    trainees.forEach((t, idx) => {
+        const traineeId = t.firebaseId || idx;
+        const released = minigamesData[traineeId] || { memory: false, wordsearch: false };
+        const completed = t.gamesCompleted || {};
+        
+        html += `
+            <div style="background:white;padding:20px;border-radius:12px;border:1px solid #e0e0e0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;">
+                    <div>
+                        <strong style="color:#1e3c72;">${t.name}</strong>
+                        <span style="color:#666;font-size:13px;margin-left:10px;">${t.function} - ${t.brand || 'Sem marca'}</span>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <label style="display:flex;align-items:center;gap:8px;padding:8px 15px;background:${released.memory ? '#d4edda' : '#f8f9fa'};border-radius:8px;cursor:pointer;">
+                            <input type="checkbox" ${released.memory ? 'checked' : ''} onchange="toggleMinigame('${traineeId}', 'memory', this.checked)">
+                            🃏 Memória ${completed.memory ? '✅' : ''}
+                        </label>
+                        <label style="display:flex;align-items:center;gap:8px;padding:8px 15px;background:${released.wordsearch ? '#d4edda' : '#f8f9fa'};border-radius:8px;cursor:pointer;">
+                            <input type="checkbox" ${released.wordsearch ? 'checked' : ''} onchange="toggleMinigame('${traineeId}', 'wordsearch', this.checked)">
+                            🔍 Caça-Palavras ${completed.wordsearch ? '✅' : ''}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `
+        </div>
+        
+        <div style="margin-top:25px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-primary" style="width:auto;" onclick="releaseAllMinigames('memory')">🃏 Liberar Memória para Todos</button>
+            <button class="btn-primary" style="width:auto;" onclick="releaseAllMinigames('wordsearch')">🔍 Liberar Caça-Palavras para Todos</button>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+function showMinigamesEditPanel() {
+    const container = document.getElementById('minigames-panel-content');
+    const brands = ['POLI', 'ESALQ/PECEGE', 'MACKENZIE', 'ECA USP'];
+    
+    let html = `
+        <h3 style="color:#1e3c72;margin-bottom:15px;">✏️ Editar Termos e Palavras</h3>
+        <p style="color:#666;margin-bottom:20px;">Edite os termos do Jogo da Memória e as palavras do Caça-Palavras para cada marca:</p>
+        
+        <div style="margin-bottom:20px;">
+            <label style="font-weight:bold;color:#1e3c72;">Selecione a Marca:</label>
+            <select id="edit-game-brand" onchange="loadGameDataForBrand()" style="margin-left:10px;padding:10px;border-radius:8px;border:2px solid #e0e0e0;">
+                ${brands.map(b => `<option value="${b}">${b}</option>`).join('')}
+            </select>
+        </div>
+        
+        <div id="game-data-editor"></div>
+    `;
+    
+    container.innerHTML = html;
+    loadGameDataForBrand();
+}
+
+function loadGameDataForBrand() {
+    const brand = document.getElementById('edit-game-brand').value;
+    const editor = document.getElementById('game-data-editor');
+    const data = gameData[brand] || { memory: [], wordsearch: [] };
+    
+    let html = `
+        <!-- Jogo da Memória -->
+        <div style="background:#f8f9fa;padding:20px;border-radius:12px;margin-bottom:20px;">
+            <h4 style="color:#667eea;margin-bottom:15px;">🃏 Jogo da Memória - Pares (Termo + Definição)</h4>
+            <div id="memory-pairs-editor">
+    `;
+    
+    data.memory.forEach((pair, idx) => {
+        html += `
+            <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:10px;margin-bottom:10px;align-items:center;">
+                <input type="text" id="mem-term-${idx}" value="${pair.term}" placeholder="Termo" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;">
+                <input type="text" id="mem-def-${idx}" value="${pair.definition}" placeholder="Definição" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;">
+                <button onclick="removeMemoryPair(${idx})" style="background:#dc3545;color:white;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;">🗑️</button>
+            </div>
+        `;
+    });
+    
+    html += `
+            </div>
+            <button onclick="addMemoryPair()" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;margin-top:10px;">➕ Adicionar Par</button>
+        </div>
+        
+        <!-- Caça-Palavras -->
+        <div style="background:#f8f9fa;padding:20px;border-radius:12px;margin-bottom:20px;">
+            <h4 style="color:#28a745;margin-bottom:15px;">🔍 Caça-Palavras - Palavras para Encontrar</h4>
+            <div id="wordsearch-words-editor">
+    `;
+    
+    data.wordsearch.forEach((word, idx) => {
+        html += `
+            <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center;">
+                <input type="text" id="ws-word-${idx}" value="${word}" placeholder="Palavra" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;flex:1;text-transform:uppercase;">
+                <button onclick="removeWordsearchWord(${idx})" style="background:#dc3545;color:white;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;">🗑️</button>
+            </div>
+        `;
+    });
+    
+    html += `
+            </div>
+            <button onclick="addWordsearchWord()" style="background:#28a745;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;margin-top:10px;">➕ Adicionar Palavra</button>
+            <p style="color:#666;font-size:12px;margin-top:10px;">⚠️ Use palavras de no máximo 10 letras, sem espaços ou acentos.</p>
+        </div>
+        
+        <button class="btn-primary" onclick="saveGameDataForBrand()">💾 Salvar Alterações</button>
+    `;
+    
+    editor.innerHTML = html;
+}
+
+function addMemoryPair() {
+    const brand = document.getElementById('edit-game-brand').value;
+    if (!gameData[brand]) gameData[brand] = { memory: [], wordsearch: [] };
+    gameData[brand].memory.push({ term: '', definition: '' });
+    loadGameDataForBrand();
+}
+
+function removeMemoryPair(idx) {
+    const brand = document.getElementById('edit-game-brand').value;
+    gameData[brand].memory.splice(idx, 1);
+    loadGameDataForBrand();
+}
+
+function addWordsearchWord() {
+    const brand = document.getElementById('edit-game-brand').value;
+    if (!gameData[brand]) gameData[brand] = { memory: [], wordsearch: [] };
+    gameData[brand].wordsearch.push('');
+    loadGameDataForBrand();
+}
+
+function removeWordsearchWord(idx) {
+    const brand = document.getElementById('edit-game-brand').value;
+    gameData[brand].wordsearch.splice(idx, 1);
+    loadGameDataForBrand();
+}
+
+async function saveGameDataForBrand() {
+    const brand = document.getElementById('edit-game-brand').value;
+    
+    // Coletar dados do Jogo da Memória
+    const memoryPairs = [];
+    let idx = 0;
+    while (document.getElementById('mem-term-' + idx)) {
+        const term = document.getElementById('mem-term-' + idx).value.trim();
+        const def = document.getElementById('mem-def-' + idx).value.trim();
+        if (term && def) {
+            memoryPairs.push({ term, definition: def });
+        }
+        idx++;
+    }
+    
+    // Coletar dados do Caça-Palavras
+    const wordsearchWords = [];
+    idx = 0;
+    while (document.getElementById('ws-word-' + idx)) {
+        const word = document.getElementById('ws-word-' + idx).value.trim().toUpperCase();
+        if (word && word.length <= 10) {
+            wordsearchWords.push(word);
+        }
+        idx++;
+    }
+    
+    gameData[brand] = {
+        memory: memoryPairs,
+        wordsearch: wordsearchWords
+    };
+    
+    // Salvar no Firebase
+    if (useFirebase && db) {
+        try {
+            await db.collection('settings').doc('gameData').set(gameData);
+            alert('✅ Dados salvos com sucesso!');
+        } catch (e) {
+            console.log('Erro ao salvar dados dos jogos:', e);
+            alert('❌ Erro ao salvar: ' + e.message);
+        }
+    } else {
+        localStorage.setItem('gameData', JSON.stringify(gameData));
+        alert('✅ Dados salvos localmente!');
+    }
+}
+
+// Carregar dados dos jogos customizados
+async function loadCustomGameData() {
+    if (useFirebase && db) {
+        try {
+            const doc = await db.collection('settings').doc('gameData').get();
+            if (doc.exists) {
+                const customData = doc.data();
+                // Mesclar com dados padrão
+                Object.keys(customData).forEach(brand => {
+                    if (customData[brand].memory?.length > 0 || customData[brand].wordsearch?.length > 0) {
+                        gameData[brand] = customData[brand];
+                    }
+                });
+            }
+        } catch (e) {
+            console.log('Erro ao carregar dados customizados:', e);
+        }
+    } else {
+        const saved = localStorage.getItem('gameData');
+        if (saved) {
+            const customData = JSON.parse(saved);
+            Object.keys(customData).forEach(brand => {
+                if (customData[brand].memory?.length > 0 || customData[brand].wordsearch?.length > 0) {
+                    gameData[brand] = customData[brand];
+                }
+            });
+        }
+    }
+}
+
+async function toggleMinigame(traineeId, game, released) {
+    if (!minigamesData[traineeId]) {
+        minigamesData[traineeId] = { memory: false, wordsearch: false };
+    }
+    minigamesData[traineeId][game] = released;
+    await saveMinigames();
+}
+
+async function releaseAllMinigames(game) {
+    trainees.forEach((t, idx) => {
+        const traineeId = t.firebaseId || idx;
+        if (!minigamesData[traineeId]) {
+            minigamesData[traineeId] = { memory: false, wordsearch: false };
+        }
+        minigamesData[traineeId][game] = true;
+    });
+    await saveMinigames();
+    showMinigamesReleasePanel();
+    alert(`✅ ${game === 'memory' ? 'Jogo da Memória' : 'Caça-Palavras'} liberado para todos!`);
 }
 
 // ========== TREINAMENTOS PONTUAIS ==========
