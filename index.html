@@ -392,8 +392,8 @@
         .memory-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            max-width: 600px;
+            gap: 12px;
+            max-width: 700px;
             margin: 20px auto;
         }
         .memory-card {
@@ -404,13 +404,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 8px;
             transition: all 0.3s;
             transform-style: preserve-3d;
             position: relative;
+            min-height: 100px;
         }
         .memory-card:hover {
             transform: scale(1.05);
@@ -2966,6 +2967,9 @@ function showTraineeDetail(traineeIdx) {
         
         <h3 class="section-title" style="margin-top:25px;">🎯 Quiz Diário</h3>
         <div id="detail-quiz-progress"></div>
+        
+        <h3 class="section-title" style="margin-top:25px;">🎮 Minigames</h3>
+        <div id="detail-games-progress"></div>
     `;
     
     content.innerHTML = html;
@@ -2974,6 +2978,7 @@ function showTraineeDetail(traineeIdx) {
     renderDetailBadges();
     renderDetailEvalHistory();
     renderDetailQuizProgress();
+    renderDetailGamesProgress();
 }
 
 function renderDetailBadges() {
@@ -3116,6 +3121,79 @@ function renderDetailQuizProgress() {
     `;
     
     c.innerHTML = h;
+}
+
+function renderDetailGamesProgress() {
+    if (adminSelectedTrainee < 0) return;
+    const c = document.getElementById('detail-games-progress');
+    const t = trainees[adminSelectedTrainee];
+    const traineeId = t.firebaseId || adminSelectedTrainee;
+    
+    loadMinigames().then(() => {
+        const released = minigamesData[traineeId] || { memory: false, wordsearch: false };
+        const completed = t.gamesCompleted || {};
+        
+        let h = `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px;">`;
+        
+        // Jogo da Memória
+        const memoryStatus = completed.memory ? 'completed' : (released.memory ? 'released' : 'locked');
+        const memoryBg = completed.memory ? 'linear-gradient(135deg, #28a745, #20c997)' : (released.memory ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#e0e0e0');
+        const memoryColor = memoryStatus === 'locked' ? '#666' : 'white';
+        const memoryText = completed.memory ? `✅ Concluído em ${new Date(completed.memory.date).toLocaleDateString('pt-BR')}` : (released.memory ? '🔓 Liberado' : '🔒 Bloqueado');
+        const memoryMoves = completed.memory?.moves ? ` (${completed.memory.moves} jogadas)` : '';
+        
+        h += `
+            <div style="background:${memoryBg};color:${memoryColor};padding:20px;border-radius:12px;text-align:center;">
+                <div style="font-size:32px;margin-bottom:10px;">🃏</div>
+                <div style="font-size:18px;font-weight:bold;">Jogo da Memória</div>
+                <div style="font-size:13px;margin-top:5px;">${memoryText}${memoryMoves}</div>
+            </div>
+        `;
+        
+        // Caça-Palavras
+        const wsStatus = completed.wordsearch ? 'completed' : (released.wordsearch ? 'released' : 'locked');
+        const wsBg = completed.wordsearch ? 'linear-gradient(135deg, #28a745, #20c997)' : (released.wordsearch ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#e0e0e0');
+        const wsColor = wsStatus === 'locked' ? '#666' : 'white';
+        const wsText = completed.wordsearch ? `✅ Concluído em ${new Date(completed.wordsearch.date).toLocaleDateString('pt-BR')}` : (released.wordsearch ? '🔓 Liberado' : '🔒 Bloqueado');
+        
+        h += `
+            <div style="background:${wsBg};color:${wsColor};padding:20px;border-radius:12px;text-align:center;">
+                <div style="font-size:32px;margin-bottom:10px;">🔍</div>
+                <div style="font-size:18px;font-weight:bold;">Caça-Palavras</div>
+                <div style="font-size:13px;margin-top:5px;">${wsText}</div>
+            </div>
+        `;
+        
+        h += `</div>`;
+        
+        // Controles de liberação
+        h += `
+            <div style="padding:15px;background:#f8f9fa;border-radius:12px;">
+                <h4 style="color:#1e3c72;margin-bottom:15px;">🔓 Liberar Jogos</h4>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <label style="display:flex;align-items:center;gap:8px;padding:10px 15px;background:${released.memory ? '#d4edda' : 'white'};border-radius:8px;cursor:pointer;border:1px solid #ddd;">
+                        <input type="checkbox" ${released.memory ? 'checked' : ''} onchange="toggleMinigameFromDetail('${traineeId}', 'memory', this.checked)">
+                        🃏 Jogo da Memória
+                    </label>
+                    <label style="display:flex;align-items:center;gap:8px;padding:10px 15px;background:${released.wordsearch ? '#d4edda' : 'white'};border-radius:8px;cursor:pointer;border:1px solid #ddd;">
+                        <input type="checkbox" ${released.wordsearch ? 'checked' : ''} onchange="toggleMinigameFromDetail('${traineeId}', 'wordsearch', this.checked)">
+                        🔍 Caça-Palavras
+                    </label>
+                </div>
+            </div>
+        `;
+        
+        c.innerHTML = h;
+    });
+}
+
+async function toggleMinigameFromDetail(traineeId, game, released) {
+    if (!minigamesData[traineeId]) {
+        minigamesData[traineeId] = { memory: false, wordsearch: false };
+    }
+    minigamesData[traineeId][game] = released;
+    await saveMinigames();
+    renderDetailGamesProgress();
 }
 
 async function toggleQuizDay(traineeIdx, day) {
@@ -3359,47 +3437,55 @@ function exportAllReports() {
 const gameData = {
     'POLI': {
         memory: [
-            { term: 'Engenharia', definition: 'Aplicação de conhecimentos científicos' },
-            { term: 'Politécnica', definition: 'Escola de engenharia da USP' },
-            { term: 'Inovação', definition: 'Introdução de novidades' },
-            { term: 'Tecnologia', definition: 'Conjunto de técnicas e métodos' },
-            { term: 'Pesquisa', definition: 'Busca por novos conhecimentos' },
-            { term: 'Graduação', definition: 'Primeiro nível do ensino superior' }
+            { term: 'Data Science', definition: 'Ciência de análise de dados', emoji: '📊' },
+            { term: 'Engenharia', definition: 'Aplicação de conhecimentos técnicos', emoji: '⚙️' },
+            { term: 'Produção', definition: 'Gestão de processos produtivos', emoji: '🏭' },
+            { term: 'Logística', definition: 'Gestão de transporte e armazenagem', emoji: '🚚' },
+            { term: 'Supply Chain', definition: 'Cadeia de suprimentos', emoji: '🔗' },
+            { term: 'ESG', definition: 'Ambiental, Social e Governança', emoji: '🌱' },
+            { term: 'Qualidade', definition: 'Melhoria contínua de processos', emoji: '✅' },
+            { term: 'Projetos', definition: 'Planejamento e execução de iniciativas', emoji: '📋' }
         ],
-        wordsearch: ['ENGENHARIA', 'POLI', 'USP', 'INOVACAO', 'TECNOLOGIA', 'CIENCIA']
+        wordsearch: ['PRODUCAO', 'DADOS', 'LOGISTICA', 'PROJETOS', 'ESG', 'QUALIDADE', 'POLI', 'USP', 'MBA', 'ENGENHARIA']
     },
     'ESALQ/PECEGE': {
         memory: [
-            { term: 'Agronegócio', definition: 'Setor da economia ligado à agricultura' },
-            { term: 'ESALQ', definition: 'Escola Superior de Agricultura' },
-            { term: 'PECEGE', definition: 'Programa de educação continuada' },
-            { term: 'Sustentabilidade', definition: 'Desenvolvimento sem esgotar recursos' },
-            { term: 'MBA', definition: 'Master in Business Administration' },
-            { term: 'Gestão', definition: 'Administração de recursos' }
+            { term: 'Agronegócio', definition: 'Setor ligado à agricultura', emoji: '🌾' },
+            { term: 'Marketing', definition: 'Estratégias de mercado', emoji: '📢' },
+            { term: 'Finanças', definition: 'Gestão de recursos financeiros', emoji: '💰' },
+            { term: 'Cibersegurança', definition: 'Proteção de dados digitais', emoji: '🔒' },
+            { term: 'Software', definition: 'Engenharia de sistemas', emoji: '💻' },
+            { term: 'Liderança', definition: 'Gestão de equipes', emoji: '👔' },
+            { term: 'Vendas', definition: 'Comercialização de produtos', emoji: '🤝' },
+            { term: 'Tributária', definition: 'Gestão de impostos', emoji: '📑' }
         ],
-        wordsearch: ['ESALQ', 'PECEGE', 'MBA', 'GESTAO', 'AGRO', 'RURAL']
+        wordsearch: ['AGRO', 'MBA', 'GESTAO', 'MARKETING', 'VENDAS', 'FINANCAS', 'SOFTWARE', 'ESG', 'LIDERANCA', 'PROJETOS']
     },
     'MACKENZIE': {
         memory: [
-            { term: 'Mackenzie', definition: '150 anos de tradição em educação' },
-            { term: 'Presbiteriana', definition: 'Origem religiosa da instituição' },
-            { term: 'Excelência', definition: 'Qualidade superior' },
-            { term: 'Tradição', definition: 'Costumes passados entre gerações' },
-            { term: 'Lato Sensu', definition: 'Especialização e MBA' },
-            { term: 'Stricto Sensu', definition: 'Mestrado e Doutorado' }
+            { term: 'Inteligência Artificial', definition: 'IA para negócios digitais', emoji: '🤖' },
+            { term: 'Controladoria', definition: 'Controle financeiro empresarial', emoji: '📈' },
+            { term: 'Direito', definition: 'Legislação empresarial', emoji: '⚖️' },
+            { term: 'Gestão de Pessoas', definition: 'Desenvolvimento organizacional', emoji: '👥' },
+            { term: 'Projetos', definition: 'Gerenciamento de projetos', emoji: '📊' },
+            { term: 'Psicologia', definition: 'Comportamento organizacional', emoji: '🧠' },
+            { term: 'Lato Sensu', definition: 'Especialização e MBA', emoji: '🎓' },
+            { term: 'Stricto Sensu', definition: 'Mestrado e Doutorado', emoji: '📚' }
         ],
-        wordsearch: ['MACKENZIE', 'MBA', 'TRADICAO', 'EDUCACAO', 'LATO', 'STRICTO']
+        wordsearch: ['DADOS', 'MBA', 'GESTAO', 'MARKETING', 'VENDAS', 'PROJETOS', 'LIDERANCA', 'FINANCEIRO', 'DIREITO', 'ANALYTICS']
     },
     'ECA USP': {
         memory: [
-            { term: 'Comunicação', definition: 'Troca de informações' },
-            { term: 'Artes', definition: 'Expressão criativa humana' },
-            { term: 'ECA', definition: 'Escola de Comunicações e Artes' },
-            { term: 'Mídia', definition: 'Meios de comunicação' },
-            { term: 'Cultura', definition: 'Conjunto de conhecimentos de um povo' },
-            { term: 'Criatividade', definition: 'Capacidade de criar coisas novas' }
+            { term: 'Business Intelligence', definition: 'Análise de dados para negócios', emoji: '📊' },
+            { term: 'Inteligência Artificial', definition: 'Transformação digital', emoji: '🤖' },
+            { term: 'Marketing Digital', definition: 'Comunicação online', emoji: '📱' },
+            { term: 'Data Analytics', definition: 'Análise para tomada de decisão', emoji: '📈' },
+            { term: 'Gestão Ágil', definition: 'Metodologias ágeis de projetos', emoji: '🚀' },
+            { term: 'Comunicação', definition: 'Gestão de comunicação', emoji: '📣' },
+            { term: 'Relações Públicas', definition: 'Comunicação organizacional', emoji: '🤝' },
+            { term: 'Certificação USP', definition: 'Selo de qualidade USP', emoji: '🏆' }
         ],
-        wordsearch: ['ECA', 'USP', 'ARTES', 'MIDIA', 'CULTURA', 'CINEMA']
+        wordsearch: ['ANALYTICS', 'DIGITAL', 'MARKETING', 'DADOS', 'GESTAO', 'MBA', 'USP', 'ECA', 'PROJETOS', 'NEGOCIOS']
     }
 };
 
@@ -3517,11 +3603,11 @@ function startMemoryGame() {
     const brand = trainees[currentTrainee]?.brand || 'POLI';
     const data = gameData[brand]?.memory || gameData['POLI'].memory;
     
-    // Criar cartas (termo + definição para cada par)
+    // Criar cartas (termo + definição para cada par, com emoji)
     memoryCards = [];
     data.forEach((item, idx) => {
-        memoryCards.push({ id: idx, type: 'term', content: item.term, pairId: idx });
-        memoryCards.push({ id: idx + 100, type: 'def', content: item.definition, pairId: idx });
+        memoryCards.push({ id: idx, type: 'term', content: item.term, pairId: idx, emoji: item.emoji || '📝' });
+        memoryCards.push({ id: idx + 100, type: 'def', content: item.definition, pairId: idx, emoji: item.emoji || '📝' });
     });
     
     // Embaralhar
@@ -3565,11 +3651,13 @@ function renderMemoryCards() {
     
     memoryCards.forEach((card, idx) => {
         const isFlipped = flippedCards.includes(idx) || card.matched;
+        const emoji = card.emoji || '📝';
+        const typeLabel = card.type === 'term' ? '📌' : '💡';
         html += `
             <div class="memory-card ${isFlipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" 
                  onclick="flipCard(${idx})" 
                  data-idx="${idx}">
-                ${isFlipped ? `<span>${card.content}</span>` : '<span class="card-back">❓</span>'}
+                ${isFlipped ? `<div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><span style="font-size:24px;">${emoji}</span><span style="font-size:12px;">${typeLabel} ${card.content}</span></div>` : `<span class="card-back" style="font-size:40px;">🎴</span>`}
             </div>
         `;
     });
