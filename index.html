@@ -2225,6 +2225,44 @@ function deleteTrainee(i){
     }
 }
 
+function deleteTraineeFromDetail(i){
+    const t = trainees[i];
+    if(!t) return;
+    
+    if(confirm(`⚠️ Tem certeza que deseja EXCLUIR o colaborador?\n\n${t.name}\n${t.function}${t.brand ? ' - ' + t.brand : ''}\n\nEsta ação não pode ser desfeita!`)){
+        if(useFirebase && db && t.firebaseId) {
+            db.collection('trainees').doc(t.firebaseId).delete().then(() => {
+                trainees.splice(i,1);
+                if(currentTrainee>=trainees.length)currentTrainee=Math.max(0,trainees.length-1);
+                adminSelectedTrainee = -1;
+                
+                // Voltar para o dashboard
+                document.getElementById('detail-panel').classList.remove('active');
+                document.getElementById('admin-dashboard').classList.add('active');
+                
+                renderAdmin();
+                renderAdminDashboard();
+                populateEmployeeSelect();
+                alert('✅ Colaborador excluído com sucesso!');
+            });
+        } else {
+            trainees.splice(i,1);
+            if(currentTrainee>=trainees.length)currentTrainee=Math.max(0,trainees.length-1);
+            adminSelectedTrainee = -1;
+            saveToLocalStorage();
+            
+            // Voltar para o dashboard
+            document.getElementById('detail-panel').classList.remove('active');
+            document.getElementById('admin-dashboard').classList.add('active');
+            
+            renderAdmin();
+            renderAdminDashboard();
+            populateEmployeeSelect();
+            alert('✅ Colaborador excluído com sucesso!');
+        }
+    }
+}
+
 async function toggleBlockTrainee(i) {
     const t = trainees[i];
     if (!t) return;
@@ -3260,6 +3298,7 @@ function showTraineeDetail(traineeIdx) {
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px;">
             <button class="btn-primary" style="width:auto;" onclick="exportTraineeReport()">📄 Exportar Relatório</button>
             <button class="btn-primary" style="width:auto;background:${blockBtnColor};" onclick="toggleBlockTrainee(${traineeIdx})">${blockBtnText}</button>
+            <button class="btn-primary" style="width:auto;background:#6c757d;" onclick="deleteTraineeFromDetail(${traineeIdx})">🗑️ Excluir Colaborador</button>
         </div>
         
         <h3 class="section-title">🏅 Badges</h3>
