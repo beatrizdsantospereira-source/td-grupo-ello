@@ -2188,6 +2188,7 @@ function addTrainee(){
     if(useFirebase && db) {
         db.collection('trainees').add(newTrainee).then(() => {
             document.getElementById('trainee-name').value='';
+            renderAdminDashboard(); // Atualizar dashboard
             alert('✅ Adicionado!\n\nCódigo de acesso: ' + code);
         }).catch(e => {
             console.log('Erro ao adicionar:', e);
@@ -2198,6 +2199,7 @@ function addTrainee(){
         saveToLocalStorage();
         document.getElementById('trainee-name').value='';
         renderAdmin();
+        renderAdminDashboard(); // Atualizar dashboard
         populateEmployeeSelect();
         alert('✅ Adicionado!\n\nCódigo de acesso: ' + code);
     }
@@ -2206,8 +2208,10 @@ function deleteTrainee(i){
     if(confirm('Excluir?')){
         if(useFirebase && db && trainees[i].firebaseId) {
             db.collection('trainees').doc(trainees[i].firebaseId).delete().then(() => {
+                trainees.splice(i,1); // Atualizar array local
                 if(currentTrainee>=trainees.length)currentTrainee=Math.max(0,trainees.length-1);
                 renderAdmin();
+                renderAdminDashboard(); // Atualizar dashboard com novos números
                 populateEmployeeSelect();
             });
         } else {
@@ -2215,6 +2219,7 @@ function deleteTrainee(i){
             if(currentTrainee>=trainees.length)currentTrainee=Math.max(0,trainees.length-1);
             saveToLocalStorage();
             renderAdmin();
+            renderAdminDashboard(); // Atualizar dashboard com novos números
             populateEmployeeSelect();
         }
     }
@@ -5939,6 +5944,10 @@ async function corrigirDissertativa(evalIndex, questionKey, correta) {
         detalhes += '<br><strong style="font-size:18px;color:'+statusColor+';">Nota Final: '+novaNota+'% - '+statusText+'</strong>';
         infoBox.innerHTML = detalhes;
     }
+    
+    // Atualizar mensagem de pendências e lista de prioridades no dashboard
+    updateWelcomeSection();
+    updatePrioritySection();
     
     console.log('Dissertativa corrigida:', questionKey, correta ? 'CORRETA' : 'INCORRETA');
     console.log('Objetivas:', acertosObjetivas+'/'+totalObjetivas+' = '+Math.round(pctObjetivas)+'%');
