@@ -1574,8 +1574,8 @@ const Q={
 // Questões comuns Backoffice
 {"n":60,"t":"Função do Backoffice","tipo":"single","q":"Qual a principal função do Backoffice no processo de vendas?","opts":["Prospectar novos leads","Validar documentação e processar matrículas","Negociar descontos com leads","Criar campanhas de marketing"],"correct":1},
 {"n":61,"t":"Documentação Obrigatória","tipo":"multi","q":"Quais documentos são obrigatórios para matrícula?","opts":["RG","CPF ou CNH","Diploma de Graduação","Certidão de nascimento"],"correct":[0,1,2]},
-{"n":62,"t":"Sistemas Utilizados","tipo":"multi","q":"Quais sistemas você utiliza no dia a dia do Backoffice?","opts":["iELLO (sistema interno)","Sistema da escola","E-mail corporativo","WhatsApp pessoal"],"correct":[0,1,2]},
-{"n":63,"t":"Prazo Cobrança Documentos","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar"],"correct":1},
+{"n":62,"t":"Meios de Contato","tipo":"multi","q":"Quais os meios de contato utilizados para atendimento ao lead?","opts":["E-mail","Telefone","WhatsApp","Carta"],"correct":[0,1,2]},
+{"n":63,"t":"Prazo Cobrança Documentos","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar"],"correct":0},
 {"n":64,"t":"Importância Validação","tipo":"text","q":"Por que a validação correta dos documentos é importante?"}
 ],
 "backoffice_poli":[
@@ -2523,6 +2523,7 @@ function renderEvalButtons(){
         
         if(jaFezAvaliacao(type, brand)) {
             const resultado = getResultadoAnterior(type, brand);
+            const evalIndex = evalHistory.findIndex(e => e.traineeIndex === currentTrainee && e.type === type && e.brand === brand);
             const statusColor = resultado.passed ? '#28a745' : '#dc3545';
             const statusText = resultado.passed ? '✅ Aprovado' : '❌ Reprovado';
             html += '<div class="info-box" style="background:#f8f9fa;border-color:'+statusColor+';text-align:center;">';
@@ -2531,6 +2532,7 @@ function renderEvalButtons(){
             html += '<p style="color:'+statusColor+';font-size:18px;margin:10px 0;">'+statusText+'</p>';
             html += '<p style="color:#666;font-size:13px;">Realizada em: '+resultado.date+'</p>';
             html += '<p style="color:#888;font-size:12px;margin-top:15px;">⚠️ Cada avaliação pode ser feita apenas 1 vez.<br>As questões dissertativas serão corrigidas pelo coordenador.</p>';
+            html += '<button class="btn-primary" style="margin-top:15px;" onclick="showGabarito('+evalIndex+',\''+type+'\',\''+brand+'\')">📋 Ver Gabarito</button>';
             html += '</div>';
         } else {
             html += '<button class="btn-primary" onclick="startEval(\''+type+'\',\''+brand+'\')">'+label+'</button>';
@@ -2545,6 +2547,9 @@ function renderEvalButtons(){
 function startEval(type,brand){currentEval={type,brand,answers:{},started:true};renderEval();}
 
 function renderEval(){
+    // Esconder os botões de avaliação enquanto responde
+    document.getElementById('eval-buttons').innerHTML = '';
+    
     const c=document.getElementById('eval-content');
     let qs=[];
     if(currentEval.type==='b2b'){
@@ -2769,6 +2774,131 @@ resultHtml += '</div>';
 resultHtml += '</div>';
 
 document.getElementById('eval-content').innerHTML = resultHtml;
+}
+
+// Função para mostrar gabarito de avaliação já realizada
+function showGabarito(evalIndex, type, brand) {
+    const evalRecord = evalHistory[evalIndex];
+    if (!evalRecord) {
+        alert('Erro ao carregar gabarito');
+        return;
+    }
+    
+    // Esconder o botão de avaliação para não permitir clicar novamente
+    document.getElementById('eval-buttons').innerHTML = '<button class="btn-secondary" onclick="renderEvalButtons();">← Voltar</button>';
+    
+    // Carregar questões
+    let qs = [];
+    if(type === 'b2b'){
+        qs = [...Q.b2b_comum];
+        if(brand === 'POLI') qs.push(...Q.b2b_poli);
+        else if(brand === 'ESALQ/PECEGE') qs.push(...Q.b2b_esalq);
+        else if(brand === 'MACKENZIE') qs.push(...Q.b2b_mackenzie);
+        else if(brand === 'ECA USP') qs.push(...Q.b2b_eca);
+    } else if(type === 'b2c'){
+        qs = [...Q.b2c];
+        if(brand === 'POLI') qs.push(...Q.b2c_poli);
+        else if(brand === 'ESALQ/PECEGE') qs.push(...Q.b2c_esalq);
+        else if(brand === 'MACKENZIE') qs.push(...Q.b2c_mackenzie);
+        else if(brand === 'ECA USP') qs.push(...Q.b2c_eca);
+    } else if(type === 'backoffice'){
+        qs = [...Q.backoffice];
+        if(brand === 'POLI') qs.push(...Q.backoffice_poli);
+        else if(brand === 'ESALQ/PECEGE') qs.push(...Q.backoffice_esalq);
+        else if(brand === 'MACKENZIE') qs.push(...Q.backoffice_mackenzie);
+        else if(brand === 'ECA USP') qs.push(...Q.backoffice_eca);
+    }
+    
+    const passed = evalRecord.passed;
+    const score = evalRecord.score;
+    
+    let resultHtml = '<div class="eval-card">';
+    resultHtml += '<div style="text-align:center;padding:20px;background:'+(passed?'linear-gradient(135deg, #28a745, #20c997)':'linear-gradient(135deg, #dc3545, #c82333)')+';border-radius:12px;color:white;margin-bottom:25px;">';
+    resultHtml += '<h2 style="margin:0 0 10px 0;">'+(passed?'🎉 Aprovado!':'📚 Não atingiu a nota mínima')+'</h2>';
+    resultHtml += '<div style="font-size:56px;font-weight:bold;">'+score+'%</div>';
+    resultHtml += '<p style="margin:10px 0 0 0;opacity:0.9;">Realizada em: '+evalRecord.date+'</p>';
+    resultHtml += '</div>';
+
+    resultHtml += '<h3 style="color:#1e3c72;margin-bottom:15px;border-bottom:2px solid #667eea;padding-bottom:10px;">📊 Gabarito - Questões Objetivas</h3>';
+
+    // Mostrar cada questão objetiva com resultado
+    qs.filter(q => q.tipo !== 'text').forEach(q => {
+        const ans = evalRecord.answers['q'+q.n];
+        if (!ans) return;
+        
+        const acertou = ans.acertou;
+        const bgColor = acertou ? '#d4edda' : '#f8d7da';
+        const borderColor = acertou ? '#28a745' : '#dc3545';
+        const icon = acertou ? '✅' : '❌';
+        
+        resultHtml += '<div style="background:'+bgColor+';border-left:4px solid '+borderColor+';padding:15px;border-radius:8px;margin-bottom:12px;">';
+        resultHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+        resultHtml += '<strong style="color:#333;">Q'+q.n+' - '+q.t+'</strong>';
+        resultHtml += '<span style="font-size:20px;">'+icon+'</span>';
+        resultHtml += '</div>';
+        resultHtml += '<p style="color:#555;margin-bottom:10px;">'+q.q+'</p>';
+        
+        // Mostrar opções com indicação de certa/errada
+        resultHtml += '<div style="margin-left:10px;">';
+        q.opts.forEach((opt, idx) => {
+            const isCorrect = Array.isArray(q.correct) ? q.correct.includes(idx) : q.correct === idx;
+            const wasSelected = ans.selecionadas ? ans.selecionadas.includes(idx) : false;
+            
+            let optStyle = 'padding:6px 10px;margin:4px 0;border-radius:4px;';
+            let optIcon = '';
+            
+            if (isCorrect && wasSelected) {
+                optStyle += 'background:#c3e6cb;color:#155724;'; // Verde - acertou
+                optIcon = '✓ ';
+            } else if (isCorrect && !wasSelected) {
+                optStyle += 'background:#bee5eb;color:#0c5460;'; // Azul - era a correta
+                optIcon = '→ ';
+            } else if (!isCorrect && wasSelected) {
+                optStyle += 'background:#f5c6cb;color:#721c24;'; // Vermelho - errou
+                optIcon = '✗ ';
+            } else {
+                optStyle += 'background:#f8f9fa;color:#666;'; // Cinza - não selecionada
+            }
+            
+            resultHtml += '<div style="'+optStyle+'">'+optIcon+opt+'</div>';
+        });
+        resultHtml += '</div>';
+        resultHtml += '</div>';
+    });
+
+    resultHtml += '<h3 style="color:#1e3c72;margin:25px 0 15px;border-bottom:2px solid #667eea;padding-bottom:10px;">📝 Suas Respostas Dissertativas</h3>';
+
+    // Mostrar dissertativas
+    qs.filter(q => q.tipo === 'text').forEach(q => {
+        const ans = evalRecord.answers['q'+q.n];
+        if (!ans) return;
+        
+        const corrigida = ans.corrigida !== undefined;
+        const correta = ans.corrigida === true;
+        const statusBg = corrigida ? (correta ? '#d4edda' : '#f8d7da') : '#f8f9fa';
+        const statusBorder = corrigida ? (correta ? '#28a745' : '#dc3545') : '#667eea';
+        
+        resultHtml += '<div style="background:'+statusBg+';border-left:4px solid '+statusBorder+';padding:15px;border-radius:8px;margin-bottom:12px;">';
+        resultHtml += '<strong style="color:#333;">Q'+q.n+' - '+q.t+'</strong>';
+        resultHtml += '<p style="color:#555;margin:10px 0;">'+q.q+'</p>';
+        resultHtml += '<div style="background:white;padding:12px;border-radius:6px;border:1px solid #ddd;">';
+        resultHtml += '<em style="color:#666;">'+(ans.resposta || '(Não respondida)')+'</em>';
+        resultHtml += '</div>';
+        
+        if (corrigida) {
+            resultHtml += '<p style="color:'+(correta ? '#28a745' : '#dc3545')+';font-size:12px;margin-top:8px;font-weight:bold;">'+(correta ? '✅ Correta' : '❌ Incorreta')+'</p>';
+        } else {
+            resultHtml += '<p style="color:#888;font-size:12px;margin-top:8px;">⏳ Aguardando correção do coordenador</p>';
+        }
+        resultHtml += '</div>';
+    });
+
+    resultHtml += '<div style="text-align:center;margin-top:25px;">';
+    resultHtml += '<button class="btn-secondary" onclick="renderEvalButtons();">← Voltar</button>';
+    resultHtml += '</div>';
+    resultHtml += '</div>';
+
+    document.getElementById('eval-content').innerHTML = resultHtml;
 }
 
 // ========== INICIALIZAÇÃO ==========
@@ -3210,7 +3340,7 @@ function renderDetailEvalHistory() {
         const statusColor = e.passed ? '#28a745' : '#dc3545';
         const statusText = e.passed ? 'Aprovado' : 'Reprovado';
         const bg = i % 2 === 0 ? '#fff' : '#f8f9fa';
-        h += '<tr style="background:' + bg + ';"><td style="padding:12px;">' + e.date + '</td><td style="padding:12px;">' + e.type.toUpperCase() + (e.brand ? ' - ' + e.brand : '') + '</td><td style="padding:12px;text-align:center;font-weight:bold;">' + e.score + '%</td><td style="padding:12px;text-align:center;color:' + statusColor + ';font-weight:bold;">' + statusText + '</td><td style="padding:12px;text-align:center;"><button class="btn-primary" style="padding:8px 16px;width:auto;" onclick="viewEvalDetails(' + e.origIndex + ')">👁️ Ver</button></td></tr>';
+        h += '<tr style="background:' + bg + ';"><td style="padding:12px;">' + e.date + '</td><td style="padding:12px;">' + e.type.toUpperCase() + (e.brand ? ' - ' + e.brand : '') + '</td><td style="padding:12px;text-align:center;font-weight:bold;">' + e.score + '%</td><td style="padding:12px;text-align:center;color:' + statusColor + ';font-weight:bold;">' + statusText + '</td><td style="padding:12px;text-align:center;"><button class="btn-primary" style="padding:8px 12px;width:auto;margin-right:5px;" onclick="viewEvalDetails(' + e.origIndex + ')">👁️</button><button class="btn-primary" style="padding:8px 12px;width:auto;background:#dc3545;" onclick="deleteEvaluation(' + e.origIndex + ')" title="Excluir e liberar refazer">🗑️</button></td></tr>';
     });
     
     h += '</table>';
@@ -5828,6 +5958,47 @@ function renderAdminQuizProgress(){
     }
     
     c.innerHTML = h;
+}
+
+async function deleteEvaluation(evalIndex) {
+    const e = evalHistory[evalIndex];
+    if (!e) return;
+    
+    if (!confirm(`Tem certeza que deseja EXCLUIR esta avaliação?\n\n${e.type.toUpperCase()}${e.brand ? ' - ' + e.brand : ''}\nNota: ${e.score}%\nData: ${e.date}\n\nIsso permitirá que o colaborador refaça a avaliação.`)) {
+        return;
+    }
+    
+    // Remover do evalHistory global
+    evalHistory.splice(evalIndex, 1);
+    
+    // Remover do trainee
+    const trainee = trainees[e.traineeIndex];
+    if (trainee && trainee.evalHistory) {
+        const idx = trainee.evalHistory.findIndex(ev => ev.date === e.date && ev.type === e.type && ev.brand === e.brand);
+        if (idx >= 0) {
+            trainee.evalHistory.splice(idx, 1);
+        }
+        
+        // Salvar no Firebase
+        if (useFirebase && db && trainee.firebaseId) {
+            try {
+                await db.collection('trainees').doc(trainee.firebaseId).update({
+                    evalHistory: trainee.evalHistory
+                });
+            } catch (err) {
+                console.log('Erro ao salvar:', err);
+            }
+        } else {
+            saveToLocalStorage();
+        }
+    }
+    
+    alert('✅ Avaliação excluída! O colaborador pode refazer.');
+    
+    // Atualizar tela
+    renderDetailEvalHistory();
+    updatePrioritySection();
+    updateWelcomeSection();
 }
 
 function viewEvalDetails(evalIndex){
