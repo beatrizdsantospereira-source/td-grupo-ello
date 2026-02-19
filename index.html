@@ -1534,35 +1534,73 @@ const Q={
 {"n":33,"t":"Avaliação do Treinamento ECA","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "b2c":[
-// Alternativas primeiro
-{"n":34,"t":"Canais de Atendimento B2C","tipo":"multi","q":"Quais canais você utiliza para atendimento ao lead?","opts":["Telefone","E-mail","WhatsApp","Presencial"],"correct":[0,1,2]},
+// Questões comuns B2C - Alternativas sobre Leads e Função
+{"n":34,"t":"Canais de Atendimento B2C","tipo":"multi","q":"Quais canais você utiliza para atendimento ao lead?","opts":["Telefone","E-mail","WhatsApp","Redes Sociais"],"correct":[0,1,2]},
 {"n":35,"t":"Primeira Abordagem ao Lead","tipo":"single","q":"Como deve ser feita a abordagem inicial ao lead?","opts":["Contato telefônico + envio de material + agendamento de follow-up","Apenas envio de material por e-mail","Esperar o lead retornar contato","Enviar proposta comercial imediatamente"],"correct":0},
-{"n":36,"t":"Lead Negativo - Procedimento","tipo":"single","q":"O que fazer quando o lead não quer seguir com inscrição?","opts":["Perguntar se deseja receber informações na próxima turma + colocar histórico + dar PERDIDO no sistema","Insistir na venda","Apenas dar PERDIDO no sistema","Transferir para outro vendedor"],"correct":0},
-{"n":37,"t":"Documentação Obrigatória","tipo":"multi","q":"Quais documentos são obrigatórios para inscrição?","opts":["RG (não pode ser substituído)","CPF (ou CNH)","Diploma de Graduação","Formulário online preenchido","Certidão de nascimento"],"correct":[0,1,2,3]},
-{"n":38,"t":"Prazo Follow-up","tipo":"single","q":"Qual o prazo ideal para retornar contato com lead após envio de material?","opts":["1 semana","3 dias","24 a 48 horas","Aguardar lead retornar"],"correct":2},
-{"n":39,"t":"Qualificação de Lead","tipo":"single","q":"Como identificar se um lead está qualificado?","opts":["Possui graduação completa + demonstra interesse real + está dentro do público-alvo da parceria","Apenas se possui condições financeiras para pagar","Se respondeu rápido ao primeiro contato","Se tem cargo de gerência ou superior"],"correct":0},
-{"n":40,"t":"Contorno de Objeções","tipo":"multi","q":"Quais as objeções mais comuns e como contorná-las?","opts":["\"Está caro\" - Mostrar desconto exclusivo da parceria e opções de pagamento","\"Não tenho tempo\" - Destacar flexibilidade do EAD e aulas ao vivo gravadas","\"Preciso pensar\" - Criar senso de urgência (vagas limitadas, turma fechando)","\"Já fiz pós-graduação\" - Mostrar diferencial da certificação USP/Mackenzie"],"correct":[0,1,2,3]},
-// Dissertativas técnicas
-{"n":41,"t":"Processo de Inscrição","tipo":"text","q":"Descreva brevemente as etapas do processo de inscrição desde o contato inicial até a matrícula"},
-{"n":42,"t":"Tratamento de Pendências Documentais","tipo":"text","q":"Como proceder quando o lead envia documentação incompleta ou com problemas?"},
-// Avaliação do treinamento por último
-{"n":43,"t":"Avaliação do Treinamento B2C","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+{"n":36,"t":"Lead Negativo - Procedimento","tipo":"single","q":"O que fazer quando o lead não quer seguir com inscrição?","opts":["Perguntar se deseja receber informações na próxima turma + registrar histórico + dar PERDIDO no sistema","Insistir na venda","Apenas dar PERDIDO no sistema","Transferir para outro vendedor"],"correct":0},
+{"n":37,"t":"Prazo Follow-up","tipo":"single","q":"Qual o prazo ideal para retornar contato com lead após envio de material?","opts":["1 semana","3 dias","24 a 48 horas","Aguardar lead retornar"],"correct":2},
+{"n":38,"t":"Qualificação de Lead","tipo":"single","q":"Como identificar se um lead está qualificado?","opts":["Possui graduação completa + demonstra interesse real + está dentro do público-alvo","Apenas se possui condições financeiras para pagar","Se respondeu rápido ao primeiro contato","Se já fez outro curso de pós"],"correct":0},
+{"n":39,"t":"Diferença B2C vs B2B","tipo":"text","q":"Qual a principal diferença entre o atendimento B2C e B2B?"}
+],
+"b2c_poli":[
+{"n":40,"t":"POLI USP Pro - Modalidade","tipo":"single","q":"Qual a modalidade dos cursos da POLI USP Pro?","opts":["100% Presencial","100% EAD","Aulas ao vivo online","Híbrido (presencial e online)"],"correct":2},
+{"n":41,"t":"POLI - Cursos Oferecidos","tipo":"multi","q":"Quais cursos a POLI USP Pro oferece?","opts":["MBA em Data Science & Analytics para Operações","MBA em Engenharia de Produção","Cursos Livres de Logística e Supply Chain","MBA em Marketing Digital"],"correct":[0,1,2]},
+{"n":42,"t":"POLI - Certificação","tipo":"single","q":"Qual certificação o aluno recebe ao concluir um curso na POLI USP Pro?","opts":["Certificado Grupo Ello","Certificado USP","Certificado MEC","Certificado PECEGE"],"correct":1},
+{"n":43,"t":"Explicar POLI","tipo":"text","q":"Como você explicaria a POLI USP Pro para um lead interessado?"},
+{"n":44,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"b2c_esalq":[
+{"n":45,"t":"ESALQ - Modalidade","tipo":"single","q":"Qual a modalidade dos cursos do MBA USP/A ESALQ?","opts":["100% Presencial","100% EAD ao vivo","Aulas gravadas","Híbrido obrigatório"],"correct":1},
+{"n":46,"t":"ESALQ - Cursos Oferecidos","tipo":"multi","q":"Quais áreas a ESALQ oferece cursos?","opts":["Agronegócios","Gestão e Negócios","Marketing e Vendas","Cibersegurança"],"correct":[0,1,2,3]},
+{"n":47,"t":"ESALQ - Certificação","tipo":"single","q":"Qual certificação o aluno recebe ao concluir um MBA USP/A ESALQ?","opts":["Certificado Grupo Ello","Certificado USP","Certificado PECEGE","Certificado MEC"],"correct":1},
+{"n":48,"t":"Explicar ESALQ","tipo":"text","q":"Como você explicaria a ESALQ para um lead interessado?"},
+{"n":49,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"b2c_mackenzie":[
+{"n":50,"t":"MACKENZIE - Modalidade","tipo":"multi","q":"Quais são as modalidades dos cursos de pós-graduação Mackenzie?","opts":["100% Presencial","100% Online ao vivo","60% Presencial + 40% Online ao vivo","Apenas gravado"],"correct":[1,2]},
+{"n":51,"t":"MACKENZIE - Cursos Oferecidos","tipo":"multi","q":"Quais áreas o Mackenzie oferece cursos de pós-graduação?","opts":["Inteligência Artificial","Gestão de Projetos","Direito Empresarial","Psicologia Organizacional"],"correct":[0,1,2,3]},
+{"n":52,"t":"MACKENZIE - Tradição","tipo":"single","q":"Quantos anos de tradição tem a Universidade Presbiteriana Mackenzie?","opts":["100 anos","125 anos","150 anos","175 anos"],"correct":2},
+{"n":53,"t":"Explicar MACKENZIE","tipo":"text","q":"Como você explicaria a pós-graduação Mackenzie para um lead interessado?"},
+{"n":54,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"b2c_eca":[
+{"n":55,"t":"ECA USP - Modalidade","tipo":"single","q":"Qual a modalidade dos cursos da ECA USP?","opts":["100% Presencial","Aulas online ao vivo","Apenas gravado","Híbrido obrigatório"],"correct":1},
+{"n":56,"t":"ECA - Cursos Oferecidos","tipo":"multi","q":"Quais áreas a ECA USP oferece cursos?","opts":["Business Intelligence & Analytics","Marketing Digital","Inteligência Artificial","Gestão de Comunicação"],"correct":[0,1,2,3]},
+{"n":57,"t":"ECA - Certificação","tipo":"single","q":"Qual certificação o aluno recebe ao concluir um curso na ECA USP?","opts":["Certificado Grupo Ello","Certificado USP","Certificado ECA","Certificado MEC"],"correct":1},
+{"n":58,"t":"Explicar ECA","tipo":"text","q":"Como você explicaria a ECA USP para um lead interessado?"},
+{"n":59,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ],
 "backoffice":[
-// Alternativas primeiro
-{"n":44,"t":"Fluxo de Trabalho - Ordem Correta","tipo":"multi","q":"Ordene corretamente as etapas do processo de matrícula:","opts":["1. Trabalhar lead","2. Aprovação interna de formulário","3. Matrícula eletrônica","4. Validar matrícula com a marca","5. Inserir aluno na marca","6. Processo seletivo (quando aplicável)","7. Status do processo seletivo","8. Gerar boleto 1ª parcela","9. Pagamento 1ª parcela"],"correct":[0,1,2,3,4,5,6,7,8]},
-{"n":45,"t":"Aprovação de Formulários","tipo":"multi","q":"O que verificar na aprovação de formulários?","opts":["Dados pessoais completos e corretos","Documentos anexados corretamente (formato e legibilidade)","Curso selecionado está correto","Empresa/parceria identificada","Score de crédito do aluno"],"correct":[0,1,2,3]},
-{"n":46,"t":"Validação de Documentação","tipo":"multi","q":"Quais documentos precisam de validação especial (autenticação)?","opts":["Diploma de graduação (autenticação em cartório, digital ou física da universidade)","Histórico de graduação (autenticação em cartório, digital ou física)","Comprovante de vínculo empregatício (quando aplicável)","RG (cópia simples aceita)"],"correct":[0,1,2]},
-{"n":47,"t":"Sistemas Utilizados","tipo":"multi","q":"Quais sistemas você utiliza no dia a dia do Backoffice?","opts":["iELLO (sistema interno Grupo Ello)","Sistemas das marcas (APOLO para ESALQ, MOVE para POLI, etc)","E-mail corporativo","CRM externo"],"correct":[0,1,2]},
-{"n":48,"t":"Cobrança de Documentos Faltantes","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes após identificar a pendência?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar espontaneamente"],"correct":1},
-{"n":49,"t":"Processo Seletivo POLI","tipo":"single","q":"Como funciona o processo seletivo específico da POLI?","opts":["Análise curricular eliminatória","Prova escrita presencial","Entrevista online","Não há processo seletivo na POLI"],"correct":0},
-{"n":50,"t":"Gestão Financeira - Responsabilidades","tipo":"multi","q":"Quais são suas responsabilidades na parte financeira?","opts":["Gerar boleto da 1ª parcela após aprovação","Confirmar pagamento da 1ª parcela","Informar inadimplência ao setor responsável","Negociar desconto diretamente com aluno"],"correct":[0,1,2]},
-// Dissertativas técnicas
-{"n":51,"t":"Matrícula Eletrônica no iELLO","tipo":"text","q":"Descreva o processo de matrícula eletrônica no sistema iELLO"},
-{"n":52,"t":"Validação com a Marca","tipo":"text","q":"Como proceder para validar a matrícula com a escola parceira?"},
-{"n":53,"t":"Boas Práticas Backoffice","tipo":"text","q":"Quais boas práticas você aplicaria para garantir zero erros no processo de matrícula?"},
-// Avaliação do treinamento por último
-{"n":54,"t":"Avaliação do Treinamento Backoffice","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+// Questões comuns Backoffice
+{"n":60,"t":"Função do Backoffice","tipo":"single","q":"Qual a principal função do Backoffice no processo de vendas?","opts":["Prospectar novos leads","Validar documentação e processar matrículas","Negociar descontos com leads","Criar campanhas de marketing"],"correct":1},
+{"n":61,"t":"Documentação Obrigatória","tipo":"multi","q":"Quais documentos são obrigatórios para matrícula?","opts":["RG","CPF ou CNH","Diploma de Graduação","Certidão de nascimento"],"correct":[0,1,2]},
+{"n":62,"t":"Sistemas Utilizados","tipo":"multi","q":"Quais sistemas você utiliza no dia a dia do Backoffice?","opts":["iELLO (sistema interno)","Sistema da escola","E-mail corporativo","WhatsApp pessoal"],"correct":[0,1,2]},
+{"n":63,"t":"Prazo Cobrança Documentos","tipo":"single","q":"Qual o prazo para cobrar documentos faltantes?","opts":["No mesmo dia","2-3 dias após identificar pendência","1 semana","Aguardar aluno enviar"],"correct":1},
+{"n":64,"t":"Importância Validação","tipo":"text","q":"Por que a validação correta dos documentos é importante?"}
+],
+"backoffice_poli":[
+{"n":65,"t":"POLI - Sistema","tipo":"single","q":"Quais sistemas são usados para matrículas da POLI USP Pro?","opts":["APOLO e iELLO","MBX e iELLO","MOVE e iELLO","SAP e iELLO"],"correct":1},
+{"n":66,"t":"POLI - Processo Seletivo","tipo":"single","q":"Como funciona o processo seletivo da POLI?","opts":["Prova escrita","Entrevista online","Análise curricular","Não há processo seletivo"],"correct":3},
+{"n":67,"t":"POLI - Certificação","tipo":"single","q":"O certificado da POLI é emitido por qual instituição?","opts":["Grupo Ello","USP","PECEGE","MEC"],"correct":1},
+{"n":68,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"backoffice_esalq":[
+{"n":69,"t":"ESALQ - Sistema","tipo":"single","q":"Quais sistemas são usados para matrículas da ESALQ?","opts":["APOLO e iELLO","MBX e iELLO","MOVE e iELLO","SAP e iELLO"],"correct":1},
+{"n":70,"t":"ESALQ - Validação Diploma","tipo":"single","q":"É necessária autenticação de diploma na ESALQ?","opts":["Sim, em cartório","Sim, digital","Não é necessária autenticação","Depende do curso"],"correct":2},
+{"n":71,"t":"ESALQ - PECEGE","tipo":"single","q":"O que é o PECEGE?","opts":["Sistema de matrículas","Instituição responsável pela comercialização e administração dos cursos da USP ESALQ","Plataforma de aulas online","Certificadora externa"],"correct":1},
+{"n":72,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"backoffice_mackenzie":[
+{"n":73,"t":"MACKENZIE - Sistema","tipo":"single","q":"Quais sistemas são usados para matrículas do Mackenzie?","opts":["APOLO e iELLO","MBX e iELLO","iELLO e Sistema de Matrículas Mackenzie","SAP e iELLO"],"correct":2},
+{"n":74,"t":"MACKENZIE - Lato vs Stricto","tipo":"single","q":"Qual a diferença entre Lato Sensu e Stricto Sensu?","opts":["Lato = MBA/Especialização, Stricto = Mestrado/Doutorado","São a mesma coisa","Lato = Presencial, Stricto = EAD","Lato = Curta duração, Stricto = Longa duração apenas"],"correct":0},
+{"n":75,"t":"MACKENZIE - Parceria","tipo":"single","q":"O desconto da parceria Mackenzie é válido para quem?","opts":["Apenas colaboradores","Colaboradores, cônjuges e filhos","Apenas pessoas com CNPJ","Qualquer pessoa"],"correct":1},
+{"n":76,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
+],
+"backoffice_eca":[
+{"n":77,"t":"ECA - Sistema","tipo":"single","q":"Qual sistema é usado para matrículas da ECA USP?","opts":["Sistema próprio ECA","APOLO","iELLO","SAP"],"correct":2},
+{"n":78,"t":"ECA - Certificação","tipo":"single","q":"O certificado da ECA é emitido por qual instituição?","opts":["Grupo Ello","USP","ECA separadamente","MEC"],"correct":1},
+{"n":79,"t":"ECA - Público-alvo","tipo":"single","q":"Qual o público-alvo principal dos cursos ECA?","opts":["Engenheiros","Profissionais de Comunicação, Marketing e Dados","Médicos","Advogados"],"correct":1},
+{"n":80,"t":"Avaliação do Treinamento","tipo":"text","q":"Como você avalia o treinamento de integração (conteúdo, didática e aprendizado)? Dicas e sugestões de melhoria são bem-vindas."}
 ]
 };
 
@@ -2446,30 +2484,36 @@ function renderEvalButtons(){
     
     if(isAdmin){
         // Admin pode fazer todas as avaliações sem restrição
+        html+='<h4 style="width:100%;color:#1e3c72;margin:10px 0;">B2B</h4>';
         html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'POLI\')">B2B - POLI</button>';
         html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'ESALQ/PECEGE\')">B2B - ESALQ</button>';
         html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'MACKENZIE\')">B2B - MACK</button>';
         html+='<button class="btn-primary" onclick="startEval(\'b2b\',\'ECA USP\')">B2B - ECA</button>';
-        html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'\')">B2C</button>';
-        html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'\')">Backoffice</button>';
+        html+='<h4 style="width:100%;color:#1e3c72;margin:15px 0 10px;">B2C</h4>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'POLI\')">B2C - POLI</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'ESALQ/PECEGE\')">B2C - ESALQ</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'MACKENZIE\')">B2C - MACK</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'b2c\',\'ECA USP\')">B2C - ECA</button>';
+        html+='<h4 style="width:100%;color:#1e3c72;margin:15px 0 10px;">Backoffice</h4>';
+        html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'POLI\')">Backoffice - POLI</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'ESALQ/PECEGE\')">Backoffice - ESALQ</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'MACKENZIE\')">Backoffice - MACK</button>';
+        html+='<button class="btn-primary" onclick="startEval(\'backoffice\',\'ECA USP\')">Backoffice - ECA</button>';
     } else {
         // Colaborador - verificar se já fez
         let type = '';
-        let brand = '';
+        let brand = t.brand || 'POLI';
         let label = '';
         
         if(t.function==='B2B'){
             type = 'b2b';
-            brand = t.brand;
-            label = 'Avaliação B2B - ' + t.brand;
+            label = 'Avaliação B2B - ' + brand;
         } else if(t.function==='B2C'){
             type = 'b2c';
-            brand = '';
-            label = 'Avaliação B2C';
+            label = 'Avaliação B2C - ' + brand;
         } else if(t.function==='Backoffice'){
             type = 'backoffice';
-            brand = '';
-            label = 'Avaliação Backoffice';
+            label = 'Avaliação Backoffice - ' + brand;
         }
         
         if(jaFezAvaliacao(type, brand)) {
@@ -2506,8 +2550,16 @@ function renderEval(){
         else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);
     }else if(currentEval.type==='b2c'){
         qs=[...Q.b2c];
+        if(currentEval.brand==='POLI')qs.push(...Q.b2c_poli);
+        else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2c_esalq);
+        else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2c_mackenzie);
+        else if(currentEval.brand==='ECA USP')qs.push(...Q.b2c_eca);
     }else if(currentEval.type==='backoffice'){
         qs=[...Q.backoffice];
+        if(currentEval.brand==='POLI')qs.push(...Q.backoffice_poli);
+        else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.backoffice_esalq);
+        else if(currentEval.brand==='MACKENZIE')qs.push(...Q.backoffice_mackenzie);
+        else if(currentEval.brand==='ECA USP')qs.push(...Q.backoffice_eca);
     }
     
     // Ordenar: alternativas primeiro, dissertativas depois
@@ -2515,7 +2567,7 @@ function renderEval(){
     const dissertativas = qs.filter(q => q.tipo === 'text');
     qs = [...alternativas, ...dissertativas];
     
-    let html='<div class="eval-card"><h2 class="section-title">'+(currentEval.type==='b2b'?'Avaliação B2B - '+currentEval.brand:currentEval.type==='b2c'?'Avaliação B2C':'Avaliação Backoffice')+'</h2>';
+    let html='<div class="eval-card"><h2 class="section-title">Avaliação '+currentEval.type.toUpperCase()+' - '+currentEval.brand+'</h2>';
     
     // Seção de Alternativas
     html+='<h3 style="color:#1e3c72;margin:20px 0 15px;border-bottom:2px solid #667eea;padding-bottom:10px;">📊 Questões Objetivas ('+alternativas.length+')</h3>';
@@ -2541,7 +2593,45 @@ function renderEval(){
     c.innerHTML=html;
 }
 
-function submitEval(){let qs=[];if(currentEval.type==='b2b'){qs=[...Q.b2b_comum];if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);}else if(currentEval.type==='b2c'){qs=Q.b2c;}else{qs=Q.backoffice;}let correct=0,total=0;qs.forEach(q=>{if(q.tipo==='text')return;total++;const answers=[];document.querySelectorAll('input[name="q'+q.n+'"]:checked').forEach(el=>{answers.push(parseInt(el.value));});let isCorrect=false;if(q.tipo==='single'){isCorrect=answers.length===1&&answers[0]===q.correct;}else{isCorrect=answers.length===q.correct.length&&answers.every(a=>q.correct.includes(a));}if(isCorrect)correct++;});const score=total>0?Math.round((correct/total)*100):0;const passed=score>=70;
+function submitEval(){
+    let qs=[];
+    if(currentEval.type==='b2b'){
+        qs=[...Q.b2b_comum];
+        if(currentEval.brand==='POLI')qs.push(...Q.b2b_poli);
+        else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2b_esalq);
+        else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2b_mackenzie);
+        else if(currentEval.brand==='ECA USP')qs.push(...Q.b2b_eca);
+    }else if(currentEval.type==='b2c'){
+        qs=[...Q.b2c];
+        if(currentEval.brand==='POLI')qs.push(...Q.b2c_poli);
+        else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.b2c_esalq);
+        else if(currentEval.brand==='MACKENZIE')qs.push(...Q.b2c_mackenzie);
+        else if(currentEval.brand==='ECA USP')qs.push(...Q.b2c_eca);
+    }else if(currentEval.type==='backoffice'){
+        qs=[...Q.backoffice];
+        if(currentEval.brand==='POLI')qs.push(...Q.backoffice_poli);
+        else if(currentEval.brand==='ESALQ/PECEGE')qs.push(...Q.backoffice_esalq);
+        else if(currentEval.brand==='MACKENZIE')qs.push(...Q.backoffice_mackenzie);
+        else if(currentEval.brand==='ECA USP')qs.push(...Q.backoffice_eca);
+    }
+    let correct=0,total=0;
+    qs.forEach(q=>{
+        if(q.tipo==='text')return;
+        total++;
+        const answers=[];
+        document.querySelectorAll('input[name="q'+q.n+'"]:checked').forEach(el=>{
+            answers.push(parseInt(el.value));
+        });
+        let isCorrect=false;
+        if(q.tipo==='single'){
+            isCorrect=answers.length===1&&answers[0]===q.correct;
+        }else{
+            isCorrect=answers.length===q.correct.length&&answers.every(a=>q.correct.includes(a));
+        }
+        if(isCorrect)correct++;
+    });
+    const score=total>0?Math.round((correct/total)*100):0;
+    const passed=score>=70;
 // Salvar histórico da avaliação
 const evalRecord={
     traineeIndex:currentTrainee,
